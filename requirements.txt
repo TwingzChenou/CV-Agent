@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+llama-index
+llama-index-llms-gemini
+llama-index-readers-github
+llama-index-vector-stores-pinecone
+dspy-ai
+python-dotenv
+pymupdf4llm
+pydantic-settings
