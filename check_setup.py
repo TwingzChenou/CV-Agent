@@ -82,6 +82,17 @@ def check_setup():
     except Exception as e:
         print(f"Pinecone Test Failed: {e}")
 
+    # 5. Test Github
+    print("--- Test Github ---")
+    try:
+        if not os.getenv("GITHUB_TOKEN"):
+            print("Skipping Github test due to missing GITHUB_TOKEN.")
+        else:
+            github_client = GithubClient(github_token=GITHUB_TOKEN)
+            print("Github Tool Test: OK")
+    except Exception as e:
+        print(f"Github Test Failed: {e}")
+
     print("\n--- End Diagnostic ---")
 
 if __name__ == "__main__":

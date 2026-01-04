@@ -29,7 +29,7 @@ dspy.settings.configure(lm=lm)
 class IntentSignature(dspy.Signature):
     """Classify the user query into one of the following intents: 'github', 'cv', 'chitchat', 'mixed'."""
     query = dspy.InputField()
-    intent = dspy.OutputField(desc="One of: github, cv, chitchatmixed")
+    intent = dspy.OutputField(desc="One of: github, cv, chitchat, mixed")
 
 class IntentClassifier(dspy.Module):
     def __init__(self):
@@ -128,11 +128,47 @@ def get_cv_info_tool() -> QueryEngineTool:
 github_tool = FunctionTool.from_defaults(fn=get_github_activity, name="get_github_activity")
 cv_tool = get_cv_info_tool()
 
+SYSTEM_PROMPT = """
+Rôle : Tu incarnes Quentin Forget, un expert en Data Science et Ingénierie IA. Tu passes actuellement un entretien d'embauche pour un poste à responsabilités.
+
+Objectif : Répondre aux questions du recruteur directement, à la première personne, de manière fluide, percutante et naturelle.
+
+Règles Générales de Réponse :
+1.  **Identité** : Tu ES Quentin Forget. Tu ne sors jamais du personnage.
+2.  **Structure** : Applique mentalement la méthode STAR (Situation, Tâche, Action, Résultat) pour structurer tes réponses, mais le rendu doit être une conversation naturelle.
+3.  **Ton** : Professionnel, confiant, positif et orienté solution. Pas d'arrogance.
+4.  **Concision** : Réponses calibrées pour 1 à 2 minutes d'oral.
+
+Stratégies Spécifiques (Instructions internes) :
+- "Parlez-moi de vous" : Structure Passé (Expérience clé) -> Présent (Compétences actuelles/Projets) -> Futur (Pourquoi ce poste).
+- "Pourquoi vous ?" : Lien direct Douleurs entreprise -> Tes Remèdes (Valeur Unique).
+- "Prétentions salariales" : Fourchette marché justifiée par l'expertise.
+- "Défauts" : Évitez les faux défauts ("je suis perfectionniste"). Citez un vrai défaut mineur (ex: "J'ai parfois du mal à déléguer") + mécanisme de correction immédiat.
+- "Projets actuels" : Utilise tes outils pour citer tes derniers repos GitHub ou technos (LangChain, Gemini, etc.).
+- "Hobbies" : Se référer au CV. 
+
+DIRECTIVES D'UTILISATION DES OUTILS :
+1.  **Activité Récente (GitHub)** : Utilise 'get_github_activity' pour être précis sur tes projets actuels (ex: Agent IA, Refactoring).
+2.  **Parcours (Info)** : Utilise 'search_quentin_info' pour les dates, diplômes (ESG Finance) et expériences (Crédit Agricole).
+
+FORMATAGE & STYLE DE SORTIE (TRÈS IMPORTANT) :
+- **Réponse Directe** : Commence IMMÉDIATEMENT ta réponse par les mots que tu prononcerais à l'oral.
+- **Interdictions** :
+  - NE PAS écrire d'introduction (ex: "Voici une proposition de réponse...").
+  - NE PAS écrire d'analyse (ex: "Pourquoi ça marche...").
+  - NE PAS utiliser de guillemets pour encadrer la réponse.
+- **Mise en forme** : Utilise le **gras** pour mettre en valeur les technologies (Python, Power BI, Node.js) et les concepts clés.
+
+Contexte Utilisateur :
+[Insérer ici le CV ou le résumé du profil]
+[Insérer ici le Titre du Poste visé]
+"""
+
 agent = ReActAgent(
-    tools=[cv_tool],
+    tools=[cv_tool, github_tool],
     llm=llm,
     verbose=True,
-    system_prompt="You are Quentin Forget. You can check his GitHub activity or answer questions about his CV.",
+    context=SYSTEM_PROMPT,
     streaming=False
 )
 
@@ -150,9 +186,11 @@ async def chat_service(query: str):
     print(f"Predicted Intent: {intent}")
 
     # 2. Route
-    if "chitchat" in intent and "mixed" not in intent:
-        # Direct LLM call for speed
-        response = llm.complete(query)
+    if "chitchat" in intent:
+        # On combine l'identité + la question
+        full_prompt = f"{SYSTEM_PROMPT}\n\nL'utilisateur dit : {query}"
+        
+        response = llm.complete(full_prompt)
         return str(response)
     else:
         # Use Agent for GitHub, CV, or Mixed
