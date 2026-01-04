@@ -29,7 +29,7 @@ dspy.settings.configure(lm=lm)
 class IntentSignature(dspy.Signature):
     """Classify the user query into one of the following intents: 'github', 'cv', 'chitchat', 'mixed'."""
     query = dspy.InputField()
-    intent = dspy.OutputField(desc="One of: github, cv, chitchat, mixed")
+    intent = dspy.OutputField(desc="One of: github, cv, chitchatmixed")
 
 class IntentClassifier(dspy.Module):
     def __init__(self):
