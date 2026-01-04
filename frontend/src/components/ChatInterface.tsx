@@ -117,6 +117,7 @@ export default function ChatInterface() {
                                     placeholder="Start typing..."
                                     className="flex-1 bg-transparent border-none outline-none text-white placeholder-zinc-500 h-10"
                                     autoFocus
+                                    suppressHydrationWarning={true}
                                 />
                                 <button
                                     type="submit"
