@@ -82,6 +82,7 @@ def check_setup():
     except Exception as e:
         print(f"Pinecone Test Failed: {e}")
 
+
     # 5. Test Github
     print("--- Test Github ---")
     try:
