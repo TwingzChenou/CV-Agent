@@ -7,6 +7,8 @@ from llama_index.core.agent import ReActAgent
 from llama_index.vector_stores.pinecone import PineconeVectorStore
 from llama_index.readers.github import GithubRepositoryReader, GithubClient
 from dotenv import load_dotenv
+from github import Github
+import logging
 
 # Load environment variables
 load_dotenv()
@@ -16,6 +18,13 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 PINECONE_INDEX = os.getenv("PINECONE_INDEX")
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+# Configure logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+if not logger.handlers:
+    handler = logging.StreamHandler()
+    handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+    logger.addHandler(handler)
 
 # Setup Gemini
 llm = Gemini(model="models/gemini-2.5-flash", api_key=GOOGLE_API_KEY)
@@ -27,9 +36,9 @@ dspy.settings.configure(lm=lm)
 
 # --- DSPy Intent Classifier ---
 class IntentSignature(dspy.Signature):
-    """Classify the user query into one of the following intents: 'github', 'cv', 'chitchat', 'mixed'."""
+    """Classify the user query into one of the following intents: read_project_readme, list_all_projects, cv, chitchat, mixed."""
     query = dspy.InputField()
-    intent = dspy.OutputField(desc="One of: github, cv, chitchat, mixed")
+    intent = dspy.OutputField(desc="One of: read_project_readme, list_all_projects, cv, chitchat, mixed")
 
 class IntentClassifier(dspy.Module):
     def __init__(self):
@@ -43,51 +52,75 @@ classifier = IntentClassifier()
 
 # --- Tools ---
 
-def get_github_activity(owner: str = "TwingzChenou", repo: str = "CV-Agent") -> str:
+def list_github_projects(username: str = "TwingzChenou") -> str:
     """
-    Retrieves recent activity (commits) or README from a public GitHub repository.
-    Useful for answering questions about the project's code or recent updates.
+    Récupère la liste de tous les projets publics (repositories) de l'utilisateur.
+    Renvoie le nom, la description et le lien de chaque projet.
     """
     try:
-        github_client = GithubClient(github_token=GITHUB_TOKEN)
-        loader = GithubRepositoryReader(
-            github_client=github_client,
-            owner=owner,
-            repo=repo,
-            use_parser=False,
-            verbose=False,
-            filter_file_extensions=[".md", ".py", ".js", ".ts", ".jsx", ".tsx"], # Limit to code/docs
-            concurrent_requests=2,
-        )
-        # To be fast, we might strictly want to fetch specific things, but the Reader loads docs.
-        # Ideally, for "activity", we'd check commits via API directly, but using the requested Reader:
-        # We will load the data. Note: The Reader loads the *content* of the repo.
-        # If the user wants "activity" (commits), the Reader might not be the best fit unless we index it.
-        # BUT, the instructions say "Charge le repo public... Configure-la pour être rapide".
-        # Let's try to limit what we load or use a custom implementation if Reader is too slow.
-        # For now, let's load the README and maybe a few top-level files to give context.
+        # Connexion à GitHub
+        token = os.getenv("GITHUB_TOKEN")
+        g = Github(token)
         
-        # Actually, the user asked for "get_github_activity" but also said "Charge le repo... cible les commits récents ou le README".
-        # The GithubRepositoryReader reads files. It doesn't typically read "commits" as a list unless configured/extended.
-        # Let's pivot to using the GithubClient directly for commits if the Reader is too heavy, 
-        # OR just load the README for context if that's what's meant by "Check activity" in a simple RAG way.
-        # Let's stick to a lightweight usage: Load README.
+        # Récupération de l'utilisateur
+        user = g.get_user(username)
         
-        documents = loader.load_data(branch="main") # Loading everything might be slow.
-        # Optimization: Filter documents to just README or small set if possible inside load_data? 
-        # The Reader supports `ignored_directories` etc.
+        # Récupération des dépôts (repos)
+        repos = user.get_repos()
         
-        # Let's manually filter after load if we can't restrict before, or trust the user wants repo content.
-        # Getting just the README is safer for speed.
-        readme_doc = next((doc for doc in documents if "README.md" in doc.metadata.get("file_path", "")), None)
+        results = []
+        for repo in repos:
+            # On ignore les projets qui sont des "forks" (projets copiés d'autres) 
+            # pour ne garder que VOS vrais projets. Enlevez le if si vous voulez tout.
+            if not repo.fork:
+                desc = repo.description if repo.description else "Pas de description"
+                results.append(f"- **{repo.name}** : {desc} ({repo.html_url})")
         
-        if readme_doc:
-            return f"README Content:\n{readme_doc.text[:5000]}" # Truncate check
-        
-        return "Could not find README. Loaded " + str(len(documents)) + " files."
+        # On limite à 10 projets pour ne pas saturer l'IA
+        return "\n".join(results[:10])
 
     except Exception as e:
-        return f"Error fetching GitHub activity: {str(e)}"
+        return f"Erreur lors de la récupération des projets : {str(e)}"
+    
+
+def get_github_activity(owner: str = "TwingzChenou", repo: str = None) -> str:
+    """
+    Récupère INSTANTANÉMENT le README d'un dépôt spécifique via l'API directe.
+    Plus de scan de dossiers, plus de lenteur.
+    """
+    token = os.getenv("GITHUB_TOKEN")
+    if not token:
+        return "Erreur: Token manquant."
+    
+    if not repo:
+        return "Erreur: Nom du repo manquant."
+
+    try:
+        # 1. Connexion
+        g = Github(token)
+        
+        # 2. Ciblage direct du repo
+        # L'API ne cherche pas, elle va directement à l'adresse
+        repo_obj = g.get_repo(f"{owner}/{repo}")
+        
+        # 3. Demande spécifique du README
+        # C'est une fonction spéciale de l'API GitHub qui trouve le README 
+        # peu importe son nom exact (README.md, readme.txt, etc.)
+        readme = repo_obj.get_readme()
+
+        print(readme)
+        
+        # 4. Décodage (Le contenu arrive encodé, il faut le traduire en texte)
+        content = readme.decoded_content.decode("utf-8")
+        
+        print(f"✅ README récupéré pour {repo} (Taille: {len(content)} caractères)")
+        
+        return f"README Content for {repo}:\n{content[:5000]}"
+
+    except Exception as e:
+        # Gestion des erreurs (ex: repo introuvable ou pas de README)
+        print(f"❌ Erreur : {e}")
+        return f"Impossible de lire le README pour {repo}. Vérifiez que le dépôt existe et est public."
 
 def get_cv_info_tool() -> QueryEngineTool:
     """
@@ -125,7 +158,18 @@ def get_cv_info_tool() -> QueryEngineTool:
         return FunctionTool.from_defaults(fn=error_tool, name="cv_query_engine", description="Error fallback")
 
 # Initialize Agent
-github_tool = FunctionTool.from_defaults(fn=get_github_activity, name="get_github_activity")
+readme_tool = FunctionTool.from_defaults(
+    fn=get_github_activity, # On pointe vers la fonction qui lit le README
+    name="read_project_readme", # Nom clair pour l'IA
+    description="Use this tool ONLY when the user asks for specific details, code, or documentation about a SPECIFIC project (e.g. 'Read the README of CV-Agent'). You must extract the repository name."
+)
+
+list_projects_tool = FunctionTool.from_defaults(
+    fn=list_github_projects, # On pointe vers la fonction qui fait la liste
+    name="list_all_projects", # Nom clair pour l'IA
+    description="Use this tool when the user asks broadly about 'your projects', 'what did you code', or 'your portfolio'. Do not use for specific file reading."
+)
+
 cv_tool = get_cv_info_tool()
 
 SYSTEM_PROMPT = """
@@ -165,7 +209,7 @@ Contexte Utilisateur :
 """
 
 agent = ReActAgent(
-    tools=[cv_tool, github_tool],
+    tools=[cv_tool, readme_tool, list_projects_tool],
     llm=llm,
     verbose=True,
     context=SYSTEM_PROMPT,

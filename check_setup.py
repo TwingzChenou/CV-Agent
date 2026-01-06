@@ -3,6 +3,7 @@ import sys
 from dotenv import load_dotenv
 from llama_index.llms.gemini import Gemini
 from llama_index.vector_stores.pinecone import PineconeVectorStore
+from github import Github
 
 def check_setup():
     print("--- Diagnostic check_setup.py ---\n")
@@ -82,6 +83,7 @@ def check_setup():
     except Exception as e:
         print(f"Pinecone Test Failed: {e}")
 
+    print("")
 
     # 5. Test Github
     print("--- Test Github ---")
@@ -89,7 +91,8 @@ def check_setup():
         if not os.getenv("GITHUB_TOKEN"):
             print("Skipping Github test due to missing GITHUB_TOKEN.")
         else:
-            github_client = GithubClient(github_token=GITHUB_TOKEN)
+            token_github = os.getenv("GITHUB_TOKEN")
+            github_client = Github(token_github)
             print("Github Tool Test: OK")
     except Exception as e:
         print(f"Github Test Failed: {e}")
