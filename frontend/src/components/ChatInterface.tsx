@@ -33,7 +33,7 @@ export default function ChatInterface() {
     };
 
     return (
-        <div className="flex flex-col h-screen bg-zinc-950 text-white overflow-hidden relative font-sans">
+        <div className="flex flex-col min-h-screen bg-zinc-950 text-white overflow-hidden relative font-sans">
             {/* Background Gradients */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
                 <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/10 rounded-full blur-[100px]" />
@@ -50,7 +50,7 @@ export default function ChatInterface() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.2 }}
-                            className="flex-1 overflow-y-auto space-y-6 pb-24 scrollbar-hide"
+                            className="flex-1 overflow-y-auto space-y-6 pb-24 pr-2 custom-scrollbar"
                         >
                             {messages.map((msg, idx) => (
                                 <MessageBubble key={idx} message={msg} />
@@ -97,10 +97,10 @@ export default function ChatInterface() {
                             className="text-center space-y-2 mb-8"
                         >
                             <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">
-                                Hello, I'm Context.
+                                Hello, I&apos;m Context.
                             </h1>
                             <p className="text-zinc-400 text-lg md:text-xl">
-                                Ask me anything about Quentin's work or experience.
+                                Ask me anything about Quentin&apos;s work or experience.
                             </p>
                         </motion.div>
                     )}

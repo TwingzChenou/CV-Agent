@@ -1,9 +1,22 @@
+import Sidebar from '@/components/Sidebar'; // Assurez-vous d'avoir renommé Sidecar.tsx
 import ChatInterface from '@/components/ChatInterface';
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 p-4">
-      <ChatInterface />
-    </main>
+    <div className="min-h-screen bg-zinc-950">
+      <div className="flex flex-col lg:flex-row">
+
+        {/* 1. La Sidebar (Fixe sur Desktop) */}
+        {/* Elle prend 40% de la largeur sur grand écran */}
+        <Sidebar />
+
+        {/* 2. La Zone de Chat */}
+        {/* On ajoute une marge à gauche (lg:ml-[40%]) pour ne pas qu'elle passe SOUS la sidebar fixe */}
+        <main className="w-full lg:w-[60%] lg:ml-[40%] min-h-screen relative">
+          <ChatInterface />
+        </main>
+
+      </div>
+    </div>
   );
 }
