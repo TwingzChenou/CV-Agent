@@ -100,12 +100,9 @@ def get_github_activity(owner: str = "TwingzChenou", repo: str = None) -> str:
         g = Github(token)
         
         # 2. Ciblage direct du repo
-        # L'API ne cherche pas, elle va directement à l'adresse
         repo_obj = g.get_repo(f"{owner}/{repo}")
         
         # 3. Demande spécifique du README
-        # C'est une fonction spéciale de l'API GitHub qui trouve le README 
-        # peu importe son nom exact (README.md, readme.txt, etc.)
         readme = repo_obj.get_readme()
 
         print(readme)
