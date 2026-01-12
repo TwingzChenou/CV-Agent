@@ -21,7 +21,7 @@ from ragas.embeddings import LangchainEmbeddingsWrapper
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__))) # Sécurité pour le chemin
-from app.services.agent import agent
+from app.services.agent import agent, chat_service
 
 # Appliquer le patch pour les boucles imbriquées (nécessaire pour Ragas + LlamaIndex)
 nest_asyncio.apply()
@@ -156,12 +156,12 @@ async def generate_responses():
     print("⏳ Génération des réponses par l'agent en cours...")
     generated_answers = []
     
-    for q, c in zip(data_dict["question"], data_dict["contexts"]):
+    for q in data_dict["question"]:
         # On injecte le contexte manuellement dans le prompt pour forcer l'agent à l'utiliser
-        prompt = f"Answer this question: {q}\nUsing this context: {c}"
+        prompt = f"Answer this question: {q}\n"
         
         # Appel asynchrone
-        response = await agent.run(prompt) 
+        response = await chat_service(prompt) 
         # OU await agent.chat(prompt) selon votre version de LlamaIndex
         
         # GESTION DE LA RÉPONSE (LlamaIndex vs LangChain)

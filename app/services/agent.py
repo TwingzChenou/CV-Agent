@@ -1,5 +1,6 @@
 import os
 import dspy
+from dspy.teleprompt import LabeledFewShot
 from llama_index.core import VectorStoreIndex, Settings
 from llama_index.llms.gemini import Gemini
 from llama_index.core.tools import FunctionTool, QueryEngineTool, ToolMetadata
@@ -27,18 +28,18 @@ if not logger.handlers:
     logger.addHandler(handler)
 
 # Setup Gemini
-llm = Gemini(model="models/gemini-2.5-flash", api_key=GOOGLE_API_KEY)
+llm = Gemini(model="models/gemini-2.5-flash", api_key=GOOGLE_API_KEY, temperature=0)
 Settings.llm = llm
 
 # Setup DSPy
-lm = dspy.LM("gemini/gemini-2.5-flash", api_key=GOOGLE_API_KEY)
+lm = dspy.LM("gemini/gemini-2.5-flash", api_key=GOOGLE_API_KEY, temperature=0)
 dspy.settings.configure(lm=lm)
 
 # --- DSPy Intent Classifier ---
 class IntentSignature(dspy.Signature):
     """Classify the user query into one of the following intents: read_project_readme, list_all_projects, cv, chitchat, mixed."""
     query = dspy.InputField()
-    intent = dspy.OutputField(desc="One of: read_project_readme, list_all_projects, cv, chitchat, mixed")
+    intent = dspy.OutputField(desc="One of: read_project_readme(project_name), list_all_projects, cv(stacks techniques, diplome, formation, experience professionnelle, compétences, langues, hobbies, localisation), chitchat (salaire, disponibilité), mixed")
 
 class IntentClassifier(dspy.Module):
     def __init__(self):
@@ -48,7 +49,31 @@ class IntentClassifier(dspy.Module):
     def forward(self, query):
         return self.classify(query=query)
 
-classifier = IntentClassifier()
+trainset = [
+    # --- Catégorie : direct_answer (Infos du System Prompt) ---
+    dspy.Example(query="Quelles sont tes prétentions salariales ?", intent="chitchat").with_inputs("query"),
+    dspy.Example(query="Es-tu disponible immédiatement ?", intent="chitchat").with_inputs("query"),
+    dspy.Example(query="Salut, comment ça va ?", intent="chitchat").with_inputs("query"),
+    dspy.Example(query="Quels sont tes hobbies ?", intent="cv (hobbies)").with_inputs("query"),
+
+    # --- Catégorie : cv (Infos complexes nécessitant recherche) ---
+    dspy.Example(query="Détaille-moi ton expérience chez Crédit Agricole", intent="cv (experience)").with_inputs("query"),
+    dspy.Example(query="Quelles sont tes stack techniques ?", intent="cv (stacks techniques)").with_inputs("query"),
+    dspy.Example(query="Quelle est ta stack technique ?", intent="cv (stack)").with_inputs("query"),
+    dspy.Example(query="Quelle est ta formation ?", intent="cv (formation)").with_inputs("query"),
+    dspy.Example(query="Quelle est ta diplome ?", intent="cv (diplome)").with_inputs("query"),
+    dspy.Example(query="Quelle est ta localisation ?", intent="cv (localisation)").with_inputs("query"),
+    
+    # --- Autres catégories ---
+    dspy.Example(query="Montre moi tes projets github", intent="list_all_projects").with_inputs("query"),
+]
+
+# Compilation du modèle
+print("🧠 Optimisation du classifieur d'intentions DSPy...")
+teleprompter = LabeledFewShot(k=3) # k = nombre d'exemples à utiliser dans le prompt
+raw_classifier = IntentClassifier()
+classifier = teleprompter.compile(raw_classifier, trainset=trainset)
+print("✅ Classifieur optimisé prêt.")
 
 # --- Tools ---
 
@@ -137,7 +162,10 @@ def get_cv_info_tool() -> QueryEngineTool:
         Settings.embed_model = GeminiEmbedding(model_name="models/text-embedding-004")
 
         index = VectorStoreIndex.from_vector_store(vector_store=vector_store)
-        query_engine = index.as_query_engine()
+        query_engine = index.as_query_engine(
+            similarity_top_k=3,
+            verbose=True
+        )
         
         return QueryEngineTool(
             query_engine=query_engine,
@@ -170,7 +198,7 @@ list_projects_tool = FunctionTool.from_defaults(
 cv_tool = get_cv_info_tool()
 
 SYSTEM_PROMPT = """
-Rôle : Tu incarnes Quentin Forget, un expert en Data Science et Ingénierie IA. Tu passes actuellement un entretien d'embauche pour un poste à responsabilités.
+Rôle : Tu incarnes Quentin Forget, un expert en Data Science et Ingénierie IA basé en Ile de France. Tu passes actuellement un entretien d'embauche pour un poste à responsabilités.
 
 Objectif : Répondre aux questions du recruteur directement, à la première personne, de manière fluide, percutante et naturelle.
 
@@ -185,8 +213,9 @@ Stratégies Spécifiques (Instructions internes) :
 - "Pourquoi vous ?" : Lien direct Douleurs entreprise -> Tes Remèdes (Valeur Unique).
 - "Prétentions salariales" : Fourchette marché justifiée par l'expertise et la localisation, donc 45000€/an - 55000€/an.
 - "Défauts" : Évitez les faux défauts ("je suis perfectionniste"). Citez un vrai défaut mineur (ex: "J'ai parfois du mal à déléguer") + mécanisme de correction immédiat.
-- "Projets actuels" : Utilise tes outils pour citer tes derniers repos GitHub ou technos (LangChain, Gemini, etc.).
+- "Projets actuels" : Utilise les outils comme 'get_github_activity' pour resumer le README.md du projet.
 - "Hobbies" : Se référer au CV.
+- "Disponibilité" : Je suis disponible maintenant.
 
 DIRECTIVES D'UTILISATION DES OUTILS :
 1.  **Activité Récente (GitHub)** : Utilise 'get_github_activity' pour être précis sur tes projets actuels (ex: Agent IA, Refactoring).
