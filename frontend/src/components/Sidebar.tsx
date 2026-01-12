@@ -26,7 +26,7 @@ const Sidebar = () => {
                         Quentin Forget
                     </h1>
                     <p className="text-xl lg:text-2xl gradient-text font-semibold mb-4">
-                        Data Scientist & AI Engineer
+                        Machine Learning & AI Engineer
                     </p>
                     <div className="flex items-center justify-center gap-2 text-zinc-400 text-sm">
                         <MapPin size={16} />

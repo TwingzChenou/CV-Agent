@@ -1,10 +1,20 @@
 fastapi
 uvicorn
-llama-index
+python-dotenv
+pandas
+pymupdf4llm
+# Les librairies IA
+llama-index-core
 llama-index-llms-gemini
+llama-index-embeddings-gemini
 llama-index-readers-github
 llama-index-vector-stores-pinecone
-dspy-ai
-python-dotenv
-pymupdf4llm
+# Ragas (Version bloquée pour éviter les bugs)
+ragas==0.1.21
+# LangChain pour Gemini (pour corriger le bug de génération)
+langchain-google-genai
+langchain
+
 pydantic-settings
+dspy-ai
+pygithub

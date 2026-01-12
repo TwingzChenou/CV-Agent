@@ -5,6 +5,8 @@ from llama_index.core import Document, VectorStoreIndex, StorageContext, Setting
 from llama_index.embeddings.gemini import GeminiEmbedding
 from llama_index.vector_stores.pinecone import PineconeVectorStore
 from pinecone import Pinecone
+import nest_asyncio
+nest_asyncio.apply()
 
 # Load environment variables
 load_dotenv()
@@ -90,6 +92,13 @@ def main():
     print("Initializing Pinecone...")
     pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
     pinecone_index = pc.Index(os.getenv("PINECONE_INDEX"))
+
+    print("Cleaning up old index data...")
+    try:
+        pinecone_index.delete(delete_all=True)
+        print("Index cleaned.")
+    except Exception as e:
+        print(f"Warning during cleanup: {e}")
     
     vector_store = PineconeVectorStore(pinecone_index=pinecone_index)
     storage_context = StorageContext.from_defaults(vector_store=vector_store)

@@ -10,7 +10,7 @@
             "github": "https://github.com/TwingzChenou"
         }
     },
-    "chronologie_professionnelle": [
+    "experience_professionnelle": [
         {
             "entreprise": "Crédit Agricole CIB",
             "poste": "Data Scientist",
@@ -33,7 +33,7 @@
     "formation": [
         {
             "ecole": "ESG Finance",
-            "diplome": "Mastère Big Data et Data Science en finance",
+            "diplome": "Mastère Big Data et Data Science et Finance",
             "date_debut": "2022-09",
             "date_fin": "2024-09",
             "est_actuel": false,
@@ -129,10 +129,11 @@
         },
         {
             "activite": "Running",
-            "details": "Dans la forêt"
+            "details": "En plein air"
         },
         {
-            "activite": "Padel"
+            "activite": "Padel",
+            "details": "Je parle du sport sur un terrain de tennis entre le squash et le tennis"
         },
         {
             "activite": "Livres",
