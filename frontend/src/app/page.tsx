@@ -1,4 +1,4 @@
-import Sidebar from '@/components/Sidebar'; // Assurez-vous d'avoir renommé Sidecar.tsx
+import Sidebar from '@/components/Sidebar';
 import ChatInterface from '@/components/ChatInterface';
 
 export default function Home() {

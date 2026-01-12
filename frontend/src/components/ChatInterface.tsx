@@ -97,10 +97,10 @@ export default function ChatInterface() {
                             className="text-center space-y-2 mb-8"
                         >
                             <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">
-                                Hello, I&apos;m Context.
+                                Bonjour, je suis Quentin
                             </h1>
                             <p className="text-zinc-400 text-lg md:text-xl">
-                                Ask me anything about Quentin&apos;s work or experience.
+                                Posez-moi une question sur mon parcours ou mes projets.
                             </p>
                         </motion.div>
                     )}
@@ -114,7 +114,7 @@ export default function ChatInterface() {
                                     type="text"
                                     value={inputValue}
                                     onChange={(e) => setInputValue(e.target.value)}
-                                    placeholder="Start typing..."
+                                    placeholder="Poser moi une question, je me ferais un plasir d'y répondre"
                                     className="flex-1 bg-transparent border-none outline-none text-white placeholder-zinc-500 h-10"
                                     autoFocus
                                     suppressHydrationWarning={true}

@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Send, Loader2, User, Bot } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import { useChat } from '@/hooks/useChat'; // 👈 On importe le moteur
+import { useChat } from '@/hooks/useChat';
 
 const ChatWidget = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -71,8 +71,8 @@ const ChatWidget = () => {
                                 </div>
 
                                 <div className={`max-w-[85%] rounded-2xl p-3 text-sm leading-relaxed ${msg.role === 'user'
-                                        ? 'bg-blue-600 text-white rounded-tr-sm'
-                                        : 'bg-zinc-800 text-zinc-200 border border-zinc-700 rounded-tl-sm'
+                                    ? 'bg-blue-600 text-white rounded-tr-sm'
+                                    : 'bg-zinc-800 text-zinc-200 border border-zinc-700 rounded-tl-sm'
                                     }`}>
                                     <ReactMarkdown>{msg.content}</ReactMarkdown>
                                 </div>
