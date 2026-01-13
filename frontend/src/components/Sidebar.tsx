@@ -26,7 +26,7 @@ const Sidebar = () => {
                         Quentin Forget
                     </h1>
                     <p className="text-xl lg:text-2xl gradient-text font-semibold mb-4">
-                        Machine Learning & AI Engineer
+                        Data Scientist & AI Engineer
                     </p>
                     <div className="flex items-center justify-center gap-2 text-zinc-400 text-sm">
                         <MapPin size={16} />
@@ -37,7 +37,7 @@ const Sidebar = () => {
                 {/* Bio */}
                 <div className="p-6 mb-8">
                     <p className="text-zinc-300 text-center leading-relaxed">
-                        Je transforme vos solutions traditionnelles en moteurs d&apos;intelligence artificielle performants, alliant optimisation des coûts et innovation technologique.
+                        Je transforme vos solutions traditionnelles en moteurs d'intelligence artificielle performants, alliant optimisation des coûts et innovation technologique.
                     </p>
                 </div>
 
