@@ -2,8 +2,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.services.agent import chat_service
 from pydantic import BaseModel
+from app.core.logging import setup_logging
 
-app = FastAPI()
+
+# Setup logging
+setup_logging()
+
+app = FastAPI(title="CV Agent API", description="API pour interagir avec l'agent CV Agent", version="1.0.0")
 
 # 1. CONFIGURATION CORS (Autoriser le Frontend)
 origins = [
