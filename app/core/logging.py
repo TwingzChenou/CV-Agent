@@ -2,7 +2,7 @@
 import logging
 import sys
 from pathlib import Path
-from loguru import logger 
+from loguru import logger
 
 # On définit où stocker les logs
 LOG_DIR = Path("logs")
