@@ -14,7 +14,9 @@ app = FastAPI(
 origins = [
     "http://localhost:3000", # Si tu utilises React/Next.js
     "http://localhost:8000",
-    "https://cv-agent-two.vercel.app"
+    "https://cv-agent-two.vercel.app",
+    "https://quentinforget.com",
+    "https://www.quentinforget.com"
 ]
 
 app.add_middleware(
