@@ -1,0 +1,62 @@
+[
+    {
+        "query": "Quel est l'objectif principal du projet `CV-Agent` et quelles sont les fonctionnalités clés que vous avez implémentées, telles que décrites dans son fichier README ?",
+        "expected_tool": "read_project_readme"
+    },
+    {
+        "query": "Dans votre projet `CV-Agent`, quelles sont les technologies front-end et back-end que vous avez utilisées, et quelles sont les instructions pour le déployer localement, selon le README ?",
+        "expected_tool": "read_project_readme"
+    },
+    {
+        "query": "Imaginez que nous voulions intégrer une fonctionnalité similaire à celle de votre projet `CV-Agent` dans notre propre système. Quelles sont les techniques que vous avez apprises lors de ce projet et qui pourrait etre utile pour nos projets ?",
+        "expected_tool": "read_project_readme"
+    },
+    {
+        "query": "Si je voulais contribuer à votre projet `CV-Agent`, quelles sont les instructions d'installation et de configuration initiales que je trouverais dans le README, et y a-t-il une section sur la manière de lancer les tests ?",
+        "expected_tool": "read_project_readme"
+    },
+    {
+        "query": "Votre projet `CV-Agent` semble intéressant. Quelles sont les défis auxquels vous avez été confronté lors de son développement et comment les avez-vous résolus ?",
+        "expected_tool": "read_project_readme"
+    },
+    {
+        "query": "Peux-tu me parler de tes projets ?",
+        "expected_tool": "list_all_projects"
+    },
+    {
+        "query": "Quels sont les projets que tu as réalisés qui, selon toi, mettent le mieux en valeur tes compétences techniques pour ce poste ?",
+        "expected_tool": "list_all_projects"
+    },
+    {
+        "query": "Pourrais-tu me donner un aperçu de l'ensemble de ton portfolio de code, en mentionnant les types de projets sur lesquels tu as travaillé ?",
+        "expected_tool": "list_all_projects"
+    },
+    {
+        "query": "En te basant sur ton expérience et ce que tu as pu coder, quels sont les projets les plus significatifs que tu as menés à bien ?",
+        "expected_tool": "list_all_projects"
+    },
+    {
+        "query": "Si je devais explorer tes contributions sur GitHub ou ton CV, quels sont les projets que tu me recommanderais de regarder en priorité pour comprendre l'étendue de tes réalisations ?",
+        "expected_tool": "list_all_projects"
+    },
+    {
+        "query": "Quelle est la durée de la dernière expérience professionnelle de Quentin et quel était son rôle principal ?",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Quelles sont les compétences techniques ou mises en avant dans la section 'Compétences' du CV de Quentin ?",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Décrivez un projet majeur mentionné dans le CV de Quentin où il a joué un rôle clé dans la gestion de bout en bout, et quels ont été les résultats concrets de son implication.",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Y a-t-il une expérience ou un projet dans le CV de Quentin qui démontre sa capacité à résoudre des problèmes complexes ou à s'adapter rapidement à de nouvelles technologies ?",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Quelle est la dernière expérience professionnelle de Quentin ?",
+        "expected_tool": "cv_query_engine"
+    }
+]
