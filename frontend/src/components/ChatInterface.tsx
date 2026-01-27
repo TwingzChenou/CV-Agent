@@ -114,7 +114,7 @@ export default function ChatInterface() {
                                     type="text"
                                     value={inputValue}
                                     onChange={(e) => setInputValue(e.target.value)}
-                                    placeholder="Poser moi une question, je me ferais un plasir d'y répondre"
+                                    placeholder="Poser moi une question, je me ferais un plaisir d'y répondre"
                                     className="flex-1 bg-transparent border-none outline-none text-white placeholder-zinc-500 h-10"
                                     autoFocus
                                     suppressHydrationWarning={true}

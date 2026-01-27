@@ -72,7 +72,7 @@ Follow these instructions to set up the project locally.
 3.  **Ingest CV Data:**
     Upload your CV data to Pinecone.
     ```bash
-    python ingest_cv.py
+    python loader.py
     ```
 
 ### Running the Application
@@ -94,6 +94,7 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
 # Run FastAPI server
+cd backend
 uvicorn app.main:app --reload
 ```
 
@@ -108,20 +109,76 @@ npm run dev
 
 ```ascii
 /
-├── app/                    # FastAPI Backend Application
-│   ├── api/                # API Routes
-│   ├── core/               # App Configuration & Security
-│   ├── services/           # Business Logic (AI Agent, GitHub Service)
-│   └── main.py             # App Entrypoint
-├── components/             # React/Next.js UI Components
+├── backend/                # FastAPI Backend Application
+│   ├── app/                # Application Code
+│   │   ├── api/            # API Routes
+│   │   ├── core/           # Configuration & Security
+│   │   ├── data/           # Data & Loaders
+│   │   ├── engine/         # RAG Engine & Tools
+│   │   └── main.py         # App Entrypoint
+│   ├── evaluation/         # Evaluation Responses Gemini
+│   ├── logs/               # Application Logs
+│   ├── Dockerfile          # Container Configuration
+│   └── requirements.txt    # Python Dependencies
 ├── frontend/               # Next.js Frontend Application
+│   ├── src/                # Source Code
+│   │   ├── app/            # Next.js App Router
+│   │   ├── components/     # UI Components
+│   │   ├── hooks/          # Custom Hooks
+│   │   └── lib/            # Utility Libraries
 │   ├── public/             # Static Assets
-│   └── src/                # Frontend Source Code
-├── ingest_cv.py            # Script to ingest CV JSON into Pinecone
-├── cv.json                 # Raw CV Data
-├── Dockerfile              # Container Configuration
-└── requirements.txt        # Backend Dependencies
+│   └── package.json        # Node Dependencies
+├── check_setup.py          # Setup Utility
+└── README.md               # Documentation
 ```
+
+## ⚙️ Backend Engine Details
+
+The `backend/app/engine` directory is the brain of the application, managing the AI logic, data ingestion, and external tool integrations. Here is a breakdown of each file:
+
+### `generate.py`
+**The Orchestrator.** This file handles the main chat generation logic.
+*   **Intent Classification:** Uses **DSPy** to classify user queries into categories like `chitchat` (handled directly), `cv` (requires RAG), or `list_all_projects` (requires GitHub API).
+*   **System Prompt:** Defines the persona of the agent ("Quentin Forget") and sets strict behavioral rules (STAR method, professional tone).
+*   **Agent Initialization:** Configures the **LlamaIndex ReActAgent** with the necessary tools and LLM (Gemini 2.5 Flash).
+*   **Response Generation:** Route the query to either a direct LLM call or the Agent based on the classified intent.
+
+### `tools.py`
+**The Toolbelt.** This file defines the specific capabilities (tools) the agent can use.
+*   **GitHub Integration:**
+    *   `list_github_projects`: Fetches the user's public repositories using the GitHub API.
+    *   `get_github_activity`: Retrieves the README content of a specific repository for real-time project context.
+*   **CV RAG Tool:**
+    *   `cv_query_engine`: Creates a query engine connected to the Pinecone vector database to answer questions about the CV.
+*   **Tool Assembly:** The `get_tools()` function packages these functions into LlamaIndex-compatible `FunctionTool` objects for the agent.
+
+### `index.py`
+**The Vector Manager.** This file manages the Pinecone vector database connection and indexing.
+*   **Connection:** Establishes the connection to the Pinecone index using environment variables.
+*   **Embedding Model:** Configures `GeminiEmbedding` (text-embedding-004) to convert text into vector representations.
+*   **Indexing Pipeline:** Defines the `run_indexing_pipeline` function which takes document chunks, generates embeddings, and upserts them into Pinecone.
+
+### `loader.py`
+**The Data Ingestor.** This file handles the ETL (Extract, Transform, Load) process for the CV data.
+*   **Loading:** Uses `SimpleDirectoryReader` to load the PDF resume (`CV_Quentin_Forget.pdf`) from the `data/` directory.
+*   **Splitting:** Uses `SentenceSplitter` to break the document into manageable chunks (tokens) with overlap to preserve context.
+*   **Execution:** Calls the indexing pipeline from `index.py` to store the processed chunks in the vector database.
+
+## 🧪 Evaluation Framework Details
+
+The `backend/evaluation` directory contains scripts to ensure the quality and accuracy of the agent's responses using the **Ragas** framework.
+
+### `generate_dataset.py`
+**The Scenario Generator.** This script automates the creation of test cases.
+*   **Tool Analysis:** Iterates through available tools in `tools.py`.
+*   **Scenario Creation:** Uses Gemini to invent 5 distinct user questions per tool that *must* use that specific tool to be answered correctly.
+*   **Output:** Generates a JSON dataset (`agent_dataset.json`) of test queries.
+
+### `run_eval.py`
+**The Judge.** This script runs the evaluation pipeline to measure performance.
+*   **Ragas Integration:** Uses Ragas (with Gemini as the judge LLM) to compute metrics like **Faithfulness** (is the answer derived from context?) and **Answer Relevancy** (does it answer the question?).
+*   **Batch Inference:** Runs the agent against a dataset of questions (currently a mix of hardcoded golden datasets and generated ones).
+*   **Reporting:** Outputs a pandas DataFrame and CSV with scores for each question, helping identify weak points in the system prompt or retrieval logic.
 
 ## Key Features
 
