@@ -107,7 +107,7 @@ export default function ChatInterface() {
 
                     <form onSubmit={handleSubmit} className="w-full relative max-w-2xl mx-auto">
                         <div className="relative group">
-                            <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/50 to-emerald-500/50 rounded-2xl blur opacity-30 group-hover:opacity-75 transition duration-1000 group-hover:duration-200" />
+                            <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/50 to-emerald-500/50 rounded-2xl blur-2xl opacity-30 group-hover:opacity-75 transition duration-1000 group-hover:duration-200" />
                             <div className="relative bg-zinc-900/90 backdrop-blur-xl rounded-2xl border border-white/10 flex items-center p-2 shadow-2xl">
                                 <Sparkles className="w-5 h-5 text-blue-400 ml-3 mr-3" />
                                 <input
