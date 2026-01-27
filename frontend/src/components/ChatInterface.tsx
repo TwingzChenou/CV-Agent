@@ -29,7 +29,20 @@ export default function ChatInterface() {
 
         const query = inputValue;
         setInputValue("");
+
+        // Petit hack pour remettre la hauteur du textarea à la taille initiale après envoi
+        const textarea = document.querySelector('textarea');
+        if (textarea) textarea.style.height = 'auto';
+
         await sendMessage(query);
+    };
+
+    // Gestion de la touche Entrée
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault(); // Empêche le saut de ligne par défaut
+            handleSubmit(e);    // Envoie le message
+        }
     };
 
     return (
@@ -107,22 +120,39 @@ export default function ChatInterface() {
 
                     <form onSubmit={handleSubmit} className="w-full relative max-w-2xl mx-auto">
                         <div className="relative group">
-                            <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/50 to-emerald-500/50 rounded-2xl blur-2xl opacity-30 group-hover:opacity-75 transition duration-1000 group-hover:duration-200" />
-                            <div className="relative bg-zinc-900/90 backdrop-blur-xl rounded-2xl border border-white/10 flex items-center p-2 shadow-2xl">
-                                <Sparkles className="w-5 h-5 text-blue-400 ml-3 mr-3" />
-                                <input
-                                    type="text"
+                            {/* Glow Effect corrigé : blur-2xl, opacity-20 et -inset-px pour la finesse */}
+                            <div className="absolute -inset-px bg-gradient-to-r from-blue-500/50 to-emerald-500/50 rounded-2xl blur-2xl opacity-20 group-hover:opacity-75 transition duration-1000 group-hover:duration-200" />
+
+                            {/* Input Container : items-end pour aligner en bas quand le texte grandit */}
+                            <div className="relative bg-zinc-900/90 backdrop-blur-xl rounded-2xl flex items-end p-2 shadow-2xl border border-white/10">
+
+                                {/* Icône Sparkles avec padding pour l'aligner en bas */}
+                                <div className="pb-2 pl-2">
+                                    <Sparkles className="w-5 h-5 text-blue-400 mr-2" />
+                                </div>
+
+                                <textarea
                                     value={inputValue}
-                                    onChange={(e) => setInputValue(e.target.value)}
+                                    onChange={(e) => {
+                                        setInputValue(e.target.value);
+                                        // Auto-resize logic
+                                        e.target.style.height = 'auto';
+                                        e.target.style.height = `${e.target.scrollHeight}px`;
+                                    }}
+                                    onKeyDown={handleKeyDown}
                                     placeholder="Poser moi une question, je me ferais un plaisir d'y répondre"
-                                    className="flex-1 bg-transparent border-none outline-none text-white placeholder-zinc-500 h-10"
+                                    rows={1}
+                                    className="flex-1 bg-transparent border-none outline-none text-white placeholder-zinc-500 resize-none min-h-[40px] max-h-[200px] py-2 px-1"
+                                    style={{ scrollbarWidth: 'none' }}
                                     autoFocus
                                     suppressHydrationWarning={true}
                                 />
+
+                                {/* Bouton Envoyer avec marge pour l'aligner en bas */}
                                 <button
                                     type="submit"
                                     disabled={!inputValue.trim() || status === 'loading'}
-                                    className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-white"
+                                    className="p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-white mb-0.5 ml-1"
                                 >
                                     <Send className="w-4 h-4" />
                                 </button>
@@ -169,7 +199,7 @@ function MessageBubble({ message }: { message: Message }) {
                 )}>
                     <ReactMarkdown
                         components={{
-                            code: ({ node, className, children, ...props }) => { // Removed redundant 'inline'
+                            code: ({ node, className, children, ...props }) => {
                                 return (
                                     <code className={cn("bg-zinc-900/50 px-1 py-0.5 rounded text-xs font-mono text-emerald-300", className)} {...props}>
                                         {children}
