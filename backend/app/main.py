@@ -30,7 +30,7 @@ app.add_middleware(
 # On ajoute la route /api/chat à l'application
 app.include_router(chat_router, prefix="/api")
 
-@app.get("/health")
+@app.api_route("/health", methods=["GET", "HEAD"])
 async def health_check():
     return {"status": "ok"}
 
