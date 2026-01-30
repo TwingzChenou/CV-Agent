@@ -59,7 +59,7 @@ def run_indexing_pipeline(documents):
 
     storage_context = setup_storage_context(pc_index)
     logger.info("✅ Storage context setup completed.")
-    """
+    """ 
     clean_index(pc_index)
     logger.info("✅ Index cleaned.")
     """
