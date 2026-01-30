@@ -1,12 +1,19 @@
-from github import Github
+import sys
 import os
+from pathlib import Path
+
+current_file = Path(__file__).resolve()
+backend_root = current_file.parent.parent.parent
+sys.path.append(str(backend_root))
+
+from github import Github
 from dotenv import load_dotenv
 from app.core.logging import setup_logging
 import logging
 from llama_index.embeddings.gemini import GeminiEmbedding
 from llama_index.core.tools import QueryEngineTool, ToolMetadata, FunctionTool
 import sys
-from llama_index.core import VectorStoreIndex
+from llama_index.core import VectorStoreIndex, Settings
 from llama_index.vector_stores.pinecone import PineconeVectorStore
 from llama_index.llms.gemini import Gemini
 
@@ -96,19 +103,26 @@ def get_github_activity(repo: str) -> str:
 
 
 # Get CV info
-def get_cv_info_tool(index: VectorStoreIndex, Embedding: GeminiEmbedding, llm: setup_llm) -> str:
+def get_cv_info_tool(index) -> str:
     """
     Retrieves information from the CV using the Pinecone Vector Store.
     """
-    embed_model = Embedding
 
     # assemble query engine
-    query_engine = index.as_query_engine(
-        llm=llm,
-        embed_model=embed_model,
-        similarity_top_k=3,
-        verbose=True
-    )
+    query_engine = index.as_query_engine()
+
+    # query
+    return query_engine
+
+
+# Get CV info
+def get_profile_tool(index) -> str:
+    """
+    Retrieves information from the CV using the Pinecone Vector Store.
+    """
+
+    # assemble query engine
+    query_engine = index.as_query_engine()
 
     # query
     return query_engine
@@ -128,6 +142,14 @@ def get_tools() -> list:
     llm = setup_llm()
     logger.info("✅ LLM setup completed.")
 
+    # Setup Settings
+    Settings.llm = llm
+    Settings.embed_model = Embedding
+    Settings.similarity_top_k = 3
+    Settings.verbose = True
+    Settings.index = index
+    logger.info("✅ Settings setup completed.")
+    
     # Initialize Agent
     readme_tool = FunctionTool.from_defaults(
         fn=get_github_activity, 
@@ -142,10 +164,18 @@ def get_tools() -> list:
     )
 
     cv_tool = QueryEngineTool(
-        query_engine=get_cv_info_tool(index, Embedding, llm),
+        query_engine=get_cv_info_tool(index),
         metadata=ToolMetadata(
             name="cv_query_engine",
             description="Useful for answering questions about Quentin's CV, skills, and experience.",
+        ),
+    )
+
+    profile_tool = QueryEngineTool(
+        query_engine=get_profile_tool(index),
+        metadata=ToolMetadata(
+            name="profile_query_engine",
+            description="Useful for answering questions about Quentin's profile, availability and personality.",
         ),
     )
 
@@ -153,7 +183,8 @@ def get_tools() -> list:
     tools = [
         readme_tool,
         list_projects_tool,
-        cv_tool
+        cv_tool,
+        profile_tool
     ]
     return tools
 
@@ -179,8 +210,12 @@ def main():
     logger.info("✅ LLM setup completed.")
     
     # Get CV info tool
-    get_cv_info_tool(index, Embedding, llm)
+    get_cv_info_tool(index)
     logger.info("✅ CV info tool setup completed.")
+
+    # Get Profile tool
+    get_profile_tool(index)
+    logger.info("✅ Profile tool setup completed.")
     
     # Get list github projects
     list_github_projects()

@@ -1,4 +1,11 @@
+import sys
 import os
+from pathlib import Path
+
+current_file = Path(__file__).resolve()
+backend_root = current_file.parent.parent.parent
+sys.path.append(str(backend_root))
+
 from llama_index.embeddings.gemini import GeminiEmbedding
 from llama_index.vector_stores.pinecone import PineconeVectorStore
 from pinecone import Pinecone
@@ -59,10 +66,10 @@ def run_indexing_pipeline(documents):
 
     storage_context = setup_storage_context(pc_index)
     logger.info("✅ Storage context setup completed.")
-    """ 
-    clean_index(pc_index)
-    logger.info("✅ Index cleaned.")
-    """
+    
+    #clean_index(pc_index)
+    #logger.info("✅ Index cleaned.")
+    
     setup_index(storage_context, documents)
     logger.info("✅ Ingest documents completed.")
 

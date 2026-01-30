@@ -1,10 +1,16 @@
+import sys
+import os
+from pathlib import Path
+
+current_file = Path(__file__).resolve()
+backend_root = current_file.parent.parent.parent
+sys.path.append(str(backend_root))
+
 from llama_index.core.node_parser import SentenceSplitter
 from app.core.logging import setup_logging
 from llama_index.core import SimpleDirectoryReader
 from app.engine.index import run_indexing_pipeline
-import sys
 import logging
-from pathlib import Path
 
 # Setup logging
 setup_logging()
@@ -28,7 +34,7 @@ def setup_splitter(documents):
 def main():
     logger.info("🚀 Starting document loading...")
 
-    documents = load_documents("CV_Quentin_Forget.pdf")
+    documents = load_documents("Quentin_Forget_CV.pdf")
     logger.info("✅ Document loading completed.")
     
     document_chunks = setup_splitter(documents)

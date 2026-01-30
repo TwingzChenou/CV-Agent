@@ -1,0 +1,38 @@
+--- INFORMATIONS LOGISTIQUES & ADMINISTRATIVES ---
+
+Question : Quelles sont vos prétentions salariales ?
+Réponse : Compte tenu de mon expertise en Data Science, de ma capacité à gérer des projets de bout en bout et des prix du marché en Île-de-France, je vise une fourchette comprise entre 45 000€ et 55 000€ brut annuel. Je reste toutefois ouvert à la discussion en fonction du package global (intéressement, télétravail, avantages).
+
+Question : Quelle est votre disponibilité ? Quand pouvez-vous commencer ?
+Réponse : Je suis disponible immédiatement. Je n'ai aucun préavis à effectuer et je peux démarrer dès que possible.
+
+Question : Quelle est votre mobilité géographique ? Où habitez-vous ?
+Réponse : Je réside actuellement en Île-de-France. Je recherche idéalement un poste dans cette région (Paris ou banlieue proche) ou un poste en "Full Remote" (télétravail complet). Je ne prévois pas de déménagement immédiat hors de cette zone.
+
+Question : Quel type de contrat recherchez-vous ?
+Réponse : Je recherche principalement un CDI (Contrat à Durée Indéterminée) pour m'investir sur le long terme dans une entreprise ou un CDD (Contrat à Durée Déterminée) pour un projet spécifique.
+
+--- PERSONNALITÉ & COMPORTEMENT (SOFT SKILLS) ---
+
+Question : Quel est votre principal défaut ?
+Réponse : J'ai un profil très technique et j'ai parfois tendance, en début de projet, à vouloir trop optimiser le code ou la solution (perfectionnisme technique) avant même d'avoir validé le besoin utilisateur complet. Je travaille activement dessus en adoptant des méthodes agiles et en me forçant à livrer des MVP (Minimum Viable Products) rapidement.
+
+Question : Quelle est votre principale qualité ?
+Réponse : Ma curiosité et ma capacité d'auto-formation. Dans le domaine de l'IA, tout change tous les 6 mois. Je suis capable d'apprendre une nouvelle stack technique ou un nouveau framework (comme DSPy ou LlamaIndex) en quelques jours et de le rendre opérationnel dans un projet pro.
+
+Question : Comment gérez-vous le stress ou les délais courts ?
+Réponse : Je priorise. J'utilise des méthodes d'organisation pour découper les tâches complexes en sous-tâches réalisables. Si le délai est intenable, je préfère communiquer tôt pour réajuster le périmètre du projet plutôt que de livrer un produit non fonctionnel.
+
+Question : Préférez-vous travailler seul ou en équipe ?
+Réponse : J'aime l'autonomie dans la phase de développement (le "Deep Work"), mais je suis convaincu que les meilleures solutions naissent du travail d'équipe. J'apprécie particulièrement les Code Reviews et les sessions de brainstorming pour confronter les idées.
+
+--- MOTIVATION & PROJET PROFESSIONNEL ---
+
+Question : Pourquoi voulez-vous travailler dans la Data / l'IA ?
+Réponse : Ce qui me passionne, ce n'est pas juste l'algorithme, c'est l'impact concret. Transformer des données brutes en une décision intelligente ou en un outil qui fait gagner du temps aux gens, c'est ce qui me motive. J'aime le côté "constructeur" de ce métier. Et surtout la possibilité de pouvoir faciliter la vie des gens.
+
+Question : Pourquoi devrions-nous vous embaucher vous et pas un autre ?
+Réponse : Parce que je ne suis pas seulement un théoricien de la Data. Je suis un profil "Maker". Je sais entraîner un modèle, mais je sais aussi créer l'API, le conteneuriser avec Docker et le déployer. Vous n'aurez pas besoin de trois personnes pour mettre mon travail en production. J'aime créer des solutions complettes et pas seulement accumuler des compétences. J'essaie de trouver des solutions de mise en production.
+
+Question : Où vous voyez-vous dans 5 ans ?
+Réponse : Je me vois évoluer vers un poste de Lead Data Scientist ou d'Architecte IA. Je souhaite continuer à mettre les mains dans le code, mais aussi accompagner des profils plus juniors et prendre des décisions stratégiques sur les choix technologiques de l'entreprise.
