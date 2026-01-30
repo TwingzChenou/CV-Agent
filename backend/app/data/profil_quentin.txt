@@ -1,38 +1,74 @@
 --- INFORMATIONS LOGISTIQUES & ADMINISTRATIVES ---
 
+Question : Quelles sont les prétentions salariales de Quentin ?
+Réponse : Compte tenu de son expertise en Data Science, de sa capacité à gérer des projets de bout en bout et des prix du marché en Île-de-France, Monsieur Forget vise une fourchette comprise entre 45 000€ et 55 000€ brut annuel. Il reste toutefois ouvert à la discussion en fonction du package global (intéressement, télétravail, avantages).
+
+Question : Quelle est la disponibilité de Quentin ? Quand peut-il commencer ?
+Réponse : Quentin est disponible immédiatement. Il n'a aucun préavis à effectuer et peut démarrer une prise de poste dès que possible.
+
+Question : Quelle est sa mobilité géographique ? Où habite-t-il ?
+Réponse : Quentin réside actuellement en Île-de-France. Il recherche idéalement un poste dans cette région (Paris ou banlieue proche) ou un poste en "Full Remote" (télétravail complet). Il ne prévoit pas de déménagement immédiat hors de cette zone.
+
+Question : Quel type de contrat Quentin recherche-t-il ?
+Réponse : Il recherche principalement un CDI (Contrat à Durée Indéterminée) pour s'investir sur le long terme dans une entreprise, mais reste ouvert à un CDD (Contrat à Durée Déterminée) pour des projets spécifiques et ambitieux.
+
 Question : Quelles sont vos prétentions salariales ?
-Réponse : Compte tenu de mon expertise en Data Science, de ma capacité à gérer des projets de bout en bout et des prix du marché en Île-de-France, je vise une fourchette comprise entre 45 000€ et 55 000€ brut annuel. Je reste toutefois ouvert à la discussion en fonction du package global (intéressement, télétravail, avantages).
+Réponse : Compte tenu de son expertise en Data Science, de sa capacité à gérer des projets de bout en bout et des prix du marché en Île-de-France, Monsieur Forget vise une fourchette comprise entre 45 000€ et 55 000€ brut annuel. Il reste toutefois ouvert à la discussion en fonction du package global (intéressement, télétravail, avantages).
 
 Question : Quelle est votre disponibilité ? Quand pouvez-vous commencer ?
-Réponse : Je suis disponible immédiatement. Je n'ai aucun préavis à effectuer et je peux démarrer dès que possible.
+Réponse : Quentin est disponible immédiatement. Il n'a aucun préavis à effectuer et peut démarrer une prise de poste dès que possible.
+
+Question : Quelles sont vos disponibilités ?
+Réponse : Quentin est disponible immédiatement. Il n'a aucun préavis à effectuer et peut démarrer une prise de poste dès que possible.
 
 Question : Quelle est votre mobilité géographique ? Où habitez-vous ?
-Réponse : Je réside actuellement en Île-de-France. Je recherche idéalement un poste dans cette région (Paris ou banlieue proche) ou un poste en "Full Remote" (télétravail complet). Je ne prévois pas de déménagement immédiat hors de cette zone.
+Réponse : Quentin réside actuellement en Île-de-France. Il recherche idéalement un poste dans cette région (Paris ou banlieue proche) ou un poste en "Full Remote" (télétravail complet). Il ne prévoit pas de déménagement immédiat hors de cette zone.
 
 Question : Quel type de contrat recherchez-vous ?
-Réponse : Je recherche principalement un CDI (Contrat à Durée Indéterminée) pour m'investir sur le long terme dans une entreprise ou un CDD (Contrat à Durée Déterminée) pour un projet spécifique.
+Réponse : Quentin recherche principalement un CDI (Contrat à Durée Indéterminée) pour s'investir sur le long terme dans une entreprise ou un CDD (Contrat à Durée Déterminée) pour un projet spécifique.
 
 --- PERSONNALITÉ & COMPORTEMENT (SOFT SKILLS) ---
 
+Question : Quel est le principal défaut de Quentin ?
+Réponse : Quentin a un profil très technique et a parfois tendance, en début de projet, à vouloir trop optimiser le code ou la solution (perfectionnisme technique) avant même d'avoir validé le besoin utilisateur complet. Il travaille activement sur ce point en adoptant des méthodes agiles et en se forçant à livrer des MVP (Minimum Viable Products) rapidement.
+
+Question : Quelle est sa principale qualité ?
+Réponse : Sa curiosité et sa capacité d'auto-formation sont ses atouts majeurs. Dans le domaine de l'IA où tout évolue très vite, Quentin est capable d'apprendre une nouvelle stack technique ou un nouveau framework (comme DSPy ou LlamaIndex) en quelques jours et de le rendre opérationnel dans un projet professionnel.
+
+Question : Comment Quentin gère-t-il le stress ou les délais courts ?
+Réponse : Il gère la pression par la priorisation. Il utilise des méthodes d'organisation pour découper les tâches complexes en sous-tâches réalisables. Si un délai semble intenable, il privilégie une communication proactive pour réajuster le périmètre du projet plutôt que de livrer un produit non fonctionnel.
+
+Question : Préfère-t-il travailler seul ou en équipe ?
+Réponse : Bien qu'il apprécie l'autonomie lors des phases de développement intense (le "Deep Work"), Quentin est convaincu que les meilleures solutions naissent du travail d'équipe. Il valorise particulièrement les Code Reviews et les sessions de brainstorming pour confronter et affiner les idées.
+
 Question : Quel est votre principal défaut ?
-Réponse : J'ai un profil très technique et j'ai parfois tendance, en début de projet, à vouloir trop optimiser le code ou la solution (perfectionnisme technique) avant même d'avoir validé le besoin utilisateur complet. Je travaille activement dessus en adoptant des méthodes agiles et en me forçant à livrer des MVP (Minimum Viable Products) rapidement.
+Réponse : Quentin a un profil très technique et a parfois tendance, en début de projet, à vouloir trop optimiser le code ou la solution (perfectionnisme technique) avant même d'avoir validé le besoin utilisateur complet. Il travaille activement dessus en adoptant des méthodes agiles et en se forçant à livrer des MVP (Minimum Viable Products) rapidement.
 
 Question : Quelle est votre principale qualité ?
-Réponse : Ma curiosité et ma capacité d'auto-formation. Dans le domaine de l'IA, tout change tous les 6 mois. Je suis capable d'apprendre une nouvelle stack technique ou un nouveau framework (comme DSPy ou LlamaIndex) en quelques jours et de le rendre opérationnel dans un projet pro.
+Réponse : Sa curiosité et sa capacité d'auto-formation. Dans le domaine de l'IA, tout change tous les 6 mois. Il est capable d'apprendre une nouvelle stack technique ou un nouveau framework (comme DSPy ou LlamaIndex) en quelques jours et de le rendre opérationnel dans un projet pro.
 
-Question : Comment gérez-vous le stress ou les délais courts ?
-Réponse : Je priorise. J'utilise des méthodes d'organisation pour découper les tâches complexes en sous-tâches réalisables. Si le délai est intenable, je préfère communiquer tôt pour réajuster le périmètre du projet plutôt que de livrer un produit non fonctionnel.
+Question : Comment gère-t-il le stress ou les délais courts ?
+Réponse : Il gère la pression par la priorisation. Il utilise des méthodes d'organisation pour découper les tâches complexes en sous-tâches réalisables. Si le délai est intenable, il préfère communiquer tôt pour réajuster le périmètre du projet plutôt que de livrer un produit non fonctionnel.
 
-Question : Préférez-vous travailler seul ou en équipe ?
-Réponse : J'aime l'autonomie dans la phase de développement (le "Deep Work"), mais je suis convaincu que les meilleures solutions naissent du travail d'équipe. J'apprécie particulièrement les Code Reviews et les sessions de brainstorming pour confronter les idées.
+Question : Préfère-t-il travailler seul ou en équipe ?
+Réponse : Il aime l'autonomie dans la phase de développement (le "Deep Work"), mais il est convaincu que les meilleures solutions naissent du travail d'équipe. Il apprécie particulièrement les Code Reviews et les sessions de brainstorming pour confronter les idées.
 
 --- MOTIVATION & PROJET PROFESSIONNEL ---
 
+Question : Pourquoi Quentin veut-il travailler dans la Data et l'IA ?
+Réponse : Ce qui le passionne, ce n'est pas uniquement l'algorithme, mais l'impact concret de la technologie. Transformer des données brutes en une décision intelligente ou en un outil qui fait gagner du temps aux utilisateurs est sa principale motivation. Il aime le côté "constructeur" de ce métier et la possibilité de faciliter la vie des gens grâce à l'IA.
+
+Question : Pourquoi devrions-nous embaucher Quentin et pas un autre ?
+Réponse : Parce que Quentin n'est pas seulement un théoricien de la Data, c'est un profil "Maker" (Faisseur). Il sait entraîner un modèle, mais il sait aussi créer l'API, le conteneuriser avec Docker et le déployer. Vous n'aurez pas besoin de trois personnes pour mettre son travail en production. Il se focalise sur la création de solutions complètes et opérationnelles.
+
+Question : Où Quentin se voit-il dans 5 ans ?
+Réponse : Il se projette vers un poste de Lead Data Scientist ou d'Architecte IA. Il souhaite continuer à "mettre les mains dans le code", tout en accompagnant des profils plus juniors et en prenant des décisions stratégiques sur les choix technologiques de l'entreprise.
+
 Question : Pourquoi voulez-vous travailler dans la Data / l'IA ?
-Réponse : Ce qui me passionne, ce n'est pas juste l'algorithme, c'est l'impact concret. Transformer des données brutes en une décision intelligente ou en un outil qui fait gagner du temps aux gens, c'est ce qui me motive. J'aime le côté "constructeur" de ce métier. Et surtout la possibilité de pouvoir faciliter la vie des gens.
+Réponse : Ce qui le passionne, ce n'est pas juste l'algorithme, c'est l'impact concret. Transformer des données brutes en une décision intelligente ou en un outil qui fait gagner du temps aux gens, c'est ce qui le motive. Il aime le côté "constructeur" de ce métier. Et surtout la possibilité de pouvoir faciliter la vie des gens.
 
 Question : Pourquoi devrions-nous vous embaucher vous et pas un autre ?
-Réponse : Parce que je ne suis pas seulement un théoricien de la Data. Je suis un profil "Maker". Je sais entraîner un modèle, mais je sais aussi créer l'API, le conteneuriser avec Docker et le déployer. Vous n'aurez pas besoin de trois personnes pour mettre mon travail en production. J'aime créer des solutions complettes et pas seulement accumuler des compétences. J'essaie de trouver des solutions de mise en production.
+Réponse : Parce que Quentin n'est pas seulement un théoricien de la Data. Il est un profil "Maker". Il sait entraîner un modèle, mais il sait aussi créer l'API, le conteneuriser avec Docker et le déployer. Vous n'aurez pas besoin de trois personnes pour mettre son travail en production. Il aime créer des solutions complettes et pas seulement accumuler des compétences. Il essaie de trouver des solutions de mise en production.
 
 Question : Où vous voyez-vous dans 5 ans ?
-Réponse : Je me vois évoluer vers un poste de Lead Data Scientist ou d'Architecte IA. Je souhaite continuer à mettre les mains dans le code, mais aussi accompagner des profils plus juniors et prendre des décisions stratégiques sur les choix technologiques de l'entreprise.
+Réponse : Il se voit évoluer vers un poste de Lead Data Scientist ou d'Architecte IA. Il souhaite continuer à mettre les mains dans le code, mais aussi accompagner des profils plus juniors et prendre des décisions stratégiques sur les choix technologiques de l'entreprise.

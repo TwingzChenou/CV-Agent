@@ -34,7 +34,7 @@ def setup_splitter(documents):
 def main():
     logger.info("🚀 Starting document loading...")
 
-    documents = load_documents("Quentin_Forget_CV.pdf")
+    documents = load_documents("profil_quentin.txt")
     logger.info("✅ Document loading completed.")
     
     document_chunks = setup_splitter(documents)
