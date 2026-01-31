@@ -9,6 +9,14 @@ import { useChat, Message } from "@/hooks/useChat";
 import { cn } from "@/lib/utils";
 
 export default function ChatInterface() {
+    const SUGGESTED_QUESTIONS = [
+        "Quelles sont ses disponibilités ?",
+        "Quel est son principal défaut ?",
+        "Quels sont ses projets GitHub ?",
+        "Peux-tu me parler de son projet 'CV-Agent' ?",
+        "Quelles stacks techniques maitrise-t-il ?"
+    ];
+
     const { messages, sendMessage, status, currentTool } = useChat();
     const [inputValue, setInputValue] = useState("");
     const [hasStarted, setHasStarted] = useState(false);
@@ -43,6 +51,11 @@ export default function ChatInterface() {
             e.preventDefault(); // Empêche le saut de ligne par défaut
             handleSubmit(e);    // Envoie le message
         }
+    };
+
+    const handleSuggestionClick = async (question: string) => {
+        if (!hasStarted) setHasStarted(true);
+        await sendMessage(question);
     };
 
     return (
@@ -107,14 +120,36 @@ export default function ChatInterface() {
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="text-center space-y-2 mb-8"
+                            className="text-center space-y-6 mb-8"
                         >
-                            <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">
-                                Bonjour, je suis Quentin
+                            <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400 pb-1">
+                                Bonjour, je suis J.A.R.V.I.S
                             </h1>
                             <p className="text-zinc-400 text-lg md:text-xl">
-                                Posez-moi une question sur mon parcours ou mes projets.
+                                L'assistant intelligent de Quentin
                             </p>
+                        </motion.div>
+                    )}
+
+                    {!hasStarted && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.3 }}
+                            className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full max-w-2xl px-4 mb-8"
+                        >
+                            {SUGGESTED_QUESTIONS.map((question, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => handleSuggestionClick(question)}
+                                    className={cn(
+                                        "p-3 text-sm text-zinc-400 bg-white/5 hover:bg-white/10 hover:text-zinc-200 border border-white/10 rounded-xl transition-all duration-200 hover:scale-105 backdrop-blur-sm text-center",
+                                        idx === SUGGESTED_QUESTIONS.length - 1 && SUGGESTED_QUESTIONS.length % 2 !== 0 ? "md:col-span-2" : ""
+                                    )}
+                                >
+                                    {question}
+                                </button>
+                            ))}
                         </motion.div>
                     )}
 
@@ -140,7 +175,7 @@ export default function ChatInterface() {
                                         e.target.style.height = `${e.target.scrollHeight}px`;
                                     }}
                                     onKeyDown={handleKeyDown}
-                                    placeholder="Poser moi une question, je me ferais un plaisir d'y répondre"
+                                    placeholder="Poser moi une question"
                                     rows={1}
                                     className="flex-1 bg-transparent border-none outline-none text-white placeholder-zinc-500 resize-none min-h-[40px] max-h-[200px] py-2 px-1"
                                     style={{ scrollbarWidth: 'none' }}

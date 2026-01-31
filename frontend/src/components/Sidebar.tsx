@@ -48,7 +48,7 @@ const Sidebar = () => {
                         Compétences clés
                     </h3>
                     <div className="flex flex-wrap gap-2">
-                        {['Python', 'Scikit-learn', 'TensorFlow', 'LlamaIndex', 'Pinecone', 'Docker', 'Git', 'FastAPI', 'MongoDB'].map((skill) => (
+                        {['Python', 'Scikit-learn', 'TensorFlow', 'LlamaIndex', 'Pinecone', 'Docker', 'Git', 'FastAPI', 'RAG'].map((skill) => (
                             <span
                                 key={skill}
                                 className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs text-zinc-300 hover:bg-white/10 hover:border-blue-500/50 transition-all duration-300 cursor-default"
@@ -80,7 +80,7 @@ const Sidebar = () => {
                         <Github size={20} className="group-hover:scale-110 transition-transform" />
                     </a>
                     <a
-                        href="/CV_Quentin_Forget.pdf"
+                        href="/Quentin_Forget_CV.pdf"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="glass-strong w-12 h-12 rounded-full flex items-center justify-center text-zinc-400 hover:text-red-400 hover:border-red-500/50 transition-all duration-300 group"

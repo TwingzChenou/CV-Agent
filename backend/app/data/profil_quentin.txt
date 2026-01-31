@@ -41,10 +41,10 @@ Réponse : Il gère la pression par la priorisation. Il utilise des méthodes d'
 Question : Préfère-t-il travailler seul ou en équipe ?
 Réponse : Bien qu'il apprécie l'autonomie lors des phases de développement intense (le "Deep Work"), Quentin est convaincu que les meilleures solutions naissent du travail d'équipe. Il valorise particulièrement les Code Reviews et les sessions de brainstorming pour confronter et affiner les idées.
 
-Question : Quel est votre principal défaut ?
+Question : Quel est son principal défaut ?
 Réponse : Quentin a un profil très technique et a parfois tendance, en début de projet, à vouloir trop optimiser le code ou la solution (perfectionnisme technique) avant même d'avoir validé le besoin utilisateur complet. Il travaille activement dessus en adoptant des méthodes agiles et en se forçant à livrer des MVP (Minimum Viable Products) rapidement.
 
-Question : Quelle est votre principale qualité ?
+Question : Quelle est sa principale qualité ?
 Réponse : Sa curiosité et sa capacité d'auto-formation. Dans le domaine de l'IA, tout change tous les 6 mois. Il est capable d'apprendre une nouvelle stack technique ou un nouveau framework (comme DSPy ou LlamaIndex) en quelques jours et de le rendre opérationnel dans un projet pro.
 
 Question : Comment gère-t-il le stress ou les délais courts ?
