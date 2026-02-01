@@ -21,20 +21,20 @@ def load_documents(name_doc):
     current_file = Path(__file__).resolve()
     project_root = current_file.parent.parent
     filepath = project_root / "data" / name_doc
-    reader = SimpleDirectoryReader(input_files=[str(filepath)])
-    return reader.load_data()
+    reader = SimpleDirectoryReader(input_files=[str(filepath)]).load_data()
+    return reader
 
 
 #setup splitter
 def setup_splitter(documents):
-    parser = SentenceSplitter(chunk_size=1024, chunk_overlap=20)
+    parser = SentenceSplitter(chunk_size=512, chunk_overlap=20)
     return parser.get_nodes_from_documents(documents)
 
 
 def main():
     logger.info("🚀 Starting document loading...")
 
-    documents = load_documents("Quentin_Forget_CV.pdf")
+    documents = load_documents("CV.txt")
     logger.info("✅ Document loading completed.")
     
     document_chunks = setup_splitter(documents)

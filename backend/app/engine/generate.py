@@ -63,7 +63,7 @@ dspy.settings.configure(lm=lm)
 class IntentSignature(dspy.Signature):
     """Classify the user query into one of the following intents: read_project_readme, list_all_projects, cv, chitchat, mixed."""
     query = dspy.InputField()
-    intent = dspy.OutputField(desc="One of: read_project_readme(project_name), list_all_projects, cv_query_engine(stacks techniques, diplome, formation, experience professionnelle, compétences, langues, hobbies, localisation), profile_query_engine(salaire, disponibilité, localisation, contrat, personalité, motivation), mixed")
+    intent = dspy.OutputField(desc="One of: read_project_readme(project_name), list_all_projects, cv_query_engine(stacks techniques, diplome, formation, experience professionnelle, compétences, langues, hobbies, contacts, salaire, disponibilité, localisation, contrat, personalité, motivation), mixed")
 
 class IntentClassifier(dspy.Module):
     def __init__(self):
@@ -74,32 +74,25 @@ class IntentClassifier(dspy.Module):
         return self.classify(query=query)
 
 trainset = [
-    # --- Catégorie : profile_query_engine ---
-    dspy.Example(query="Quelles sont tes prétentions salariales ?", intent="profile_query_engine(salaire)").with_inputs("query"),
-    dspy.Example(query="Es-tu disponible immédiatement ?", intent="profile_query_engine(disponibilité)").with_inputs("query"),
-    dspy.Example(query="Quelle est ta localisation ?", intent="profile_query_engine(localisation)").with_inputs("query"),
-    dspy.Example(query="Quelles sont vos points forts et vos points faibles ?", intent="profile_query_engine(personalité)").with_inputs("query"),
-    dspy.Example(query="Quelle est ta motivation ?", intent="profile_query_engine(motivation)").with_inputs("query"),
-    dspy.Example(query="Où vous voyez-vous dans 5 ans ?", intent="profile_query_engine(motivation)").with_inputs("query"),
-    dspy.Example(query="Quel est votre contrat ?", intent="profile_query_engine(contrat)").with_inputs("query"),
-    
-    
-    # --- Catégorie : direct_answer (Infos du System Prompt) ---
+    # --- Catégorie : cv (Infos complexes nécessitant recherche) ---
+    dspy.Example(query="Quelles sont ses prétentions salariales ?", intent="cv_query_engine(salaire)").with_inputs("query"),
+    dspy.Example(query="Quelles sont ses disponibilités ?", intent="cv_query_engine(disponibilité)").with_inputs("query"),
+    dspy.Example(query="Quels sont ses points forts et ses points faibles ?", intent="cv_query_engine(personalité)").with_inputs("query"),
+    dspy.Example(query="Quelle est sa motivation ?", intent="cv_query_engine(motivation)").with_inputs("query"),
+    dspy.Example(query="Où se voit-il dans 5 ans ?", intent="cv_query_engine(motivation)").with_inputs("query"),
+    dspy.Example(query="Quel est son contrat ?", intent="cv_query_engine(contrat)").with_inputs("query"),
+    dspy.Example(query="Détaille-moi son expérience chez Crédit Agricole", intent="cv_query_engine(experience)").with_inputs("query"),
+    dspy.Example(query="Quelles sont ses stack techniques ?", intent="cv_query_engine(stacks techniques)").with_inputs("query"),
+    dspy.Example(query="Quelle est sa formation ?", intent="cv_query_engine(formation)").with_inputs("query"),
+    dspy.Example(query="Quelles sont ses diplomes ?", intent="cv_query_engine(diplome)").with_inputs("query"),
+    dspy.Example(query="Quels sont ses hobbies ?", intent="cv_query_engine(hobbies)").with_inputs("query"),
+    dspy.Example(query="Quelle est sa localisation ?", intent="cv_query_engine(localisation)").with_inputs("query"),
 
     # --- Catégorie : chitchat (Infos du System Prompt) ---
     dspy.Example(query="Salut, comment ça va ?", intent="chitchat").with_inputs("query"),
-    
 
-    # --- Catégorie : cv (Infos complexes nécessitant recherche) ---
-    dspy.Example(query="Détaille-moi ton expérience chez Crédit Agricole", intent="cv (experience)").with_inputs("query"),
-    dspy.Example(query="Quelles sont tes stack techniques ?", intent="cv (stacks techniques)").with_inputs("query"),
-    dspy.Example(query="Quelle est ta formation ?", intent="cv (formation)").with_inputs("query"),
-    dspy.Example(query="Quelle est ta diplome ?", intent="cv (diplome)").with_inputs("query"),
-    dspy.Example(query="Quelle est ta localisation ?", intent="cv (localisation)").with_inputs("query"),
-    dspy.Example(query="Quels sont tes hobbies ?", intent="cv (hobbies)").with_inputs("query"),
-    
     # --- Autres catégories ---
-    dspy.Example(query="Montre moi tes projets github", intent="list_all_projects").with_inputs("query"),
+    dspy.Example(query="Montre moi ses projets github", intent="list_all_projects").with_inputs("query"),
 ]
 
 # Compilation du modèle
@@ -169,23 +162,40 @@ async def generate_response(query):
 if __name__ == "__main__":
 
     async def main():
-        print("--- TEST 1 : Chitchat ---")
-        print(await generate_response("Bonjour, comment ça va ?"))
+        #print("--- TEST 1 : Chitchat ---")
+        #print(await generate_response("Bonjour, comment ça va ?"))
         
         print("\n--- TEST 2 : CV (RAG) ---")
-        print(await generate_response("Quelles stacks techniques maitrise-t-il ?"))
+        print(await generate_response("Est ce que tu peux me fournir les contacts de Quentin ?"))
+
+        print("\n--- TEST 2 : CV (RAG) ---")
+        print(await generate_response("Quels sont ses hobbies ?"))
+
+        print("\n--- TEST 2 : CV (RAG) ---")
+        print(await generate_response("Quels sont ses compétences techniques ?"))
+
+        print("\n--- TEST 2 : CV (RAG) ---")
+        print(await generate_response("Quels sont ses expériences professionnelles ?"))
+
+        print("\n--- TEST 2 : CV (RAG) ---")
+        print(await generate_response("Quels sont ses formations ?"))
         
         print("\n--- TEST 3 : GitHub ---")
-        print(await generate_response("Quels sont ses projets GitHub ?"))
+        print(await generate_response("Décris moi son projet Argentic CV ?"))
 
         print("\n--- TEST 4 : Profile (RAG) ---")
         print(await generate_response("Quelles sont ses disponibilités ?"))
 
+        #print("\n--- TEST 4 : Profile (RAG) ---")
+        #print(await generate_response("Quelles sont ses prétentions salariales ?"))
+
+        """
         print("\n--- TEST 5 : Unformal question ---")
         print(await generate_response("Tu fais quoi dans la vie ?"))
 
         print("\n--- TEST 6 : Question for J.A.R.V.I.S ---")
         print(await generate_response("Tu fais quoi dans la vie J.A.R.V.I.S?"))
+        """
     
     asyncio.run(main())
 
