@@ -132,7 +132,7 @@ def get_tools() -> list:
     # Setup Settings
     Settings.llm = llm
     Settings.embed_model = Embedding
-    Settings.similarity_top_k = 10
+    Settings.similarity_top_k = 5
     Settings.verbose = True
     logger.info("✅ Settings setup completed.")
     
