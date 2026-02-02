@@ -1,0 +1,166 @@
+[
+    {
+        "query": "Selon le README du projet, quelle est la description principale et l'objectif fondamental de ce projet ? Comment Quentin, avec son expérience, percevrait-il sa pertinence pour une tâche de Data Science ou d'Ingénierie de Données ?",
+        "expected_tool": "read_project_readme"
+    },
+    {
+        "query": "Quelles sont les dépendances techniques ou les prérequis logiciels spécifiques mentionnés dans la section d'installation du projet ? Quentin, en tant qu'ingénieur de données, comment s'assurerait-il que son environnement respecte ces exigences ?",
+        "expected_tool": "read_project_readme"
+    },
+    {
+        "query": "Le README fournit-il des instructions claires pour lancer l'application ou le script principal du projet ? Si oui, pouvez-vous les détailler et demander à Quentin comment il validerait le bon fonctionnement initial ?",
+        "expected_tool": "read_project_readme"
+    },
+    {
+        "query": "En cas de problème lors de l'installation ou de l'exécution, quelles sections du README Quentin consulterait-il en priorité pour le dépannage ? Le README propose-t-il une section FAQ ou de résolution de problèmes ?",
+        "expected_tool": "read_project_readme"
+    },
+    {
+        "query": "Quelles sont les principales fonctionnalités ou cas d'utilisation du projet décrits dans le README ? Comment Quentin pourrait-il envisager d'étendre ou d'adapter ces fonctionnalités pour un nouveau besoin métier ?",
+        "expected_tool": "read_project_readme"
+    },
+    {
+        "query": "Le README mentionne-t-il des exemples d'utilisation ou des extraits de code ? Si oui, pouvez-vous en citer un et demander à Quentin d'expliquer son fonctionnement ou son utilité ?",
+        "expected_tool": "read_project_readme"
+    },
+    {
+        "query": "Y a-t-il des informations sur l'architecture générale du projet ou le flux de données dans le README ? Si oui, comment Quentin, avec son expérience en Data Engineering, évaluerait-il cette architecture ?",
+        "expected_tool": "read_project_readme"
+    },
+    {
+        "query": "Si Quentin devait contribuer à ce projet, quelles sont les directives de contribution ou les étapes à suivre, telles que décrites dans le README (par exemple, comment soumettre un bug ou une nouvelle fonctionnalité) ?",
+        "expected_tool": "read_project_readme"
+    },
+    {
+        "query": "Le README spécifie-t-il une version minimale de Python ou d'autres outils nécessaires pour le projet ? Comment Quentin gérerait-il les problèmes de compatibilité si sa version locale était différente ?",
+        "expected_tool": "read_project_readme"
+    },
+    {
+        "query": "Quelles sont les technologies ou frameworks clés utilisés dans le projet, d'après le README ? Quentin a-t-il déjà travaillé avec ces technologies, et si non, comment aborderait-il l'apprentissage rapide nécessaire ?",
+        "expected_tool": "read_project_readme"
+    },
+    {
+        "query": "Pour commencer, pourriez-vous me lister tous les projets significatifs sur lesquels vous avez travaillé, en particulier ceux liés à l'ingénierie des données ?",
+        "expected_tool": "list_all_projects"
+    },
+    {
+        "query": "Combien de vos projets ont spécifiquement impliqué la construction ou l'optimisation de pipelines de données ETL/ELT ?",
+        "expected_tool": "list_all_projects"
+    },
+    {
+        "query": "Parmi l'ensemble de vos projets, lesquels ont nécessité l'utilisation de technologies de Big Data comme Apache Spark ou Hadoop ?",
+        "expected_tool": "list_all_projects"
+    },
+    {
+        "query": "Pouvez-vous identifier les projets où votre rôle principal était celui d'un Data Engineer, et non d'un Data Scientist, et les lister ?",
+        "expected_tool": "list_all_projects"
+    },
+    {
+        "query": "Quel est le projet le plus complexe en termes d'architecture de données que vous ayez géré, et pouvez-vous le nommer ?",
+        "expected_tool": "list_all_projects"
+    },
+    {
+        "query": "Listez tous les projets où vous avez été responsable de la mise en place de solutions de streaming de données en temps réel.",
+        "expected_tool": "list_all_projects"
+    },
+    {
+        "query": "Combien de vos projets ont été menés en utilisant des méthodologies agiles, et lesquels parmi ceux-ci ont été les plus réussis ?",
+        "expected_tool": "list_all_projects"
+    },
+    {
+        "query": "Parmi tous vos projets, lesquels ont eu un impact direct sur l'amélioration de la qualité ou de la gouvernance des données au sein de l'organisation ?",
+        "expected_tool": "list_all_projects"
+    },
+    {
+        "query": "Quels sont les projets qui ont le mieux démontré votre capacité à collaborer avec des équipes de développement logiciel ou des analystes métier ?",
+        "expected_tool": "list_all_projects"
+    },
+    {
+        "query": "Si nous devions vous confier un projet d'envergure en Data Engineering, quels sont les trois projets de votre expérience qui, selon vous, prouvent le mieux votre aptitude à le mener à bien ?",
+        "expected_tool": "list_all_projects"
+    },
+    {
+        "query": "Quelle est la durée totale de l'expérience de Quentin en tant que Data Engineer, selon son CV ?",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Quels sont les langages de programmation et les frameworks de Data Science que Quentin maîtrise, d'après son profil ?",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Dans quelle(s) entreprise(s) Quentin a-t-il travaillé et quelles étaient ses responsabilités principales en lien avec le Data Engineering ?",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Quel est le diplôme le plus élevé de Quentin et quelle est sa spécialisation principale ?",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Quelles sont les compétences de Quentin en matière de gestion de bases de données (SQL et NoSQL) et quels projets ou expériences les illustrent spécifiquement ?",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Comment l'expérience de Quentin en Data Engineering, telle que décrite dans son CV, le prépare-t-elle à des défis de mise en production de modèles de Data Science (MLOps) ?",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Le CV de Quentin mentionne-t-il une expérience avec des plateformes cloud (AWS, Azure, GCP) pour le stockage ou le traitement de données ? Si oui, lesquelles ?",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Décrivez un projet clé de Quentin où il a dû concevoir ou optimiser un pipeline de données, en mentionnant les technologies utilisées et son rôle spécifique.",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Quelles sont les compétences de Quentin qui le distinguent pour un rôle de Data Scientist avec une forte composante Data Engineering, au-delà des compétences de base attendues ?",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Quentin a-t-il de l'expérience avec des outils d'orchestration de pipelines de données comme Apache Airflow ou d'autres technologies similaires ?",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Quelles sont les disponibilités de Quentin ?",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Quelles sont les contacts de Quentin ?",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Quelles sont les compétences de Quentin en matière de AI Engineering ?",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Quelles langues parle Quentin ?",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Quels sont les centres d'interet de Quentin ?",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Quels sont les softskills de Quentin ?",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Quels sont les hardskills de Quentin ?",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Quelles sont les formations de Quentin ?",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Où se voit Quentin dans 5 ans ?",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Quels sont les points forts de Quentin ?",
+        "expected_tool": "cv_query_engine"
+    },
+    {
+        "query": "Quels sont les points faibles de Quentin ?",
+        "expected_tool": "cv_query_engine"
+    }
+]

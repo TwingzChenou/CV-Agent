@@ -30,14 +30,13 @@ async def main():
     for tool in tools:
         # On récupère les infos de l'outil
         tool_name = tool.metadata.name
-        tool_desc = tool.metadata.description
         
+
         # PROMPT : On demande à Gemini d'inventer des questions pour CET outil
         prompt = (
-            f"Tu es un expert en test QA. Le but est de tester les outils de l'agent. Les questions porteront sur le CV de Quentin et ses projets Github. Les questions doivent etre en lien avec un entretien d'embauche. Voici un outil utilisé par un Agent IA.\n"
+            f"Tu es un expert en test QA. Le but est de tester les outils de l'agent. Les questions porteront sur le CV et le profil de Quentin qui est un Data Scientist avec 2 ans d'expérience en Data Engineering. Les questions doivent etre en lien avec un entretien d'embauche. Tu dois poser des questions pour savoir si Quentin peut etre embauchéVoici un outil utilisé par un Agent IA.\n"
             f"Nom: {tool_name}\n"
-            f"Description: {tool_desc}\n"
-            "Génère 5 questions utilisateurs variées (complexes, simples, directes) "
+            "Génère 10 questions utilisateurs variées (complexes, simples, directes) "
             "qui nécessiteraient impérativement d'utiliser cet outil.\n"
             "Format de réponse attendu : JSON pur (liste de strings)."
         )
@@ -55,13 +54,14 @@ async def main():
                     "query": q,
                     "expected_tool": tool_name
                 })
-            print(f"✅ 5 questions générées pour l'outil : {tool_name}")
+            print(f"✅ Questions générées pour l'outil : {tool_name}")
             
         except Exception as e:
             print(f"⚠️ Erreur de parsing pour l'outil {tool_name}: {e}")
 
     # Sauvegarde
-    output_path = "evaluation/datasets/agent_dataset.json"
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    output_path = os.path.join(current_dir, "datasets", "agent_RAG_dataset.json")
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(dataset, f, indent=4, ensure_ascii=False)
 

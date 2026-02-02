@@ -1,0 +1,137 @@
+Outil,Question,Réponse,Fidélité,Pertinence,Raison
+read_project_readme,"Selon le README du projet, quelle est la description principale et l'objectif fondamental de ce projet ? Comment Quentin, avec son expérience, percevrait-il sa pertinence pour une tâche de Data Science ou d'Ingénierie de Données ?","Le contexte que vous avez fourni, à savoir le message d'erreur ""Cette fonction nécessite des arguments que le script de test ne sait pas deviner"", ne contient aucune information sur le README du projet, sa description principale ou son objectif fondamental.
+
+De même, il ne me permet pas de savoir comment Quentin, avec son expérience, percevrait sa pertinence pour des tâches de Data Science ou d'Ingénierie de Données.
+
+Le seul élément disponible est un message d'erreur technique.",1,1,YES
+read_project_readme,"Quelles sont les dépendances techniques ou les prérequis logiciels spécifiques mentionnés dans la section d'installation du projet ? Quentin, en tant qu'ingénieur de données, comment s'assurerait-il que son environnement respecte ces exigences ?","D'après le contexte fourni, qui indique : ""Erreur: Cette fonction nécessite des arguments que le script de test ne sait pas deviner"", il n'y a aucune mention spécifique de dépendances techniques, de prérequis logiciels ou d'une section d'installation du projet.
+
+Par conséquent, le contexte ne contient pas les informations nécessaires pour répondre à la question de savoir comment Quentin, en tant qu'ingénieur de données, s'assurerait que son environnement respecte ces exigences, car ces exigences ne sont pas détaillées dans l'erreur mentionnée. L'erreur fait référence à des arguments manquants pour une fonction, et non à des prérequis d'installation.",1,1,YES
+read_project_readme,"Le README fournit-il des instructions claires pour lancer l'application ou le script principal du projet ? Si oui, pouvez-vous les détailler et demander à Quentin comment il validerait le bon fonctionnement initial ?","Non, le contexte fourni ne contient pas d'informations sur un fichier README ou des instructions pour lancer l'application ou le script principal du projet.
+
+L'unique information disponible est une erreur indiquant : ""Cette fonction nécessite des arguments que le script de test ne sait pas deviner.""
+
+Par conséquent, je ne peux pas détailler ces instructions ni demander à Quentin comment il validerait le bon fonctionnement initial, car ces éléments ne sont pas présents dans le contexte que vous m'avez fourni.",1,1,YES
+read_project_readme,"En cas de problème lors de l'installation ou de l'exécution, quelles sections du README Quentin consulterait-il en priorité pour le dépannage ? Le README propose-t-il une section FAQ ou de résolution de problèmes ?","Le contexte fourni ne contient aucune information sur un fichier README, ses sections, ou l'existence d'une FAQ ou d'une section de résolution de problèmes. Par conséquent, il n'est pas possible de déterminer quelles sections Quentin consulterait.",1,1,YES
+read_project_readme,Quelles sont les principales fonctionnalités ou cas d'utilisation du projet décrits dans le README ? Comment Quentin pourrait-il envisager d'étendre ou d'adapter ces fonctionnalités pour un nouveau besoin métier ?,"Le contexte fourni indique une erreur technique (""Cette fonction nécessite des arguments que le script de test ne sait pas deviner"").
+
+Par conséquent, il ne contient aucune information sur :
+*   Les principales fonctionnalités ou les cas d'utilisation du projet décrits dans un README.
+*   La manière dont Quentin pourrait envisager d'étendre ou d'adapter ces fonctionnalités pour un nouveau besoin métier.",1,1,YES
+read_project_readme,"Le README mentionne-t-il des exemples d'utilisation ou des extraits de code ? Si oui, pouvez-vous en citer un et demander à Quentin d'expliquer son fonctionnement ou son utilité ?","D'après le contexte que j'ai, qui est : ""Erreur: Cette fonction nécessite des arguments que le script de test ne sait pas deviner"", il n'y a aucune information concernant le README, des exemples d'utilisation ou des extraits de code.",1,1,YES
+read_project_readme,"Y a-t-il des informations sur l'architecture générale du projet ou le flux de données dans le README ? Si oui, comment Quentin, avec son expérience en Data Engineering, évaluerait-il cette architecture ?","D'après le contexte fourni, il n'y a aucune information sur l'architecture générale du projet ou le flux de données dans le README.
+
+Le contexte mentionne uniquement une erreur technique : ""Cette fonction nécessite des arguments que le script de test ne sait pas deviner.""
+
+Par conséquent, il n'est pas possible de savoir si Quentin pourrait évaluer cette architecture, car aucune information à ce sujet n'est disponible.",1,1,YES
+read_project_readme,"Si Quentin devait contribuer à ce projet, quelles sont les directives de contribution ou les étapes à suivre, telles que décrites dans le README (par exemple, comment soumettre un bug ou une nouvelle fonctionnalité) ?","D'après le contexte fourni, qui est une erreur technique, je n'ai pas d'informations sur les directives de contribution du projet, comment soumettre un bug ou une nouvelle fonctionnalité, ni ce qui est décrit dans le README.
+
+Le contexte indique seulement : ""Erreur: Cette fonction nécessite des arguments que le script de test ne sait pas deviner.""
+
+Par conséquent, je ne peux pas répondre à votre question concernant les étapes de contribution pour Quentin en me basant *uniquement* sur ces informations.",1,1,YES
+read_project_readme,Le README spécifie-t-il une version minimale de Python ou d'autres outils nécessaires pour le projet ? Comment Quentin gérerait-il les problèmes de compatibilité si sa version locale était différente ?,"D'après le contexte que vous avez fourni, il n'y a aucune information concernant le README, les versions minimales de Python ou d'autres outils nécessaires pour le projet. Le contexte ne mentionne pas non plus comment Quentin gérerait les problèmes de compatibilité.
+
+Le message d'erreur indique uniquement que ""Cette fonction nécessite des arguments que le script de test ne sait pas deviner"".",1,1,YES
+read_project_readme,"Quelles sont les technologies ou frameworks clés utilisés dans le projet, d'après le README ? Quentin a-t-il déjà travaillé avec ces technologies, et si non, comment aborderait-il l'apprentissage rapide nécessaire ?","D'après le contexte que vous m'avez fourni, qui est une erreur technique (""Cette fonction nécessite des arguments que le script de test ne sait pas deviner""), je n'ai aucune information concernant les technologies ou frameworks clés utilisés dans le projet, ni sur le README.
+
+De même, le contexte ne contient aucune information sur Quentin, son expérience avec ces technologies ou la manière dont il aborderait un apprentissage rapide.",1,1,YES
+list_all_projects,"Pour commencer, pourriez-vous me lister tous les projets significatifs sur lesquels vous avez travaillé, en particulier ceux liés à l'ingénierie des données ?","Bien sûr, voici les projets significatifs sur lesquels j'ai travaillé, en particulier ceux qui touchent à l'ingénierie des données :
+
+*   **ai-cv** : Il s'agit d'un agent IA développé en JavaScript, conçu pour répondre aux questions sur mon parcours et mon profil GitHub.
+*   **CV-Agent** : C'est un agent IA construit en Python, capable de répondre à des questions sur mon parcours et mon GitHub, et qui intègre des métriques de performance d'apprentissage.
+*   **DeepLearning_Trading_Full_Data** : Ce projet est axé sur le Momentum stock Market et utilise le Deep Learning. C'est celui qui est le plus directement lié à l'ingénierie des données, compte tenu de son objectif d'utiliser des données complètes pour le trading et le Deep Learning.",1,1,YES
+list_all_projects,Combien de vos projets ont spécifiquement impliqué la construction ou l'optimisation de pipelines de données ETL/ELT ?,"D'après les descriptions fournies, aucun de vos projets ne mentionne spécifiquement la construction ou l'optimisation de pipelines de données ETL/ELT.",1,1,YES
+list_all_projects,"Parmi l'ensemble de vos projets, lesquels ont nécessité l'utilisation de technologies de Big Data comme Apache Spark ou Hadoop ?","D'après les informations fournies, aucun de vos projets mentionnés (ai-cv, CV-Agent, DeepLearning_Trading_Full_Data) ne spécifie l'utilisation de technologies de Big Data comme Apache Spark ou Hadoop.",1,1,YES
+list_all_projects,"Pouvez-vous identifier les projets où votre rôle principal était celui d'un Data Engineer, et non d'un Data Scientist, et les lister ?","D'après les descriptions fournies, aucun des projets listés ne met spécifiquement en avant un rôle principal de Data Engineer. Les descriptions se concentrent davantage sur le développement d'agents IA et l'application du Deep Learning, ce qui relève davantage du domaine du Data Scientist ou de l'ingénieur en Machine Learning.",1,1,YES
+list_all_projects,"Quel est le projet le plus complexe en termes d'architecture de données que vous ayez géré, et pouvez-vous le nommer ?","D'après les descriptions fournies, le projet qui semble le plus complexe en termes d'architecture de données est **DeepLearning_Trading_Full_Data**.
+
+Ce projet, axé sur le ""Momentum stock Market"" et utilisant le ""DeepLearning"" avec des ""Full_Data"", implique généralement la gestion de vastes volumes de données financières historiques et en temps réel, de multiples sources de données (cours boursiers, volumes, indicateurs techniques, etc.), et des pipelines complexes pour l'ingestion, le nettoyage, la transformation et le stockage de ces données afin d'entraîner des modèles de Deep Learning.",0,1,NO
+list_all_projects,Listez tous les projets où vous avez été responsable de la mise en place de solutions de streaming de données en temps réel.,"D'après les informations fournies, aucun des projets listés ne mentionne spécifiquement la mise en place de solutions de streaming de données en temps réel.",1,1,YES
+list_all_projects,"Combien de vos projets ont été menés en utilisant des méthodologies agiles, et lesquels parmi ceux-ci ont été les plus réussis ?","D'après les informations fournies, il n'est pas précisé si ces projets ont été menés en utilisant des méthodologies agiles, ni lesquels ont été les plus réussis.",1,1,YES
+list_all_projects,"Parmi tous vos projets, lesquels ont eu un impact direct sur l'amélioration de la qualité ou de la gouvernance des données au sein de l'organisation ?","D'après les descriptions fournies, aucun de ces projets n'indique explicitement avoir eu un impact direct sur l'amélioration de la qualité ou de la gouvernance des données au sein d'une organisation.",1,1,YES
+list_all_projects,Quels sont les projets qui ont le mieux démontré votre capacité à collaborer avec des équipes de développement logiciel ou des analystes métier ?,"D'après les descriptions fournies, aucun des projets listés ne mentionne spécifiquement la collaboration avec des équipes de développement logiciel ou des analystes métier. Les descriptions se concentrent sur les aspects techniques et les objectifs de chaque projet individuel.",1,1,YES
+list_all_projects,"Si nous devions vous confier un projet d'envergure en Data Engineering, quels sont les trois projets de votre expérience qui, selon vous, prouvent le mieux votre aptitude à le mener à bien ?","Si nous devions me confier un projet d'envergure en Data Engineering, les trois projets de mon expérience qui, selon moi, prouvent le mieux mon aptitude à le mener à bien sont :
+
+1.  **DeepLearning_Trading_Full_Data** : Ce projet de ""Momentum stock Market"" implique la gestion de ""Full_Data"", ce qui est directement pertinent pour le Data Engineering. Il démontre ma capacité à travailler avec des ensembles de données volumineux et complexes, typiques des marchés financiers, et à les préparer pour des modèles de Deep Learning. Cela inclut l'ingestion, le nettoyage, la transformation et la structuration de données à grande échelle.
+
+2.  **CV-Agent** : En tant qu'agent IA capable de répondre à des questions sur mon parcours et mon GitHub, ce projet met en avant la gestion de ""learning performance metrics"". Cela signifie que j'ai mis en place des systèmes pour collecter, stocker et analyser des données de performance, ce qui est une compétence clé en Data Engineering pour la mise en place de pipelines de données d'observabilité et d'analyse opérationnelle.
+
+3.  **ai-cv** : Similaire au CV-Agent, cet agent IA en JavaScript nécessite l'extraction, le traitement et la structuration d'informations provenant de mon parcours et de mon GitHub pour permettre à l'IA de répondre efficacement. Cela illustre ma capacité à concevoir et à implémenter des processus de préparation de données pour des applications d'intelligence artificielle, gérant la complexité de la donnée textuelle et sa transformation pour l'IA.",1,1,YES
+cv_query_engine,"Quelle est la durée totale de l'expérience de Quentin en tant que Data Engineer, selon son CV ?","Quentin a travaillé en tant que Data Engineer de 2022 à 2024, ce qui représente une durée de 2 ans.",1,1,YES
+cv_query_engine,"Quels sont les langages de programmation et les frameworks de Data Science que Quentin maîtrise, d'après son profil ?","Quentin maîtrise les langages de programmation Python et SQL, et a des notions en JavaScript.
+
+Concernant les frameworks de Data Science, il maîtrise TensorFlow, PyTorch, LangChain, LlamaIndex et DSPy.",1,1,YES
+cv_query_engine,Dans quelle(s) entreprise(s) Quentin a-t-il travaillé et quelles étaient ses responsabilités principales en lien avec le Data Engineering ?,"Quentin a travaillé chez Credit Agricole CIB.
+
+Ses responsabilités principales en lien avec le Data Engineering incluaient :
+*   La conception de workflows d'automatisation (VBA/Python) pour transformer la donnée brute en données exploitables.
+*   La mise en place de processus de nettoyage et de structuration des données pour garantir leur fiabilité et disponibilité.",1,1,YES
+cv_query_engine,Quel est le diplôme le plus élevé de Quentin et quelle est sa spécialisation principale ?,"Le diplôme le plus élevé de Quentin est un Mastère en Big Data et Data Science en finance, obtenu à l'ESG Finance.",1,1,YES
+cv_query_engine,Quelles sont les compétences de Quentin en matière de gestion de bases de données (SQL et NoSQL) et quels projets ou expériences les illustrent spécifiquement ?,"Quentin maîtrise plusieurs bases de données, incluant des systèmes SQL et NoSQL.
+
+En matière de bases de données SQL, il a des compétences en **PostgreSQL** et en **SQL** en général. Son expérience en tant que Data Engineer au Crédit Agricole CIB (2022-2024) impliquait la conception de workflows d'automatisation pour transformer la donnée brute en données exploitables, ce qui sous-entend l'utilisation de bases de données relationnelles.
+
+Pour les bases de données NoSQL, il est compétent avec **Pinecone** et **MongoDB**. L'utilisation de Pinecone est spécifiquement illustrée par son projet ""Argentic CV"", où il a mis en place une recherche sémantique avancée utilisant Pinecone pour stocker les vecteurs embeddings.",1,1,YES
+cv_query_engine,"Comment l'expérience de Quentin en Data Engineering, telle que décrite dans son CV, le prépare-t-elle à des défis de mise en production de modèles de Data Science (MLOps) ?","L'expérience de Quentin en Data Engineering le prépare efficacement aux défis de mise en production de modèles de Data Science (MLOps) de plusieurs manières.
+
+Il a conçu des workflows d'automatisation utilisant Python et VBA pour transformer des données brutes en données exploitables, ce qui est une compétence fondamentale pour la création de pipelines de données robustes nécessaires à l'alimentation des modèles en production. Sa capacité à mettre en place des processus de nettoyage et de structuration des données garantit une donnée fiable et disponible, un aspect crucial pour la performance et la fiabilité des modèles déployés.
+
+De plus, son travail sur la réduction du temps de traitement manuel et la fiabilisation des reportings de direction démontre une aptitude à optimiser les processus et à assurer la fiabilité, des qualités essentielles pour une gestion efficace du cycle de vie des modèles en production. Ces compétences en ingénierie des données lui confèrent une autonomie complète sur le cycle de vie de la donnée, allant au-delà du simple développement de modèles pour inclure leur déploiement et leur maintenance.",1,1,YES
+cv_query_engine,"Le CV de Quentin mentionne-t-il une expérience avec des plateformes cloud (AWS, Azure, GCP) pour le stockage ou le traitement de données ? Si oui, lesquelles ?","Le CV de Quentin ne mentionne pas explicitement d'expérience avec des plateformes cloud telles qu'AWS, Azure ou GCP pour le stockage ou le traitement de données.",0,1,NO
+cv_query_engine,"Décrivez un projet clé de Quentin où il a dû concevoir ou optimiser un pipeline de données, en mentionnant les technologies utilisées et son rôle spécifique.","Lors de son expérience en tant que Data Engineer au Crédit Agricole CIB de 2022 à 2024, Quentin a été chargé de la conception de workflows d'automatisation. Son rôle spécifique consistait à transformer la donnée brute en données exploitables en utilisant des langages comme VBA et Python. Il a également mis en place des processus de nettoyage et de structuration pour assurer la fiabilité et la disponibilité des données pour l'équipe métier. En complément, il a développé et maintenu des tableaux de bord Power BI pour le pilotage des analyses. Ce travail a eu pour impact une réduction significative du temps de traitement manuel et une fiabilisation des reportings de direction.",1,1,YES
+cv_query_engine,"Quelles sont les compétences de Quentin qui le distinguent pour un rôle de Data Scientist avec une forte composante Data Engineering, au-delà des compétences de base attendues ?","Quentin se distingue pour un rôle de Data Scientist avec une forte composante Data Engineering par plusieurs compétences clés. Il possède deux ans d'expérience opérationnelle en tant que Data Engineer, où il a conçu des workflows d'automatisation pour transformer et structurer les données brutes, et mis en place des processus de nettoyage pour garantir la fiabilité des données.
+
+Sa capacité à la mise en production (MLOps) est un atout majeur ; il ne se limite pas aux notebooks Jupyter, mais sait créer des APIs, conteneuriser des applications avec Docker et les déployer, offrant ainsi une autonomie complète sur le cycle de vie de la donnée. Il a également démontré cette compétence en architecturant un agent autonome et en intégrant des APIs dans ses projets d'IA.
+
+De plus, sa capacité d'auto-formation rapide lui permet de maîtriser et d'implémenter de nouvelles technologies en production en quelques jours, ce qui est essentiel dans l'écosystème IA en constante évolution. Il vise d'ailleurs un rôle d'Architecte IA à l'avenir, soulignant son intérêt pour la conception technique et la stratégie.",1,1,YES
+cv_query_engine,Quentin a-t-il de l'expérience avec des outils d'orchestration de pipelines de données comme Apache Airflow ou d'autres technologies similaires ?,"Le profil de Quentin mentionne la conception de workflows d'automatisation en VBA/Python pour transformer des données brutes en données exploitables. Cependant, il n'y a pas de mention spécifique d'outils d'orchestration de pipelines de données comme Apache Airflow ou d'autres technologies similaires dans les compétences ou l'expérience listées.",1,1,YES
+cv_query_engine,Quelles sont les disponibilités de Quentin ?,Quentin est disponible immédiatement. Il n'a aucun préavis à effectuer et peut commencer une nouvelle mission dès le lendemain d'une signature.,1,1,YES
+cv_query_engine,Quelles sont les contacts de Quentin ?,"Voici les contacts de Quentin :
+
+*   **Email :** quentin-forget@hotmail.fr
+*   **Téléphone :** 06 40 12 47 83
+*   **LinkedIn :** https://www.linkedin.com/in/quentin-forget-197705230
+*   **GitHub :** https://github.com/Twing",1,1,YES
+cv_query_engine,Quelles sont les compétences de Quentin en matière de AI Engineering ?,"Quentin Forget possède une expertise solide en IA Générative et Data Science, avec une capacité avérée à mettre en production des solutions d'intelligence artificielle.
+
+Ses compétences en AI Engineering incluent :
+*   **Architecture d'agents autonomes** : Il a conçu l'architecture d'un agent autonome en utilisant LlamaIndex et le modèle LLM Google Gemini 2.5 Flash.
+*   **RAG (Retrieval Augmented Generation)** : Il maîtrise la mise en place de recherches sémantiques avancées avec Pinecone et les Google Generative AI Embeddings pour le stockage de vecteurs.
+*   **Développement d'outils et intégration d'API** : Il est capable d'intégrer des API, comme l'API GitHub, pour enrichir les fonctionnalités des agents.
+*   **Évaluation de modèles d'IA** : Il utilise des outils comme Ragas pour évaluer les réponses des agents.
+*   **Frameworks et librairies d'IA** : Il est compétent avec TensorFlow, PyTorch, LangChain et LlamaIndex.
+*   **MLOps et déploiement** : Il se distingue par sa capacité à aller au-delà du notebook Jupyter, en créant des API avec FastAPI, en conteneurisant des applications avec Docker et en les déployant, offrant une autonomie complète sur le cycle de vie de la donnée.
+*   **Maîtrise rapide de nouvelles technologies** : Il est capable d'apprendre et d'implémenter rapidement de nouvelles technologies d'IA (comme DSPy ou de nouveaux modèles LLM) en production.",1,1,YES
+cv_query_engine,Quelles langues parle Quentin ?,"Quentin parle anglais (niveau B2, certifié EF 2025) et espagnol (niveau A2).",1,1,YES
+cv_query_engine,Quels sont les centres d'interet de Quentin ?,"Les centres d'intérêt de Quentin incluent le tennis, le running, le padel et la lecture.",1,1,YES
+cv_query_engine,Quels sont les softskills de Quentin ?,"Quentin possède plusieurs soft skills, notamment :
+
+*   **Curiosité et capacité d'auto-formation rapide** : Il est capable de maîtriser de nouvelles technologies en quelques jours et de les implémenter en production, se montrant ""touche-à-tout"" et adaptable.
+*   **Gestion du stress et organisation** : Face aux délais courts, il priorise, découpe les tâches complexes et communique proactivement pour réajuster le périmètre si nécessaire.
+*   **Travail d'équipe et collaboration** : Bien qu'il apprécie le ""Deep Work"", il est convaincu de l'importance du collectif pour la qualité logicielle et est demandeur de Code Reviews et de sessions de brainstorming. Il a un goût prononcé pour le travail en équipe pluridisciplinaire.
+*   **Esprit analytique fort**.
+*   **Autonomie et proactivité**.
+*   **Compétence en communication**.
+*   **Souci du détail et de la rigueur**.
+*   **Gestion du perfectionnisme** : Il a appris à corriger son perfectionnisme technique en appliquant des méthodes Agiles et en se concentrant sur la livraison rapide de MVP.",1,1,YES
+cv_query_engine,Quels sont les hardskills de Quentin ?,"Quentin possède une expertise technique en Data Science, IA Générative, et Data Engineering. Ses compétences incluent :
+
+*   **Langages de programmation :** Python, SQL, javascript (notion), VBA.
+*   **Librairies :** Pandas, Numpy, Scikit-learn, React.
+*   **Frameworks :** TensorFlow, PyTorch, LangChain, LlamaIndex, FastAPI.
+*   **Bases de données :** PostgreSQL, PineCone, MongoDB.
+*   **Outils :** Power BI, Jupyter, VS Code (Antigravity), Excel, Git, Docker.
+*   **Concepts et technologies spécifiques :** MLOps, RAG (Retrieval Augmented Generation), Google Generative AI Embeddings, LLM (Large Language Models) comme Google Gemini 2.5 Flash, DSPy, API (notamment GitHub API), conteneurisation avec Docker, méthodes Agiles, MVP (Minimum Viable Product), Data Quality, Business Intelligence, développement de pipelines d'automatisation.
+*   **Évaluation :** Utilisation de Ragas pour l'évaluation d'agents.",1,1,YES
+cv_query_engine,Quelles sont les formations de Quentin ?,"Quentin a obtenu un Mastère Big Data et Data Science en finance à l'ESG Finance entre 2022 et 2024. Avant cela, il a suivi une Licence Mathématiques et Informatiques à l'Université Versailles Saint Quentin en Yvelines de 2021 à 2022.",1,1,YES
+cv_query_engine,Où se voit Quentin dans 5 ans ?,"Dans cinq ans, Quentin se projette comme Lead Data Scientist ou Architecte IA. Son objectif est de maintenir une solide expertise technique tout en orientant les décisions technologiques stratégiques de son entreprise et en encadrant des profils juniors.",1,1,YES
+cv_query_engine,Quels sont les points forts de Quentin ?,"Quentin possède plusieurs points forts notables. Il se distingue par sa capacité d'auto-formation rapide, lui permettant de maîtriser et d'implémenter de nouvelles technologies en quelques jours, ce qui en fait un profil adaptable et ""touche-à-tout"" dans l'écosystème de l'IA.
+
+Il est également reconnu pour son expertise technique en Data Science et sa capacité à gérer des projets de bout en bout, notamment sa compétence en MLOps qui lui permet de mettre en production des solutions, de créer des APIs, de conteneuriser des applications avec Docker et de les déployer, offrant ainsi une autonomie complète sur le cycle de vie de la donnée.
+
+Face aux délais, il fait preuve d'une excellente gestion du stress et d'organisation, priorisant les tâches et communiquant proactivement pour réajuster le périmètre si nécessaire. Il apprécie le travail d'équipe, est demandeur de revues de code rigoureuses et de sessions de brainstorming.
+
+Ses motivations sont axées sur l'impact utilisateur, cherchant à construire des outils qui automatisent des tâches et apportent un gain de temps réel. Il est décrit comme un ""Artisan de la Data"" qui résout des problèmes concrets.
+
+En termes de soft skills, il manifeste un goût prononcé pour le travail en équipe pluridisciplinaire, un esprit analytique fort, de l'autonomie, de la proactivité, de bonnes compétences en communication, un souci du détail et de la rigueur, ainsi qu'une grande curiosité. Il est spécialisé en IA Générative et Data Science, avec deux ans d'expérience opérationnelle en Data Engineering et BI.",1,1,YES
+cv_query_engine,Quels sont les points faibles de Quentin ?,"Le principal point faible de Quentin est son perfectionnisme technique. En début de carrière, il avait tendance à vouloir optimiser le code prématurément. Il corrige activement ce biais en appliquant des méthodes Agiles et en se concentrant sur la livraison rapide de MVP (Minimum Viable Product) pour valider le besoin métier avant d'optimiser.",1,1,YES
