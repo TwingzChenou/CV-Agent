@@ -11,6 +11,7 @@ from app.core.logging import setup_logging
 from llama_index.core import SimpleDirectoryReader
 from app.engine.index import run_indexing_pipeline
 import logging
+from llama_parse import LlamaParse
 
 # Setup logging
 setup_logging()
@@ -21,23 +22,29 @@ def load_documents(name_doc):
     current_file = Path(__file__).resolve()
     project_root = current_file.parent.parent
     filepath = project_root / "data" / name_doc
-    reader = SimpleDirectoryReader(input_files=[str(filepath)]).load_data()
-    return reader
+    return filepath
 
 
 #setup splitter
-def setup_splitter(documents):
-    parser = SentenceSplitter(chunk_size=512, chunk_overlap=20)
-    return parser.get_nodes_from_documents(documents)
+def setup_splitter(filepath):
+    parser = LlamaParse(
+        api_key=os.getenv("LLAMA_CLOUD_API_KEY"),
+        result_type="markdown",
+        verbose=True,
+        language="fr"
+    )
+    file_extractor = {".pdf": parser}
+    documents = SimpleDirectoryReader(input_files=[str(filepath)], file_extractor=file_extractor).load_data()
+    return documents
 
 
 def main():
     logger.info("🚀 Starting document loading...")
 
-    documents = load_documents("CV.txt")
+    filepath = load_documents("CV ATS.pdf")
     logger.info("✅ Document loading completed.")
     
-    document_chunks = setup_splitter(documents)
+    document_chunks = setup_splitter(filepath)
     logger.info("🚀 Starting document splitter...")
 
     run_indexing_pipeline(document_chunks)
