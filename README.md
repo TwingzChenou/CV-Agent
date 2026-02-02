@@ -67,6 +67,7 @@ Follow these instructions to set up the project locally.
     PINECONE_API_KEY=your_pinecone_api_key
     PINECONE_INDEX=your_index_name
     GITHUB_TOKEN=your_github_personal_access_token
+    LLAMA_CLOUD_API_KEY=your_llama_cloud_api_key
     ```
 
 3.  **Ingest CV Data:**
@@ -115,8 +116,11 @@ npm run dev
 │   │   ├── core/           # Configuration & Security
 │   │   ├── data/           # Data & Loaders
 │   │   ├── engine/         # RAG Engine & Tools
-│   │   └── main.py         # App Entrypoint
-│   ├── evaluation/         # Evaluation Responses Gemini
+│   │   ├── main.py         # App Entrypoint
+│   ├── evaluation/         # Evaluation Scripts
+│   │   ├── datasets/       # Evaluation Datasets
+│   │   ├── generate_dataset.py # Dataset Generator
+│   │   └── run_eval_llamaIndex.py # LlamaIndex Eval Script
 │   ├── logs/               # Application Logs
 │   ├── Dockerfile          # Container Configuration
 │   └── requirements.txt    # Python Dependencies
@@ -159,26 +163,26 @@ The `backend/app/engine` directory is the brain of the application, managing the
 *   **Indexing Pipeline:** Defines the `run_indexing_pipeline` function which takes document chunks, generates embeddings, and upserts them into Pinecone.
 
 ### `loader.py`
-**The Data Ingestor.** This file handles the ETL (Extract, Transform, Load) process for the CV data.
-*   **Loading:** Uses `SimpleDirectoryReader` to load the PDF resume (`CV_Quentin_Forget.pdf`) from the `data/` directory.
-*   **Splitting:** Uses `SentenceSplitter` to break the document into manageable chunks (tokens) with overlap to preserve context.
+**The Data Ingestor.** This file handles the ETL (Extract, Transform, Load) process.
+*   **Loading:** Locates the source documents (e.g., `profil_quentin.md`) in the `data/` directory.
+*   **Splitting & Parsing:** Uses **LlamaParse** (via `LLAMA_CLOUD_API_KEY`) to accurately parse and convert documents (including PDFs) into markdown format for better embedding quality.
 *   **Execution:** Calls the indexing pipeline from `index.py` to store the processed chunks in the vector database.
 
 ## 🧪 Evaluation Framework Details
 
-The `backend/evaluation` directory contains scripts to ensure the quality and accuracy of the agent's responses using the **Ragas** framework.
+The `backend/evaluation` directory contains scripts to ensure the quality and accuracy of the agent's responses using **LlamaIndex Evaluation** tools.
 
 ### `generate_dataset.py`
 **The Scenario Generator.** This script automates the creation of test cases.
 *   **Tool Analysis:** Iterates through available tools in `tools.py`.
 *   **Scenario Creation:** Uses Gemini to invent 5 distinct user questions per tool that *must* use that specific tool to be answered correctly.
-*   **Output:** Generates a JSON dataset (`agent_dataset.json`) of test queries.
+*   **Output:** Generates a JSON dataset (`datasets/agent_RAG_dataset.json`) of test queries.
 
-### `run_eval.py`
+### `run_eval_llamaIndex.py`
 **The Judge.** This script runs the evaluation pipeline to measure performance.
-*   **Ragas Integration:** Uses Ragas (with Gemini as the judge LLM) to compute metrics like **Faithfulness** (is the answer derived from context?) and **Answer Relevancy** (does it answer the question?).
-*   **Batch Inference:** Runs the agent against a dataset of questions (currently a mix of hardcoded golden datasets and generated ones).
-*   **Reporting:** Outputs a pandas DataFrame and CSV with scores for each question, helping identify weak points in the system prompt or retrieval logic.
+*   **LlamaIndex Evaluators:** Uses `FaithfulnessEvaluator` and `RelevancyEvaluator` (with Gemini as the judge LLM) to score responses.
+*   **Batch Inference:** Runs the agent against the dataset defined in `datasets/agent_RAG_dataset.json`.
+*   **Reporting:** Outputs a pandas DataFrame and CSV (`datasets/evaluation_results.csv`) with fidelity and relevancy scores for each question.
 
 ## Key Features
 

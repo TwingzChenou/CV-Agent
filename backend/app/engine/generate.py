@@ -18,6 +18,9 @@ from llama_index.core.agent import ReActAgent
 from llama_index.llms.gemini import Gemini
 import asyncio
 
+from llama_index.core.llms import ChatMessage, MessageRole
+from llama_index.core.memory import ChatMemoryBuffer
+
 # Load environment variables
 load_dotenv()
 
@@ -125,6 +128,27 @@ Recruteur : "T'es dispo quand ?"
 J.A.R.V.I.S : "Monsieur Forget est disponible immédiatement pour une prise de fonction. Dois-je préparer son contrat ?"
 """
 
+initial_history = [
+    ChatMessage(
+        role=MessageRole.USER, 
+        content="Initialisation du protocole d'assistance."
+    ),
+    ChatMessage(
+        role=MessageRole.ASSISTANT, 
+        content=(
+            "Bonjour. Je suis J.A.R.V.I.S., l'assistant virtuel de Monsieur Forget. "
+            "Mes systèmes sont opérationnels et j'ai accès à l'ensemble de son parcours professionnel. "
+            "Je suis prêt à répondre aux questions des recruteurs avec précision et courtoisie. "
+            "En quoi puis-je vous être utile aujourd'hui ?"
+        )
+    ),
+]
+
+# 2. On crée la mémoire avec cet historique pré-rempli
+memory = ChatMemoryBuffer.from_defaults(
+    chat_history=initial_history,
+    token_limit=3000 # On garde de la place pour la suite
+)
 
 agent = ReActAgent(
     tools=get_tools(),
@@ -162,40 +186,27 @@ async def generate_response(query):
 if __name__ == "__main__":
 
     async def main():
-        #print("--- TEST 1 : Chitchat ---")
-        #print(await generate_response("Bonjour, comment ça va ?"))
+
+        print("\n--- TEST 1 : CV (RAG) ---")
+        print(await generate_response("Quelles sont ses disponibilités ?"))
         
-        print("\n--- TEST 2 : CV (RAG) ---")
-        print(await generate_response("Est ce que tu peux me fournir les contacts de Quentin ?"))
-
-        print("\n--- TEST 2 : CV (RAG) ---")
-        print(await generate_response("Quels sont ses hobbies ?"))
-
-        print("\n--- TEST 2 : CV (RAG) ---")
-        print(await generate_response("Quels sont ses compétences techniques ?"))
-
-        print("\n--- TEST 2 : CV (RAG) ---")
-        print(await generate_response("Quels sont ses expériences professionnelles ?"))
-
-        print("\n--- TEST 2 : CV (RAG) ---")
+        print("--- TEST 2 : Chitchat ---")
+        print(await generate_response("Bonjour, comment ça va ?"))
+    
+        print("\n--- TEST 3 : CV (RAG) ---")
         print(await generate_response("Quels sont ses formations ?"))
         
-        print("\n--- TEST 3 : GitHub ---")
+        print("\n--- TEST 4 : GitHub ---")
         print(await generate_response("Décris moi son projet Argentic CV ?"))
 
-        print("\n--- TEST 4 : Profile (RAG) ---")
-        print(await generate_response("Quelles sont ses disponibilités ?"))
+        print("\n--- TEST 5 : Profile (RAG) ---")
+        print(await generate_response("Quels sont les contacts de Quentin ?"))
 
-        #print("\n--- TEST 4 : Profile (RAG) ---")
-        #print(await generate_response("Quelles sont ses prétentions salariales ?"))
-
-        """
-        print("\n--- TEST 5 : Unformal question ---")
+        print("\n--- TEST 6 : Unformal question ---")
         print(await generate_response("Tu fais quoi dans la vie ?"))
 
-        print("\n--- TEST 6 : Question for J.A.R.V.I.S ---")
+        print("\n--- TEST 7 : Question for J.A.R.V.I.S ---")
         print(await generate_response("Tu fais quoi dans la vie J.A.R.V.I.S?"))
-        """
     
     asyncio.run(main())
 
