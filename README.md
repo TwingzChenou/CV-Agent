@@ -61,7 +61,7 @@ Follow these instructions to set up the project locally.
     ```
 
 2.  **Configure Environment Variables:**
-    Create a `.env` file in the root directory and add the following keys:
+    Create a `.env` file in the `backend/` directory and add the following keys:
     ```env
     GOOGLE_API_KEY=your_gemini_api_key
     PINECONE_API_KEY=your_pinecone_api_key
@@ -72,8 +72,16 @@ Follow these instructions to set up the project locally.
 
 3.  **Ingest CV Data:**
     Upload your CV data to Pinecone.
+
+    **Using Docker:**
     ```bash
-    python loader.py
+    docker-compose run --rm backend python app/engine/loader.py
+    ```
+
+    **Local (after installing dependencies):**
+    ```bash
+    cd backend
+    python app/engine/loader.py
     ```
 
 ### Running the Application

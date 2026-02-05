@@ -1,5 +1,6 @@
 import os
 import sys
+from pathlib import Path
 from dotenv import load_dotenv
 from llama_index.llms.gemini import Gemini
 from llama_index.vector_stores.pinecone import PineconeVectorStore
@@ -9,8 +10,11 @@ def check_setup():
     print("--- Diagnostic check_setup.py ---\n")
 
     # 1. Load env vars
-    load_dotenv()
-    print("Environment variables loaded.\n")
+    current_dir = Path(__file__).parent
+    dotenv_path = current_dir / "backend/.env"
+    
+    load_dotenv(dotenv_path=dotenv_path)
+    print(f"Environment variables loaded from {dotenv_path}.\n")
 
     # 2. Check keys
     required_keys = [
@@ -37,7 +41,7 @@ def check_setup():
         if not os.getenv("GOOGLE_API_KEY"):
             print("Skipping Gemini test due to missing GOOGLE_API_KEY.")
         else:
-            llm = Gemini(model="models/gemini-2.5-flash") # Using a standard model for test
+            llm = Gemini(model="models/gemini-2.5-flash")
             response = llm.complete("Coucou")
             print(f"Response: {response}")
             print("Gemini Test: OK")
@@ -55,27 +59,13 @@ def check_setup():
         if not pinecone_key or not pinecone_index:
              print("Skipping Pinecone test due to missing keys.")
         else:
-            # Just trying to initialize the store to check if it connects/validates config
-            # We are not inserting anything.
-            # PineconeVectorStore usually connects lazily or on first call, 
-            # but initializing it often validates the api key format or presence.
-            # To be more sure, we might need to list indexes if using the raw client, 
-            # but instructions say "Tente simplement d'initialiser le PineconeVectorStore"
-            
-            # Note: newer llama-index-vector-stores-pinecone might use 'pinecone_index' or 'index_name'
-            # Let's try basic initialization.
-            
             vector_store = PineconeVectorStore(
                 api_key=pinecone_key,
                 index_name=pinecone_index
             )
             print("PineconeVectorStore initialized: OK")
             
-            # Optional: Try to access the index to verify connection if possible without heavy ops
             try: 
-                 # This is specific to the underlying pinecone client usually wrapped.
-                 # But the instruction says "Initialize ... to see if connection establishes".
-                 # Initialization is often enough to check import and key presence.
                  pass
             except:
                 pass

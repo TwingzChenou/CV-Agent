@@ -193,8 +193,8 @@ if __name__ == "__main__":
         print("--- TEST 2 : Chitchat ---")
         print(await generate_response("Bonjour, comment ça va ?"))
     
-        print("\n--- TEST 3 : CV (RAG) ---")
-        print(await generate_response("Quels sont ses formations ?"))
+        print("\n--- TEST 3 : Github ---")
+        print(await generate_response("Quels sont les projets de Github de Quentin ?"))
         
         print("\n--- TEST 4 : GitHub ---")
         print(await generate_response("Décris moi son projet Argentic CV ?"))
