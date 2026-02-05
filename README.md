@@ -13,7 +13,7 @@
 
 This project represents a "Digital Twin" or Agentic Resume. It splits knowledge into two distinct domains to provide accurate and up-to-date responses:
 
-*   **🧠 Static Knowledge (RAG):** Uses **Pinecone** to store vector embeddings of my Curriculum Vitae (`cv.json`). This allows the agent to answer questions about my education, past experience, and skills with high precision.
+*   **🧠 Static Knowledge (RAG):** Uses **Pinecone** to store vector embeddings of my Curriculum Vitae (`cv.pdf`) and a file's profile. This allows the agent to answer questions about my education, past experience, and skills with high precision.
 *   **⚡ Dynamic Knowledge (Tools):** Uses the **GitHub API** and real-time tools to fetch current coding activity, recent commits, and active repositories. This ensures the agent knows what I am working on *right now*.
 
 ```mermaid
