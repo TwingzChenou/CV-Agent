@@ -36,9 +36,8 @@ def setup_storage_context(pc_index):
 )
 
 #setup embeddings
-def setup_embeddings():
     return GeminiEmbedding(
-        model_name="gemini-embedding-001",
+        model_name="models/gemini-embedding-001",
         api_key=os.getenv("GOOGLE_API_KEY")
     )
 

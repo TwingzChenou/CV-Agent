@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 from dotenv import load_dotenv
 from llama_index.llms.gemini import Gemini
+from llama_index.embeddings.gemini import GeminiEmbedding
 from llama_index.vector_stores.pinecone import PineconeVectorStore
 from github import Github
 
@@ -47,6 +48,23 @@ def check_setup():
             print("Gemini Test: OK")
     except Exception as e:
         print(f"Gemini Test Failed: {e}")
+
+    print("")
+
+    # 3.5 Test Embeddings
+    print("--- Test Embeddings ---")
+    try:
+        if not os.getenv("GOOGLE_API_KEY"):
+             print("Skipping Embedding test due to missing GOOGLE_API_KEY.")
+        else:
+            embed_model = GeminiEmbedding(
+                model_name="models/gemini-embedding-001",
+                api_key=os.getenv("GOOGLE_API_KEY")
+            )
+            emb = embed_model.get_text_embedding("Test embedding")
+            print(f"Embedding Test: OK (Length: {len(emb)})")
+    except Exception as e:
+        print(f"Embedding Test Failed: {e}")
 
     print("")
 
