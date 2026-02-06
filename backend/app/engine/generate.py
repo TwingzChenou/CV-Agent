@@ -41,7 +41,7 @@ def setup_github(username: str = "TwingzChenou"):
 
 # Setup Gemini
 def setup_gemini():
-    return GeminiEmbedding(model_name="models/text-embedding-004")
+    return GeminiEmbedding(model_name="gemini-embedding-001")
 
 
 # Setup Pinecone
@@ -197,7 +197,7 @@ if __name__ == "__main__":
         print(await generate_response("Quels sont les projets de Github de Quentin ?"))
         
         print("\n--- TEST 4 : GitHub ---")
-        print(await generate_response("Décris moi son projet Argentic CV ?"))
+        print(await generate_response("Décris moi son projet CV-Agent ?"))
 
         print("\n--- TEST 5 : Profile (RAG) ---")
         print(await generate_response("Quels sont les contacts de Quentin ?"))

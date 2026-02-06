@@ -41,7 +41,7 @@ def setup_splitter(filepath):
 def main():
     logger.info("🚀 Starting document loading...")
 
-    filepath = load_documents("profil_quentin.md")
+    filepath = load_documents("Quentin_Forget_CV.pdf")
     logger.info("✅ Document loading completed.")
     
     document_chunks = setup_splitter(filepath)

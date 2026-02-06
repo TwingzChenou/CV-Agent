@@ -38,7 +38,7 @@ def setup_github(username: str = "TwingzChenou"):
 
 # Setup Gemini
 def setup_gemini():
-    return GeminiEmbedding(model_name="models/text-embedding-004")
+    return GeminiEmbedding(model_name="gemini-embedding-001")
 
 # Setup Pinecone
 def setup_pinecone_index(embed_model):
