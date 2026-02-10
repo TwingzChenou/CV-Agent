@@ -11,9 +11,8 @@ import { cn } from "@/lib/utils";
 export default function ChatInterface() {
     const SUGGESTED_QUESTIONS = [
         "Quelles sont ses disponibilités ?",
-        "Quel est son principal défaut ?",
         "Quels sont ses projets GitHub ?",
-        "Peux-tu me parler de son projet 'CV-Agent' ?",
+        "Parle-moi de son projet 'CV-Agent' ?",
         "Quelles stacks techniques maitrise-t-il ?"
     ];
 
