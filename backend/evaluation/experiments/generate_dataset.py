@@ -2,18 +2,14 @@ import sys
 import os
 import asyncio
 import json
-from llama_index.llms.gemini import Gemini
+from llama_index.llms.ollama import Ollama
+from llama_index.embeddings.ollama import OllamaEmbedding
 from llama_index.core.tools import FunctionTool
 from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
 
-# --- Configuration ---
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-
-# Import de vos outils (ceux que l'agent utilise)
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from app.engine.tools import get_tools
 
 async def main():
@@ -21,7 +17,10 @@ async def main():
     tools = get_tools()
     
     # On prépare le LLM "Créateur de scénarios"
-    llm = Gemini(model="gemini-2.5-flash", api_key=GOOGLE_API_KEY)
+    llm = Ollama(model="mistral", base_url="http://localhost:11434", request_timeout=120.0)
+    embedding = OllamaEmbedding(model_name="mistral", base_url="http://localhost:11434")
+    
+    
     
     dataset = []
 
@@ -32,9 +31,9 @@ async def main():
         tool_name = tool.metadata.name
         
 
-        # PROMPT : On demande à Gemini d'inventer des questions pour CET outil
+        # PROMPT : On demande à Ollama d'inventer des questions pour CET outil
         prompt = (
-            f"Tu es un expert en test QA. Le but est de tester les outils de l'agent. Les questions porteront sur le CV et le profil de Quentin qui est un Data Scientist avec 2 ans d'expérience en Data Engineering. Les questions doivent etre en lien avec un entretien d'embauche. Tu dois poser des questions pour savoir si Quentin peut etre embauchéVoici un outil utilisé par un Agent IA.\n"
+            f"Tu es un expert en test QA. Le but est de tester les outils de l'agent. Les questions porteront sur le CV et le profil de Quentin qui est un Data Scientist avec 2 ans d'expérience en Data Engineering. Les questions doivent etre en lien avec un entretien d'embauche. Tu dois poser des questions pour savoir si Quentin peut etre embauché. Voici un outil utilisé par un Agent IA.\n"
             f"Nom: {tool_name}\n"
             "Génère 10 questions utilisateurs variées (complexes, simples, directes) "
             "qui nécessiteraient impérativement d'utiliser cet outil.\n"

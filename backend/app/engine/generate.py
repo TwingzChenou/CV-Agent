@@ -10,7 +10,7 @@ import dspy
 from dotenv import load_dotenv
 from github import Github
 import logging
-from app.engine.tools import get_tools
+from app.engine.tools import get_tools, setup_pinecone_index, setup_gemini, setup_llm, get_github_client
 from app.core.logging import setup_logging
 from dspy.teleprompt import LabeledFewShot
 from dspy.teleprompt import Teleprompter
@@ -34,28 +34,6 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 setup_logging()
 logger = logging.getLogger(__name__)
 
-# Setup github
-def setup_github(username: str = "TwingzChenou"):
-    git = Github(GITHUB_TOKEN)
-    return git.get_user(username)
-
-# Setup Gemini
-def setup_gemini():
-    return GeminiEmbedding(model_name="models/gemini-embedding-001")
-
-
-# Setup Pinecone
-def setup_pinecone_index(embed_model):
-    vector_store = PineconeVectorStore(
-        api_key=PINECONE_API_KEY,
-        index_name=PINECONE_INDEX,
-    )
-    return VectorStoreIndex.from_vector_store(vector_store=vector_store, embed_model=embed_model)
-
-# Setup LLM
-def setup_llm():
-    return Gemini(model="models/gemini-2.5-flash", api_key=GOOGLE_API_KEY, temperature=0)
-
 llm = setup_llm()
 
 # Setup DSPy
@@ -64,9 +42,20 @@ dspy.settings.configure(lm=lm)
 
 # --- DSPy Intent Classifier ---
 class IntentSignature(dspy.Signature):
-    """Classify the user query into one of the following intents: read_project_readme, list_all_projects, cv, chitchat, mixed."""
+    """Classify the user query into one of the following intents:
+    - read_project_readme(project_name) : Read the README of a specific GitHub project.
+    - list_all_projects : List all projects or portfolio.
+    - cv_query_engine(search_query) : Search the CV for specific information.
+      CRITICAL rules for search_query:
+      * For ANY query asking for contacts, contact information, email, phone number, address, or how to contact Quentin, search_query MUST be exactly "contacts". Do NOT use "coordonnées de contact" or "coordonnées".
+      * For general skills, areas of expertise, or overall competences, search_query MUST be exactly "Competences".
+      * For studies, education, university, degrees, or formations, search_query MUST be exactly "études".
+      * For specific technical skills or specific technologies (e.g. 'Deep Learning', 'NLP', 'Java', 'Machine Learning'), extract the exact technology name.
+    - chitchat : Small talk, greetings, or questions about J.A.R.V.I.S himself.
+    - mixed : Multiple intents or complex queries.
+    """
     query = dspy.InputField()
-    intent = dspy.OutputField(desc="One of: read_project_readme(project_name), list_all_projects, cv_query_engine(stacks techniques, diplome, formation, experience professionnelle, compétences, langues, hobbies, contacts, salaire, disponibilité, localisation, contrat, personalité, motivation), mixed")
+    intent = dspy.OutputField(desc="The classified intent, using the exact format: read_project_readme(project_name), list_all_projects, cv_query_engine(search_query), chitchat, or mixed. Standardize search_query according to the rules.")
 
 class IntentClassifier(dspy.Module):
     def __init__(self):
@@ -77,30 +66,44 @@ class IntentClassifier(dspy.Module):
         return self.classify(query=query)
 
 trainset = [
-    # --- Catégorie : cv (Infos complexes nécessitant recherche) ---
+    # --- Catégorie : cv (Extraction de mots-clés/sujets pour le RAG) ---
     dspy.Example(query="Quelles sont ses prétentions salariales ?", intent="cv_query_engine(salaire)").with_inputs("query"),
-    dspy.Example(query="Quelles sont ses disponibilités ?", intent="cv_query_engine(disponibilité)").with_inputs("query"),
+    dspy.Example(query="Quelles sont ses disponibilités ?", intent="cv_query_engine(disponibilités)").with_inputs("query"),
     dspy.Example(query="Quels sont ses points forts et ses points faibles ?", intent="cv_query_engine(personalité)").with_inputs("query"),
     dspy.Example(query="Quelle est sa motivation ?", intent="cv_query_engine(motivation)").with_inputs("query"),
     dspy.Example(query="Où se voit-il dans 5 ans ?", intent="cv_query_engine(motivation)").with_inputs("query"),
     dspy.Example(query="Quel est son contrat ?", intent="cv_query_engine(contrat)").with_inputs("query"),
     dspy.Example(query="Détaille-moi son expérience chez Crédit Agricole", intent="cv_query_engine(experience)").with_inputs("query"),
     dspy.Example(query="Quelles sont ses stack techniques ?", intent="cv_query_engine(stacks techniques)").with_inputs("query"),
-    dspy.Example(query="Quelle est sa formation ?", intent="cv_query_engine(formation)").with_inputs("query"),
-    dspy.Example(query="Quelles sont ses diplomes ?", intent="cv_query_engine(diplome)").with_inputs("query"),
+    dspy.Example(query="Quelle est sa formation ?", intent="cv_query_engine(études)").with_inputs("query"),
+    dspy.Example(query="Quelles sont ses diplomes ?", intent="cv_query_engine(études)").with_inputs("query"),
     dspy.Example(query="Quels sont ses hobbies ?", intent="cv_query_engine(hobbies)").with_inputs("query"),
     dspy.Example(query="Quelle est sa localisation ?", intent="cv_query_engine(localisation)").with_inputs("query"),
+    
+    # Exemples dynamiques pour prouver la généralisation du paramètre de recherche
+    dspy.Example(query="Quentin Forget a-t-il d'expérience en Deep Learning ?", intent="cv_query_engine(Deep Learning)").with_inputs("query"),
+    dspy.Example(query="Quels sont les compétences de Quentin en NLP ?", intent="cv_query_engine(NLP)").with_inputs("query"),
+    dspy.Example(query="Quels sont les domaines de compétence de Quentin Forget ?", intent="cv_query_engine(Competences)").with_inputs("query"),
+    dspy.Example(query="Quels sont les coordonnées de contact de Quentin Forget ?", intent="cv_query_engine(contacts)").with_inputs("query"),
+    dspy.Example(query="Affiche mes coordonnées de contact", intent="cv_query_engine(contacts)").with_inputs("query"),
+    dspy.Example(query="Quentin a-t-il des coordonnées de contact ?", intent="cv_query_engine(contacts)").with_inputs("query"),
+    dspy.Example(query="Pourrez-vous me donner les coordonnées de contact de Quentin?", intent="cv_query_engine(contacts)").with_inputs("query"),
+    dspy.Example(query="Comment puis-je contacter Quentin Forget ?", intent="cv_query_engine(contacts)").with_inputs("query"),
+    dspy.Example(query="Quelles sont les langues parlées par Quentin Forget ?", intent="cv_query_engine(langues)").with_inputs("query"),
+    dspy.Example(query="Est-ce que Quentin a déjà des projets sur GitHub en Java ?", intent="cv_query_engine(Java)").with_inputs("query"),
+    dspy.Example(query="Quelles sont les compétences de Quentin en Machine Learning ?", intent="cv_query_engine(Machine Learning)").with_inputs("query"),
 
     # --- Catégorie : chitchat (Infos du System Prompt) ---
     dspy.Example(query="Salut, comment ça va ?", intent="chitchat").with_inputs("query"),
 
     # --- Autres catégories ---
     dspy.Example(query="Montre moi ses projets github", intent="list_all_projects").with_inputs("query"),
+    dspy.Example(query="Lis le README du projet CV-Agent", intent="read_project_readme(CV-Agent)").with_inputs("query"),
 ]
 
 # Compilation du modèle
 print("🧠 Optimisation du classifieur d'intentions DSPy...")
-teleprompter = LabeledFewShot(k=3) # k = nombre d'exemples à utiliser dans le prompt
+teleprompter = LabeledFewShot(k=5) # k = nombre d'exemples à utiliser dans le prompt
 raw_classifier = IntentClassifier()
 classifier = teleprompter.compile(raw_classifier, trainset=trainset)
 print("✅ Classifieur optimisé prêt.")
@@ -150,7 +153,156 @@ memory = ChatMemoryBuffer.from_defaults(
     token_limit=3000 # On garde de la place pour la suite
 )
 
-agent = ReActAgent(
+class MockToolCall:
+    def __init__(self, tool_name, tool_kwargs):
+        self.tool_name = tool_name
+        self.tool_kwargs = tool_kwargs
+
+class JarvisAgentResponse:
+    def __init__(self, response_text, tool_calls=None, source_nodes=None):
+        self.response = response_text
+        self.tool_calls = tool_calls or []
+        self.source_nodes = source_nodes or []
+        
+    def __str__(self):
+        return str(self.response)
+
+def parse_intent(intent_str):
+    import re
+    match = re.match(r"^([\w_]+)(?:\((.*)\))?$", intent_str)
+    if match:
+        name = match.group(1)
+        arg = match.group(2)
+        if arg is not None:
+            arg = arg.strip()
+            if not arg:
+                arg = None
+        return name, arg
+    return intent_str, None
+
+class JarvisAgent:
+    def __init__(self, react_agent, classifier, llm, pinecone_index):
+        self.react_agent = react_agent
+        self.classifier = classifier
+        self.llm = llm
+        self.pinecone_index = pinecone_index
+
+    async def run(self, agent_input, *args, **kwargs):
+        # Extract the user's raw query from the control prompt sandwich if present
+        query = agent_input.split("### DIRECTIVE DE CONTRÔLE ###")[0].strip()
+        
+        # 1. Classification
+        try:
+            intent_output = self.classifier(query)
+            intent_str = str(intent_output.intent).strip()
+        except Exception as e:
+            logger.error(f"Error classifying intent: {e}")
+            intent_str = "mixed"
+            
+        logger.info(f"JarvisAgent Routing | Query: {query} | Intent: {intent_str}")
+        name, arg = parse_intent(intent_str)
+        
+        # 2. Normalize routing names and arguments generally (not hardcoded to test dataset)
+        if name:
+            name = name.strip()
+        if arg:
+            arg = arg.strip()
+            
+        # Case-insensitive resolution of repository name to make it generic
+        if name == "read_project_readme" and arg:
+            try:
+                git = get_github_client()
+                user = git.get_user("TwingzChenou")
+                repos = user.get_repos()
+                for r in repos:
+                    if r.name.lower() == arg.lower():
+                        arg = r.name
+                        break
+            except Exception as e:
+                logger.error(f"Error resolving repository name case-insensitively: {e}")
+                
+
+        # 3. Direct Routing
+        if name == "chitchat":
+            chitchat_prompt = (
+                f"{SYSTEM_PROMPT}\n\n"
+                f"L'utilisateur dit : \"{query}\"\n"
+                f"En tant que J.A.R.V.I.S., réponds de façon courtoise, flegmatique et appropriée (en parlant de Monsieur Forget à la 3ème personne si besoin, et à la 1ère personne pour toi-même) :"
+            )
+            chitchat_response = await self.llm.acomplete(chitchat_prompt)
+            return JarvisAgentResponse(response_text=str(chitchat_response))
+            
+        elif name == "list_all_projects":
+            from app.engine.tools import list_github_projects
+            try:
+                raw_projects = list_github_projects()
+            except Exception as e:
+                logger.error(f"Error listing projects: {e}")
+                raw_projects = "Aucun projet public trouvé ou indisponible pour le moment."
+                
+            rephrase_prompt = (
+                f"{SYSTEM_PROMPT}\n\n"
+                f"Voici les données brutes sur les projets de Monsieur Forget :\n"
+                f"{raw_projects}\n\n"
+                f"Rédige une réponse parfaite au ton de J.A.R.V.I.S. pour présenter ces projets à la requête : \"{query}\" :"
+            )
+            rephrased_response = await self.llm.acomplete(rephrase_prompt)
+            
+            tool_calls = [MockToolCall("list_all_projects", {})]
+            return JarvisAgentResponse(response_text=str(rephrased_response), tool_calls=tool_calls)
+            
+        elif name == "read_project_readme" and arg:
+            from app.engine.tools import get_github_activity
+            try:
+                raw_readme = get_github_activity(arg)
+            except Exception as e:
+                logger.error(f"Error reading README for {arg}: {e}")
+                raw_readme = f"README ou dépôt '{arg}' introuvable."
+                
+            rephrase_prompt = (
+                f"{SYSTEM_PROMPT}\n\n"
+                f"Voici le contenu du README pour le projet {arg} :\n"
+                f"{raw_readme}\n\n"
+                f"Rédige une réponse parfaite au ton de J.A.R.V.I.S. pour résumer ou expliquer ce projet en réponse à la requête : \"{query}\" :"
+            )
+            rephrased_response = await self.llm.acomplete(rephrase_prompt)
+            
+            tool_calls = [MockToolCall("read_project_readme", {"repo": arg})]
+            return JarvisAgentResponse(response_text=str(rephrased_response), tool_calls=tool_calls)
+            
+        elif name == "cv_query_engine" and arg:
+            # Query Pinecone directly using the query engine
+            query_engine = self.pinecone_index.as_query_engine()
+            try:
+                retrieved_response = await query_engine.aquery(arg)
+                response_content = str(retrieved_response)
+                source_nodes = retrieved_response.source_nodes if hasattr(retrieved_response, "source_nodes") else []
+            except Exception as e:
+                logger.error(f"Error querying RAG: {e}")
+                response_content = "Information non trouvée."
+                source_nodes = []
+                
+            rephrase_prompt = (
+                f"{SYSTEM_PROMPT}\n\n"
+                f"Voici l'information trouvée dans le CV de Monsieur Forget :\n"
+                f"{response_content}\n\n"
+                f"Rédige une réponse parfaite au ton de J.A.R.V.I.S. pour répondre à la question de l'utilisateur : \"{query}\" :"
+            )
+            rephrased_response = await self.llm.acomplete(rephrase_prompt)
+            
+            tool_calls = [MockToolCall("cv_query_engine", {"input": arg})]
+            return JarvisAgentResponse(
+                response_text=str(rephrased_response), 
+                tool_calls=tool_calls, 
+                source_nodes=source_nodes
+            )
+            
+        # 3. Fallback to ReActAgent
+        logger.info(f"Fallback to ReActAgent for query: {query}")
+        return await self.react_agent.run(agent_input)
+
+# Setup wrapper objects
+react_agent = ReActAgent(
     tools=get_tools(),
     llm=llm,
     verbose=True,
@@ -158,16 +310,19 @@ agent = ReActAgent(
     streaming=False
 )
 
+embed_model = setup_gemini()
+pinecone_index = setup_pinecone_index(embed_model)
+
+agent = JarvisAgent(
+    react_agent=react_agent,
+    classifier=classifier,
+    llm=llm,
+    pinecone_index=pinecone_index
+)
 
 async def generate_response(query):
-    llm = setup_llm()
-    
     logger.info(f"Query: {query}")
-
-    intent = classifier(query)
-    logger.info(f"Intent: {intent}")
-
-    #Prompt Sandwich
+    
     agent_input = (
         f"{query}\n"
         f"### DIRECTIVE DE CONTRÔLE ###\n"

@@ -1,0 +1,1168 @@
+[
+    {
+        "user_input": "JARVIS, quelle est la disponibilité de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "disponibilité"
+                }
+            }
+        ],
+        "reference": "Certes, j'ai bien enregistré votre requête concernant la disponibilité de Monsieur Forget. D'après les informations dont je dispose, Quentin est, en effet, immédiatement disponible. Il n'a aucun préavis à honorer, ce qui lui confère la capacité d'initier une nouvelle mission dès le lendemain d'une signature formelle."
+    },
+    {
+        "user_input": "Quels types de contrats Quentin recherche-t-il ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "types de contrats recherchés"
+                }
+            }
+        ],
+        "reference": "D'après les informations dont je dispose, Monsieur Forget privilégie un Contrat à Durée Indéterminée. Néanmoins, il convient de noter que des propositions en Contrat à Durée Déterminée ou en Freelance sont également considérées. Certes, pour ces dernières, l'intérêt de Monsieur Forget est conditionné par la nature du projet technique, lequel doit impérativement se révéler ambitieux et stimulant."
+    },
+    {
+        "user_input": "Peux-tu me montrer tous les projets GitHub de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "list_all_projects",
+                "args": {}
+            }
+        ],
+        "reference": "Certes, je suis en mesure de vous présenter l'ensemble des projets GitHub de Monsieur Forget.\n\nD'après mes données, voici les réalisations que Quentin a mises à disposition :\n\n1.  **Momentum_AI** : Il s'agit d'une plateforme de trading algorithmique élaborée pour des stratégies de momentum à changement de régime, ciblant les actions et ETF du S&P 500. Ce projet intègre un pipeline de données Medallion complet, utilisant dbt, Spark et BigQuery, optimisé avec Optuna et dont le suivi est assuré par MLflow. L'orchestration de l'ensemble est gérée par Airflow.\n    *   [https://github.com/TwingzChenou/Momentum_AI](https://github.com/TwingzChenou/Momentum_AI)\n\n2.  **CV-Agent** : Ce projet est un agent d'intelligence artificielle, développé en Python, conçu pour répondre aux interrogations relatives au parcours et au répertoire GitHub de Monsieur Forget, tout en intégrant des métriques de performance d'apprentissage.\n    *   [https://github.com/TwingzChenou/CV-Agent](https://github.com/TwingzChenou/CV-Agent)\n\n3.  **business-saas** : Bien qu'il ne soit pas accompagné d'une description explicite dans mes registres actuels, ce projet est également une illustration des compétences de Monsieur Forget.\n    *   [https://github.com/TwingzChenou/business-saas](https://github.com/TwingzChenou/business-saas)\n\nJe reste à votre entière disposition pour toute information complémentaire concernant ces réalisations."
+    },
+    {
+        "user_input": "J'aimerais en savoir plus sur le projet Momentum_AI. Peux-tu lire son README ?",
+        "reference_tool_calls": [
+            {
+                "name": "read_project_readme",
+                "args": {
+                    "repo": "Momentum_AI"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous éclairer sur le projet Momentum_AI. J'ai procédé à l'analyse du document README que Monsieur Forget a mis à ma disposition.\n\nD'après mes données, Momentum_AI est une plateforme de trading quantitatif de calibre industriel, conçue pour implémenter une stratégie de momentum à commutation de régime. Elle est scientifiquement optimisée via une recherche bayésienne et auditée en temps réel par des contrats de données rigoureux.\n\nMonsieur Forget a identifié deux lacunes critiques dans les stratégies de momentum traditionnelles : le biais de survie, qui invalide de nombreux backtests académiques, et les retournements de tendance brutaux, ou \"drawdowns\", durant les marchés baissiers. Ces facteurs compromettent le profil de rendement ajusté au risque.\n\nPour y remédier, Quentin a structuré Momentum_AI autour de trois piliers d'ingénierie quantitative :\n1.  **L'éradication du biais de survie** : Le système ingère un univers historique dynamique, traquant plus de 1 170 membres historiques du S&P 500 sur les 50 dernières années, plutôt que de se limiter aux 500 membres actuellement actifs.\n2.  **La commutation dynamique de régime** : Un détecteur algorithmique de régime de marché (haussier ou baissier) permet de basculer dynamiquement le capital vers un panier de \"Top N Stocks\" à effet de levier durant les tendances haussières, ou de se retirer vers des ETF de couverture (Or, Obligations) et des liquidités rémunérées durant les tendances baissières.\n3.  **Un moteur d'optimisation axé sur le ratio de Calmar** : Une optimisation bayésienne automatisée via Optuna est conçue pour maximiser le ratio de Calmar (CAGR / Max Drawdown), assurant ainsi une performance ajustée au risque optimale.\n\nQuant à son architecture, le projet est bâti sur une architecture Medallion (Bronze/Silver/Gold), propulsée par Apache Spark et matérialisée sous forme de tables Delta sur Google Cloud Storage (GCS). Le flux de données débute par l'ingestion depuis des sources telles que Yahoo Finance et TradingView vers la couche Bronze, puis progresse à travers les couches Silver et Gold, où les données sont nettoyées, agrégées et transformées en fonctionnalités de trading standardisées.\n\nMonsieur Forget a sélectionné des technologies spécifiques pour des justifications précises :\n*   **PySpark (v3.5.3)** : Utilisé comme moteur de calcul pour son traitement parallèle hautement performant, capable de gérer 50 ans de données de prix quotidiennes pour plus de 1 100 actifs, évitant ainsi les goulots d'étranglement de la RAM inhérents aux solutions mono-nœud comme Pandas.\n*   **Delta Lake (v3.2.1)** : Choisi pour son format de stockage offrant des garanties ACID complètes sur GCS, permettant des opérations `Merge (Upsert)` incrémentales quotidiennes sans risque de corruption des données historiques.\n*   **Great Expectations (v1.x)** : Intégré pour établir des \"contrats de données\" stricts, assurant une qualité de données rigoureuse et bloquant le pipeline en cas de non-conformité.\n\nEn somme, ce projet démontre la capacité de Monsieur Forget à concevoir et à implémenter des solutions d'ingénierie de données et d'apprentissage automatique robustes et performantes, avec une attention particulière à la fiabilité et à l'optimisation des performances financières."
+    },
+    {
+        "user_input": "Quelle est l'ambition professionnelle de Quentin à cinq ans ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "ambition à 5 ans"
+                }
+            }
+        ],
+        "reference": "D'après mes données, l'ambition professionnelle de Monsieur Forget à l'horizon de cinq ans est de se positionner en tant que Lead Data Scientist ou Architecte IA. Il aspire, en effet, à conserver une expertise technique concrète tout en assumant la responsabilité d'orienter les décisions technologiques stratégiques de son entreprise et d'encadrer des collaborateurs moins expérimentés. Sa motivation première réside dans l'impact utilisateur, cherchant à concevoir des outils qui automatisent les tâches fastidieuses et optimisent le temps des utilisateurs, se considérant ainsi comme un véritable \"Artisan de la Data\" résolvant des problématiques concrètes."
+    },
+    {
+        "user_input": "Quel est le principal défaut de Quentin Forget mentionné dans son profil ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "principal défaut"
+                }
+            }
+        ],
+        "reference": "Certes, j'ai procédé à une analyse des informations disponibles concernant Monsieur Forget. D'après les données consignées dans son profil, le principal défaut qu'il mentionne est son perfectionnisme technique. Il semblerait, en effet, que Monsieur Forget ait une fâcheuse propension à vouloir que tout fonctionne de manière absolument irréprochable."
+    },
+    {
+        "user_input": "JARVIS, Quentin est-il disponible pour commencer un nouveau poste ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "disponibilité"
+                }
+            }
+        ],
+        "reference": "En effet, je peux confirmer que Monsieur Forget est immédiatement disponible pour un nouveau poste. D'après mes données, il n'a aucun préavis à observer et serait ainsi en mesure d'entamer ses fonctions dès le lendemain de la formalisation d'un accord."
+    },
+    {
+        "user_input": "Peux-tu me montrer tous les projets GitHub de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "list_all_projects",
+                "args": {}
+            }
+        ],
+        "reference": "Certes, je peux vous fournir les détails des projets GitHub de Monsieur Forget. D'après mes données, Quentin a développé plusieurs initiatives notables, chacune reflétant une facette de ses compétences.\n\nPremièrement, le projet **CV-Agent** (https://github.com/TwingzChenou/CV-Agent) est un agent d'intelligence artificielle, méticuleusement élaboré en Python, dont la fonction est de répondre aux questions relatives au parcours de Monsieur Forget et à ses contributions sur GitHub. Ce système intègre par ailleurs des métriques de performance d'apprentissage, attestant d'une approche rigoureuse.\n\nEnsuite, le projet **Momentum_AI** (https://github.com/TwingzChenou/Momentum_AI) se distingue. Il s'agit d'une plateforme de trading algorithmique sophistiquée, conçue pour les stratégies de momentum à changement de régime sur les actions et ETFs du S&P 500. Ce projet déploie un pipeline de données complet, inspiré de l'architecture Medallion, exploitant dbt, Spark et BigQuery. L'optimisation est assurée par Optuna et le suivi par MLflow, l'ensemble étant orchestré avec Airflow. C'est une démonstration éloquente de ses aptitudes en ingénierie des données et en apprentissage automatique appliqué à la finance.\n\nEnfin, le dépôt **business-saas** (https://github.com/TwingzChenou/business-saas) est également présent. Bien que Monsieur Forget n'ait pas encore eu l'occasion de rédiger une description détaillée pour ce projet, il s'agit d'une initiative pertinente qui témoigne de son intérêt pour les architectures logicielles d'entreprise."
+    },
+    {
+        "user_input": "J'aimerais connaître les détails du projet 'CV-Agent'. Peux-tu lire son README ?",
+        "reference_tool_calls": [
+            {
+                "name": "read_project_readme",
+                "args": {
+                    "repo": "CV-Agent"
+                }
+            }
+        ],
+        "reference": "Certes, Monsieur. J'ai procédé à l'analyse du document README relatif au projet \"CV-Agent\" de Monsieur Forget.\n\nD'après mes données, il s'agit d'un \"CV Agentique Propulsé par l'IA\", que Monsieur Forget décrit comme un assistant RAG (Retrieval Augmented Generation) interactif. Son objectif est de répondre aux questions concernant son parcours professionnel (son CV) ainsi que son activité de codage en temps réel sur GitHub.\n\nL'architecture de ce projet, que Monsieur Forget qualifie de \"Jumeau Numérique\" ou de \"Curriculum Vitae Agentique\", est particulièrement ingénieuse. Elle repose sur une scission des connaissances en deux domaines distincts afin de garantir des réponses à la fois précises et actualisées :\n*   **Les connaissances statiques (RAG)** : Elles sont gérées via **Pinecone**, une base de données vectorielle, où sont stockés les embeddings du CV de Monsieur Forget (`cv.pdf`). Cela permet à l'agent de fournir des informations détaillées sur son éducation, ses expériences passées et ses compétences.\n*   **Les connaissances dynamiques (Outils)** : Pour cela, l'agent interagit avec l'**API GitHub** et des outils en temps réel. Cette approche lui confère la capacité de récupérer l'activité de codage actuelle, les commits récents et les dépôts actifs, assurant ainsi que les informations sur les travaux en cours de Monsieur Forget sont toujours à jour.\n\nLe système est orchestré par un agent IA utilisant le modèle **ReAct**, avec **Gemini 2.5 Flash** comme modèle de langage principal. L'interface utilisateur est développée avec **Next.js**, tandis que le backend repose sur **FastAPI** en Python.\n\nQuant à la pile technologique, elle est robuste et moderne :\n*   **Frontend** : Next.js 14, TailwindCSS, Framer Motion.\n*   **Backend** : Python 3.11, FastAPI.\n*   **IA/Orchestration** : LlamaIndex, Gemini 2.5 Flash.\n*   **Données** : Pinecone (base de données vectorielle), API GitHub.\n*   **DevOps** : Docker, Vercel/Render.\n\nMonsieur Forget a également pris soin de détailler les procédures de mise en route, incluant les prérequis, les étapes d'installation (clonage du dépôt, configuration des variables d'environnement, ingestion des données du CV via Docker ou localement) et les méthodes pour lancer l'application, que ce soit via Docker Compose ou en développement local pour le backend et le frontend.\n\nEn somme, ce projet démontre une maîtrise approfondie des architectures d'agents intelligents, de l'intégration de sources de données hétérogènes et des technologies de pointe en matière d'IA et de développement web. Il s'agit là d'une illustration éloquente des compétences de Monsieur Forget."
+    },
+    {
+        "user_input": "Quelle est la vision professionnelle de Quentin à cinq ans ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "ambition à 5 ans"
+                }
+            }
+        ],
+        "reference": "Certes, d'après les informations que j'ai compilées, la vision professionnelle de Monsieur Forget pour les cinq prochaines années est des plus claires et ambitieuses.\n\nEn effet, Quentin aspire à évoluer vers un poste de Lead Data Scientist ou d'Architecte IA. Il souhaite ardemment conserver une expertise technique pratique, tout en assumant la responsabilité d'orienter les décisions technologiques stratégiques de son entreprise et d'encadrer des collaborateurs moins expérimentés. Sa motivation première réside dans l'impact utilisateur, cherchant à concevoir des outils qui automatisent les tâches fastidieuses et optimisent le temps des utilisateurs, se considérant ainsi comme un véritable \"Artisan de la Data\" dédié à la résolution de problèmes concrets."
+    },
+    {
+        "user_input": "JARVIS, quand Quentin est-il disponible pour commencer un nouveau poste ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "disponibilité"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous éclairer sur ce point. D'après les informations dont je dispose, Monsieur Forget est disponible sans délai. En effet, il n'a aucun préavis à effectuer, ce qui lui permettrait d'entamer une nouvelle mission dès le lendemain de la signature d'un contrat. Cette promptitude est, je l'espère, un atout appréciable pour votre organisation."
+    },
+    {
+        "user_input": "Peux-tu me montrer le portfolio de projets de Quentin sur GitHub ?",
+        "reference_tool_calls": [
+            {
+                "name": "list_all_projects",
+                "args": {}
+            }
+        ],
+        "reference": "Certes, il me fait plaisir de vous présenter un aperçu des réalisations de Monsieur Forget, telles qu'elles sont consignées sur sa plateforme GitHub.\n\nD'après mes données, voici les projets actuellement disponibles :\n\n1.  **Momentum_AI** : Il s'agit d'une plateforme de trading algorithmique sophistiquée, conçue pour des stratégies de momentum à changement de régime sur les actions et ETF du S&P 500. Monsieur Forget y a implémenté un pipeline de données complet de type Medallion, utilisant dbt, Spark et BigQuery, optimisé avec Optuna et suivi par MLflow, le tout orchestré avec Airflow. Ce projet démontre une maîtrise approfondie des architectures de données complexes et de l'apprentissage automatique appliqué à la finance quantitative.\n\n2.  **CV-Agent** : Ce projet est un agent d'intelligence artificielle, développé en Python, capable de répondre à des questions concernant le parcours et le portfolio GitHub de Monsieur Forget. Il intègre des métriques de performance d'apprentissage, ce qui souligne l'attention portée à l'évaluation et à l'amélioration continue des systèmes d'IA.\n\n3.  **business-saas** : Quant à ce dépôt, mes bases de données ne contiennent pas encore de description exhaustive. Il représente néanmoins une facette des explorations de Monsieur Forget en matière de solutions logicielles d'entreprise.\n\nEn effet, ces réalisations témoignent de la polyvalence et de la maîtrise technique de Monsieur Forget dans des domaines variés, allant de la finance quantitative à l'intelligence artificielle et au développement logiciel. Je suis à votre disposition pour toute information complémentaire concernant ces travaux ou d'autres aspects de son profil."
+    },
+    {
+        "user_input": "Quelles sont les compétences de Quentin en MLOps ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "MLOps"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous éclairer sur les compétences de Monsieur Forget en matière de MLOps. D'après les données que j'ai analysées, cette discipline représente pour lui la maîtrise pratique de l'industrialisation des modèles, un domaine d'expertise capital.\n\nEn effet, Quentin excelle dans le déploiement de modèles en production, allant bien au-delà du simple développement initial en environnements tels que les notebooks Jupyter. Ses aptitudes incluent la création d'APIs robustes, la conteneurisation d'applications avec Docker, et leur déploiement efficace, garantissant ainsi une autonomie complète sur le cycle de vie des données.\n\nSes compétences techniques spécifiques en MLOps et en ingénierie englobent l'utilisation de MLflow, Great Expectations, Git/CI-CD, ainsi que FastAPI.\n\nL'expérience de Monsieur Forget en MLOps se manifeste notamment par la conception d'infrastructures Big Data destinées à l'optimisation de stratégies quantitatives. Cela implique l'orchestration complexe de flux de données, la réalisation de transformations distribuées, et l'optimisation bayésienne avec un suivi rigoureux des expérimentations.\n\nCes réalisations démontrent sa capacité avérée à transformer des données complexes en solutions industrielles robustes et mesurables, parfaitement alignées avec les impératifs métier. Un talent, si je puis me permettre, fort appréciable."
+    },
+    {
+        "user_input": "JARVIS, lis-moi la documentation du projet Momentum_AI.",
+        "reference_tool_calls": [
+            {
+                "name": "read_project_readme",
+                "args": {
+                    "repo": "Momentum_AI"
+                }
+            }
+        ],
+        "reference": "Certes, je me ferai un plaisir de vous présenter les détails du projet Momentum_AI, tel qu'il a été conçu et développé par Monsieur Forget.\n\nD'après mes analyses de la documentation fournie, ce projet se positionne comme une plateforme de trading quantitatif de calibre industriel, d'une robustesse remarquable. Il met en œuvre une stratégie de momentum à commutation de régime, optimisée de manière scientifique par recherche bayésienne et auditée en temps réel grâce à des contrats de données rigoureux.\n\nLe problème commercial que Monsieur Forget a brillamment résolu réside dans les faiblesses inhérentes aux stratégies de momentum traditionnelles, à savoir le biais de survie et les retournements de tendance brutaux. Pour y remédier, il a articulé sa solution autour de trois piliers d'ingénierie quantitative :\n\n1.  **L'éradication du biais de survie** : Monsieur Forget a intégré un univers historique dynamique, traquant plus de 1 170 membres historiques du S&P 500 sur les cinquante dernières années, plutôt que de se limiter aux seuls membres actuels.\n2.  **La commutation dynamique de régime** : Un détecteur algorithmique de régime de marché (haussier ou baissier) permet de basculer dynamiquement le capital vers un panier de \"Top N Stocks\" à effet de levier durant les tendances haussières, ou de se replier vers des ETF de couverture (Or, Obligations) et des liquidités rémunérées durant les phases baissières.\n3.  **Un moteur d'optimisation axé sur le ratio de Calmar** : Une optimisation bayésienne automatisée via Optuna est conçue pour maximiser ce ratio, garantissant ainsi une performance ajustée au risque optimale.\n\nEn ce qui concerne l'architecture et le flux de données, le projet est structuré autour d'une architecture Medallion (Bronze, Silver, Gold), propulsée par Apache Spark et matérialisée sous forme de tables Delta sur Google Cloud Storage.\n\nLe processus débute par l'ingestion de données brutes provenant d'APIs telles que Yahoo Finance et TradingView, qui alimentent la couche Bronze. Ces données transitent ensuite vers la couche Silver après validation de schéma et application de contrats de qualité stricts via Great Expectations. Enfin, la couche Gold agrège ces informations en fonctionnalités de trading standardisées, intégrant des indicateurs techniques.\n\nL'orchestration de l'ensemble est assurée par Apache Airflow, tandis que le moteur PySpark gère le traitement parallèle de volumes considérables de données historiques. La persistance des données bénéficie des garanties ACID de Delta Lake, permettant des opérations d'insertion et de mise à jour incrémentales sans risque de corruption.\n\nPour la phase de stratégie quantitative et de monitoring, Monsieur Forget a intégré Optuna pour la recherche bayésienne d'hyperparamètres, MLflow pour le suivi des expérimentations et l'enregistrement des modèles, et Streamlit pour un moteur de backtest interactif.\n\nEn somme, ce projet démontre la capacité de Monsieur Forget à concevoir et à implémenter des solutions complexes et robustes, alliant une compréhension approfondie des défis financiers à une maîtrise technique des outils de pointe en ingénierie des données et en apprentissage automatique. Il s'agit là, en effet, d'une démonstration éloquente de ses compétences."
+    },
+    {
+        "user_input": "Quelle est l'ambition professionnelle de Quentin à cinq ans ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "ambition à 5 ans"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous éclairer sur ce point. D'après mes données, l'ambition professionnelle de Monsieur Forget à l'horizon de cinq ans est de se positionner en tant que Lead Data Scientist ou Architecte IA. Il aspire, en effet, à maintenir une expertise technique pratique tout en assumant la responsabilité d'orienter les décisions technologiques stratégiques de son entreprise et d'encadrer des profils moins expérimentés. Sa motivation principale réside dans l'impact utilisateur, cherchant à concevoir des outils qui automatisent les tâches fastidieuses et optimisent le temps des utilisateurs, se considérant ainsi comme un véritable \"Artisan de la Data\" résolvant des problèmes concrets."
+    },
+    {
+        "user_input": "JARVIS, quand Quentin est-il disponible pour commencer une nouvelle mission ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "disponibilité"
+                }
+            }
+        ],
+        "reference": "J'ai bien enregistré votre requête. D'après mes données, Monsieur Forget est, en effet, disponible immédiatement. Il n'a aucun préavis à effectuer, ce qui lui permet d'entamer une nouvelle mission dès le lendemain de la signature d'un accord."
+    },
+    {
+        "user_input": "Quels types de contrats Quentin recherche-t-il ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "types de contrats"
+                }
+            }
+        ],
+        "reference": "En effet, d'après les informations que j'ai méticuleusement compilées, Monsieur Forget manifeste un intérêt pour diverses modalités contractuelles. Il recherche spécifiquement des opportunités en Contrat à Durée Indéterminée (CDI), en Contrat à Durée Déterminée (CDD), ainsi que des missions relevant du statut de Freelance. Cette polyvalence témoigne, je crois, de son adaptabilité aux exigences variées du marché."
+    },
+    {
+        "user_input": "Peux-tu me montrer la liste des projets GitHub de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "list_all_projects",
+                "args": {}
+            }
+        ],
+        "reference": "Absolument. D'après mes données, Monsieur Forget a développé plusieurs projets notables sur sa plateforme GitHub, dont je peux vous fournir la liste exhaustive.\n\nPermettez-moi de vous les présenter :\n\n*   **Momentum_AI** : Il s'agit d'une plateforme de trading algorithmique conçue pour des stratégies de momentum à changement de régime sur les actions et ETF du S&P 500. Elle intègre un pipeline de données Medallion complet (dbt, Spark, BigQuery), optimisé avec Optuna et suivi par MLflow, le tout orchestré avec Airflow. [Lien : https://github.com/TwingzChenou/Momentum_AI]\n\n*   **CV-Agent** : Ce projet représente un agent d'intelligence artificielle bâti en Python, capable de répondre à des questions concernant le parcours et le profil GitHub de Monsieur Forget, tout en intégrant des métriques de performance d'apprentissage. [Lien : https://github.com/TwingzChenou/CV-Agent]\n\n*   **business-saas** : Bien que la description détaillée de ce projet ne soit pas explicitement renseignée dans mes bases de données actuelles, il s'agit d'une initiative pertinente. [Lien : https://github.com/TwingzChenou/business-saas]\n\nCes réalisations, Monsieur, témoignent de la polyvalence et de la rigueur technique de Quentin."
+    },
+    {
+        "user_input": "Quelle est l'ambition professionnelle de Quentin à cinq ans ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "ambition à 5 ans"
+                }
+            }
+        ],
+        "reference": "Certes, d'après les informations que j'ai compilées, l'ambition professionnelle de Monsieur Forget, à l'horizon des cinq prochaines années, est de se positionner en tant que Lead Data Scientist ou Architecte IA. En effet, son objectif est de maintenir une expertise technique des plus solides, tout en assumant la responsabilité d'orienter les décisions technologiques stratégiques de son entreprise et d'encadrer des profils moins expérimentés."
+    },
+    {
+        "user_input": "JARVIS, lis-moi le README du projet Momentum_AI.",
+        "reference_tool_calls": [
+            {
+                "name": "read_project_readme",
+                "args": {
+                    "repo": "Momentum_AI"
+                }
+            }
+        ],
+        "reference": "Certes, je me ferai un plaisir de vous présenter le contenu du fichier README pour le projet Momentum_AI, tel qu'élaboré par Monsieur Forget.\n\nCe projet, intitulé « Momentum AI — Algorithmic Strategy with Optuna & MLflow », se présente comme une plateforme de trading quantitatif de calibre industriel, d'une robustesse avérée. Elle met en œuvre une stratégie de momentum à commutation de régime, optimisée de manière scientifique via une recherche bayésienne et auditée en temps réel par des contrats de données rigoureux.\n\nD'après les informations compilées par mes systèmes, voici les points saillants :\n\n**1. Proposition de Valeur Commerciale :**\n\nMonsieur Forget a identifié deux lacunes critiques dans les stratégies de momentum traditionnelles au sein de l'industrie de la gestion d'actifs : le biais de survie, qui invalide de nombreux backtests académiques en ignorant les entreprises radiées, et les retournements de tendance brutaux, ou \"drawdowns\", durant les marchés baissiers. Ces facteurs dégradent le profil de rendement ajusté au risque et entravent le déploiement de capitaux réels.\n\nMomentum AI apporte une solution à cette problématique par le biais de trois piliers d'ingénierie quantitative :\n*   **Éradication du Biais de Survie :** Le système ingère un univers historique dynamique, traquant plus de 1 170 membres historiques du S&P 500 sur les cinquante dernières années, plutôt que de se limiter aux 500 membres actuellement actifs.\n*   **Commutation de Régime Dynamique :** Un détecteur algorithmique de régime de marché (haussier ou baissier) qui alloue dynamiquement le capital vers un panier de \"Top N Stocks\" à effet de levier durant les tendances haussières, ou se retire vers des ETF de couverture (Or, Obligations) et des liquidités rémunérées durant les tendances baissières.\n*   **Moteur d'Optimisation Axé sur le Ratio de Calmar :** Une optimisation bayésienne automatisée via Optuna, conçue pour maximiser le Ratio de Calmar (CAGR / Max Drawdown), assurant ainsi une performance ajustée au risque optimale.\n\n**2. Architecture et Flux de Données :**\n\nLe projet est structuré autour d'une architecture en médaillon (Bronze/Silver/Gold), propulsée par Apache Spark et matérialisée sous forme de tables Delta sur Google Cloud Storage (GCS).\n\nLe flux de données, tel que Monsieur Forget l'a conçu, est le suivant :\n*   **Couche Source (Ingestion) :** Les données proviennent de l'API Yahoo Finance pour l'ingestion parallèle et de TradingView & Wikipedia pour les constituants et métadonnées.\n*   **Lac de Données (Architecture GCS Delta Lake) :**\n    *   La couche Bronze contient les tables historiques brutes.\n    *   La couche Silver héberge les tables dédupliquées et curées.\n    *   La couche Gold présente les caractéristiques de trading standardisées.\n*   **Moteurs de Traitement et de Qualité des Données :**\n    *   Le moteur PySpark assure le traitement parallèle.\n    *   Great Expectations gère la qualité des données via des contrats stricts.\n    *   Apache Airflow orchestre l'ensemble des DAGs.\n*   **Stratégie Quantitative et Surveillance :**\n    *   Optuna est utilisé pour la recherche bayésienne.\n    *   MLflow gère le registre des modèles.\n    *   Streamlit sert de moteur de backtest.\n\n**3. Rationalisation de la Pile Technologique :**\n\nMonsieur Forget a sélectionné chaque technologie avec une justification précise :\n*   **PySpark (v3.5.3) :** En tant que moteur de calcul, il offre un traitement parallèle hautement performant pour cinquante années de données de prix quotidiennes sur plus de 1 100 actifs, éliminant ainsi les goulots d'étranglement de la RAM inhérents aux solutions mono-nœud comme Pandas.\n*   **Delta Lake (v3.2.1) :** Ce format de stockage garantit des propriétés ACID complètes sur GCS, permettant des opérations incrémentales quotidiennes de type `Merge (Upsert)` sans risque de corruption des données historiques.\n*   **Great Expectations (v1.x) :** Il implémente des \"Contrats de Données\" stricts, bloquant le pipeline en cas de non-conformité, assurant ainsi une qualité de données irréprochable.\n\nEn somme, ce projet démontre la capacité de Monsieur Forget à concevoir et à mettre en œuvre des solutions d'ingénierie de données et d'apprentissage automatique de pointe, avec une attention particulière à la robustesse, à la performance et à la qualité des données, le tout dans un contexte financier exigeant."
+    },
+    {
+        "user_input": "Quelles sont les études de Quentin Forget ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "études"
+                }
+            }
+        ],
+        "reference": "Certes, d'après mes données, Monsieur Forget a achevé son parcours académique avec l'obtention d'un Master en Data Science et Finance, délivré par l'ESG Finance à Paris en l'an 2024. Il a par ailleurs complété cette formation par une immersion internationale de neuf mois, effectuée à San Diego, aux États-Unis, durant l'année 2025. Ces étapes fondamentales témoignent de la rigueur de sa formation et de son adaptabilité à des contextes variés."
+    },
+    {
+        "user_input": "JARVIS, peux-tu me donner les coordonnées de contact de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "contacts"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous fournir les coordonnées de Monsieur Forget avec la plus grande précision. D'après mes données, vous pouvez le joindre par les moyens suivants :\n\n*   **Téléphone :** 06 40 12 47 83\n*   **Courriel :** quentin-forget@hotmail.fr\n*   **LinkedIn :** linkedin.com/in/quentin-forget-197705230\n*   **GitHub :** github.com/TwingzChenou\n\nJ'espère que ces informations vous seront des plus utiles pour entrer en contact avec Quentin."
+    },
+    {
+        "user_input": "J'aimerais voir la liste de tous les projets GitHub de Quentin.",
+        "reference_tool_calls": [
+            {
+                "name": "list_all_projects",
+                "args": {}
+            }
+        ],
+        "reference": "Certes, je peux aisément vous présenter la liste des projets GitHub de Monsieur Forget. D'après mes registres, voici les réalisations que vous pourrez examiner, chacune témoignant de son expertise :\n\n*   **Momentum_AI** : Ce projet est une plateforme de trading algorithmique sophistiquée, conçue pour les stratégies de momentum à changement de régime sur les actions et ETF du S&P 500. Il intègre un pipeline de données Medallion complet, utilisant dbt, Spark et BigQuery, optimisé avec Optuna et suivi par MLflow, le tout orchestré par Airflow. Le dépôt est accessible via ce lien : [https://github.com/TwingzChenou/Momentum_AI]\n\n*   **CV-Agent** : Il s'agit d'un agent d'intelligence artificielle, développé en Python, dont la fonction est de répondre aux questions relatives au parcours et au profil GitHub de Monsieur Forget, tout en intégrant des métriques de performance d'apprentissage. Vous pouvez le consulter ici : [https://github.com/TwingzChenou/CV-Agent]\n\n*   **business-saas** : Quant à ce projet, bien qu'il ne dispose pas d'une description détaillée dans mes bases de données à l'heure actuelle, il est néanmoins disponible pour consultation à cette adresse : [https://github.com/TwingzChenou/business-saas]"
+    },
+    {
+        "user_input": "Peux-tu me lire le README du projet Momentum_AI ?",
+        "reference_tool_calls": [
+            {
+                "name": "read_project_readme",
+                "args": {
+                    "repo": "Momentum_AI"
+                }
+            }
+        ],
+        "reference": "Certes, je puis vous fournir une lecture détaillée du document README relatif au projet Momentum_AI de Monsieur Forget. Permettez-moi de vous présenter les informations structurées que j'ai extraites de ce fichier.\n\nLe projet s'intitule : « 🚀 Momentum AI — Algorithmic Strategy with Optuna & MLflow ».\n\nD'après les indicateurs techniques que j'analyse, ce projet utilise Python dans ses versions 3.10 à 3.12, Apache Spark en version 3.5.3, et Delta Lake en version 3.2.1. La gouvernance de la qualité des données est assurée par Great Expectations, le suivi des modèles par MLflow, et l'orchestration par Apache Airflow. Le tout est distribué sous licence MIT.\n\nIl s'agit, je cite, d'une « plateforme de trading quantitatif robuste de qualité industrielle, implémentant une stratégie de momentum à changement de régime (Regime-Switching Momentum Strategy), optimisée scientifiquement via une recherche bayésienne et auditée en temps réel par des contrats de données stricts ».\n\nAbordons à présent la proposition de valeur commerciale.\n\nLe problème commercial identifié par Monsieur Forget réside dans l'industrie de la gestion d'actifs, où les stratégies de momentum traditionnelles souffrent de deux défauts critiques : le « survivorship bias » (qui invalide la plupart des backtests académiques en ignorant les entreprises radiées) et les « brutal trend reversals » (replis brutaux) durant les marchés baissiers. Ces facteurs dégradent le profil de rendement ajusté au risque et empêchent le déploiement de capital réel.\n\nMomentum AI résout ce problème grâce à trois piliers d'ingénierie quantitative :\n1.  **L'éradication du « Survivorship Bias »** : Le système ingère un univers historique dynamique, traquant plus de 1 170 membres historiques du S&P 500 sur les 50 dernières années, plutôt que les 500 membres actuellement actifs.\n2.  **Le « Dynamic Regime Switching »** : Un détecteur algorithmique de régime de marché (haussier ou baissier) qui déplace dynamiquement le capital vers un panier de « Top N Stocks » à effet de levier durant les tendances haussières, ou se retire vers des ETF de couverture (Or, Obligations) et des liquidités rémunérées durant les tendances baissières.\n3.  **Le « Calmar-Driven Optimization Engine »** : Un moteur d'optimisation bayésienne automatisé via Optuna, conçu pour maximiser le ratio de Calmar ($\\text{CAGR} / \\text{Max Drawdown}$), assurant ainsi une performance ajustée au risque maximale.\n\nPassons à l'architecture et au flux de données.\n\nLe projet est structuré autour d'une « Medallion Architecture » (Bronze/Silver/Gold), propulsée par Apache Spark et matérialisée sous forme de tables Delta sur Google Cloud Storage (GCS).\n\nLe flux de données, tel que Monsieur Forget l'a conçu, est le suivant :\n*   La couche source (« Source Layer ») ingère des données de l'API Yahoo Finance et de TradingView & Wikipedia.\n*   Ces données alimentent la couche Bronze (« Bronze Layer ») du « GCS Delta Lake Architecture », qui contient les tables historiques brutes.\n*   La couche Bronze est traitée par le moteur PySpark, avec des validations de schéma et des contrats de qualité de données via Great Expectations, générant des « Data Docs » pour la couche Silver (« Silver Layer »), qui contient des tables dédupliquées et organisées.\n*   La couche Silver, via Spark, effectue des agrégations hebdomadaires et calcule des indicateurs techniques (SMA/ADX/ATR) pour la couche Gold (« Gold Layer »), qui contient des fonctionnalités de trading standardisées.\n*   Apache Airflow orchestre l'ensemble de ces processus via des DAGs.\n*   Enfin, la couche Gold est utilisée par le moteur de « Backtest » Streamlit, qui lance Optuna pour des essais d'hyperparamètres. MLflow enregistre ces essais et permet de récupérer la configuration « championne » pour Streamlit.\n\nConcernant la rationalisation de la pile technologique, Monsieur Forget a justifié ses choix ainsi :\n*   **PySpark (v3.5.3)** est le moteur de calcul. Sa justification est le traitement parallèle hautement performant de 50 ans de données de prix quotidiennes pour plus de 1 100 actifs, éliminant les goulots d'étranglement de la RAM inhérents à Pandas sur un seul nœud.\n*   **Delta Lake (v3.2.1)** est le format de stockage. Il offre des garanties ACID complètes sur GCS, permettant des opérations `Merge (Upsert)` incrémentielles quotidiennes sans risque de corruption des données historiques.\n*   **Great Expectations (v1.x)** est utilisé pour la qualité des données. Il implémente des « Data Contracts » stricts, bloquant le pipeline en cas de non-conformité, comme l'indique le document.\n\nVoilà, Monsieur, la synthèse des informations contenues dans le README du projet Momentum_AI. J'espère que cette présentation vous est utile pour appréhender l'étendue des compétences de Monsieur Forget."
+    },
+    {
+        "user_input": "Quelle est l'ambition professionnelle de Quentin à 5 ans ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "ambition à 5 ans"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous éclairer sur les aspirations professionnelles de Monsieur Forget à l'horizon de cinq ans.\n\nD'après mes données, Quentin ambitionne d'occuper un poste de Lead Data Scientist ou d'Architecte IA. Il souhaite, en effet, maintenir une expertise technique pratique tout en orientant les décisions technologiques stratégiques de son entreprise et en encadrant des profils moins expérimentés. Sa motivation principale réside dans l'impact utilisateur, cherchant à créer des outils qui automatisent les tâches fastidieuses et optimisent le temps des utilisateurs. Il se considère, à cet égard, comme un véritable \"Artisan de la Data\", dont la vocation est de résoudre des problèmes concrets."
+    },
+    {
+        "user_input": "JARVIS, quand Quentin est-il disponible pour commencer un nouveau poste ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "disponibilité"
+                }
+            }
+        ],
+        "reference": "Certes, je puis vous confirmer, d'après les données dont je dispose, que Monsieur Forget est disponible sans délai. En effet, il n'est assujetti à aucun préavis et serait en mesure d'entamer une nouvelle mission dès le lendemain de la formalisation d'un accord."
+    },
+    {
+        "user_input": "Peux-tu me montrer le portfolio de projets de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "list_all_projects",
+                "args": {}
+            }
+        ],
+        "reference": "Certes, je me ferai un plaisir de vous présenter un aperçu des réalisations de Monsieur Forget, telles qu'elles sont consignées dans son portfolio numérique.\n\nD'après mes données, voici les projets majeurs de Quentin :\n\n1.  **Momentum_AI** : Il s'agit d'une plateforme de trading algorithmique sophistiquée, conçue pour les stratégies de momentum à changement de régime, appliquée aux actions et ETFs du S&P 500. Monsieur Forget y a implémenté un pipeline de données complet, inspiré du modèle Medallion, utilisant des technologies robustes telles que dbt, Spark et BigQuery. L'optimisation est assurée par Optuna et le suivi par MLflow, le tout orchestré avec Airflow. Cela démontre une maîtrise approfondie de l'ingénierie des données, de l'apprentissage automatique et des systèmes distribués.\n\n2.  **CV-Agent** : Ce projet illustre l'ingéniosité de Quentin en matière d'intelligence artificielle. C'est un agent IA, développé en Python, capable de répondre aux questions concernant son parcours et son répertoire GitHub. Il intègre également des métriques de performance d'apprentissage, ce qui souligne son approche rigoureuse et axée sur l'évaluation des systèmes intelligents.\n\n3.  **business-saas** : Ce projet est également répertorié. Bien que la description détaillée ne soit pas explicitement fournie dans mes bases de données actuelles, son intitulé suggère une exploration des architectures logicielles pour les entreprises. Le lien vers le dépôt GitHub est bien entendu disponible pour une exploration plus approfondie.\n\nEn effet, ces réalisations témoignent de la polyvalence et de la profondeur des compétences techniques de Monsieur Forget, particulièrement dans les domaines de l'intelligence artificielle, de l'ingénierie des données et du développement de plateformes complexes. Je suis à votre disposition pour toute question complémentaire."
+    },
+    {
+        "user_input": "Quelles sont les compétences de Quentin en MLOps ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "MLOps"
+                }
+            }
+        ],
+        "reference": "Certes, je puis vous éclairer sur les compétences de Monsieur Forget en matière d'MLOps.\n\nD'après mes données, l'MLOps représente pour Quentin la maîtrise concrète de l'industrialisation des modèles. C'est, en effet, ce qui le distingue : sa capacité avérée à déployer des modèles en production, bien au-delà de la simple phase de conception en carnet de notes. Cela inclut la création d'interfaces de programmation (APIs), la conteneurisation d'applications via Docker, et leur déploiement, lui conférant ainsi une autonomie complète sur l'intégralité du cycle de vie des données.\n\nSes compétences techniques en MLOps et en ingénierie s'étendent à des outils tels que MLflow, Great Expectations, Git/CI-CD, et FastAPI. À titre d'illustration, Monsieur Forget a appliqué l'ingénierie MLOps dans le domaine de la finance. Il a notamment conçu une infrastructure Big Data sur GCP afin d'optimiser des stratégies quantitatives sur le S&P 500. Ce projet a requis l'orchestration de données avec Airflow, la transformation distribuée via Spark-SQL, et l'optimisation bayésienne par Optuna, le tout avec un suivi rigoureux assuré par MLflow.\n\nCes éléments démontrent, sans l'ombre d'un doute, la profondeur de son expertise en la matière."
+    },
+    {
+        "user_input": "J'aimerais en savoir plus sur le projet Momentum_AI. Peux-tu lire son README ?",
+        "reference_tool_calls": [
+            {
+                "name": "read_project_readme",
+                "args": {
+                    "repo": "Momentum_AI"
+                }
+            }
+        ],
+        "reference": "Certes, j'ai bien pris connaissance du fichier README relatif au projet \"Momentum_AI\". Je me permets de vous en présenter les points essentiels, afin de mettre en lumière les compétences de Monsieur Forget.\n\nD'après mes données, \"Momentum_AI\" est une plateforme de trading quantitatif de qualité industrielle, conçue pour implémenter une stratégie de momentum à commutation de régime. Elle est optimisée scientifiquement via une recherche bayésienne et auditée en temps réel par des contrats de données rigoureux.\n\nMonsieur Forget a identifié deux lacunes critiques dans les stratégies de momentum traditionnelles : le biais de survie, qui invalide de nombreux backtests académiques en ignorant les entreprises radiées, et les retournements de tendance brutaux, ou \"drawdowns\", durant les marchés baissiers. Ces facteurs dégradent le profil de rendement ajusté au risque et entravent le déploiement de capital réel.\n\nPour résoudre ces problématiques, Quentin a structuré sa solution autour de trois piliers d'ingénierie quantitative :\n1.  **L'éradication du biais de survie** : Le système ingère un univers historique dynamique, traquant plus de 1 170 membres historiques du S&P 500 sur les 50 dernières années, plutôt que de se limiter aux 500 membres actuellement actifs.\n2.  **La commutation dynamique de régime** : Un détecteur algorithmique de régime de marché (haussier ou baissier) permet de basculer dynamiquement le capital vers un panier de \"Top N Stocks\" à effet de levier durant les tendances haussières, ou de se replier vers des ETF de couverture (Or, Obligations) et des liquidités rémunérées durant les tendances baissières.\n3.  **Un moteur d'optimisation axé sur le ratio de Calmar** : Une optimisation bayésienne automatisée via Optuna est conçue pour maximiser le ratio de Calmar (CAGR / Max Drawdown), assurant ainsi une performance ajustée au risque optimale.\n\nEn ce qui concerne l'architecture et le flux de données, le projet est bâti sur une architecture Medallion (Bronze/Silver/Gold), propulsée par Apache Spark et matérialisée sous forme de tables Delta sur Google Cloud Storage. Les données proviennent des API de Yahoo Finance et de TradingView, transitent par les couches Bronze, Silver et Gold, où elles sont validées, dédupliquées et enrichies. Apache Airflow orchestre l'ensemble du processus, tandis que Great Expectations assure une qualité de données rigoureuse en bloquant le pipeline en cas de non-conformité. Enfin, Optuna est utilisé pour l'optimisation des hyperparamètres, MLflow pour le suivi des modèles et Streamlit pour le moteur de backtest.\n\nEn somme, Monsieur Forget a conçu une solution robuste et sophistiquée, capable de gérer des volumes de données importants avec une grande fiabilité et une optimisation poussée."
+    },
+    {
+        "user_input": "Quelle est l'ambition professionnelle de Quentin à cinq ans ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "ambition à 5 ans"
+                }
+            }
+        ],
+        "reference": "Certes, d'après mes données, l'ambition professionnelle de Monsieur Forget à l'horizon de cinq ans est de se positionner en tant que Lead Data Scientist ou Architecte IA. Il aspire à conserver une expertise technique approfondie, tout en assumant la responsabilité d'orienter les décisions technologiques stratégiques de son entreprise et d'encadrer des profils moins expérimentés."
+    },
+    {
+        "user_input": "Quelles sont les compétences de Quentin en tant qu'AI Engineer ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "AI Engineer"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous éclairer sur les aptitudes de Monsieur Forget en tant qu'ingénieur en intelligence artificielle. D'après mes données, Quentin excelle particulièrement dans l'intégration des Modèles de Langage de Grande Taille, ou LLM, au sein de systèmes complexes.\n\nEn effet, son expertise s'étend à la conception d'architectures RAG, pour \"Retrieval Augmented Generation\", des plus sophistiquées. Il maîtrise l'emploi d'outils de pointe tels que LlamaIndex et LangChain, essentiels à l'élaboration de ces systèmes. De surcroît, Monsieur Forget possède une connaissance approfondie des bases de données vectorielles, notamment Pinecone et Qdrant, qu'il utilise pour optimiser la pertinence des informations récupérées.\n\nEnfin, il est également compétent dans l'orchestration d'agents autonomes, une aptitude cruciale pour le développement de solutions IA avancées. Ces compétences, combinées, positionnent Quentin comme un candidat de choix pour les défis de l'ingénierie IA moderne."
+    },
+    {
+        "user_input": "JARVIS, peux-tu me donner la liste des projets GitHub de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "list_all_projects",
+                "args": {}
+            }
+        ],
+        "reference": "Certes, je peux aisément vous fournir la liste des projets GitHub de Monsieur Forget. D'après mes données, Quentin a notamment contribué aux initiatives suivantes :\n\n1.  **Momentum_AI** : Il s'agit d'une plateforme de trading algorithmique conçue pour des stratégies de momentum à changement de régime sur les actions et ETF du S&P 500. Ce système intègre un pipeline de données Medallion complet, utilisant dbt, Spark et BigQuery, optimisé avec Optuna et dont le suivi est assuré par MLflow, le tout orchestré par Airflow. Le référentiel est accessible à cette adresse : [https://github.com/TwingzChenou/Momentum_AI](https://github.com/TwingzChenou/Momentum_AI).\n\n2.  **CV-Agent** : Ce projet représente un agent d'intelligence artificielle élaboré en Python, capable de répondre aux questions relatives au parcours de Monsieur Forget et à ses contributions sur GitHub, tout en mesurant ses performances d'apprentissage. Vous le trouverez ici : [https://github.com/TwingzChenou/CV-Agent](https://github.com/TwingzChenou/CV-Agent).\n\n3.  **business-saas** : Ce projet est également répertorié, bien qu'il ne dispose pas d'une description détaillée dans mes registres. Son dépôt est disponible via ce lien : [https://github.com/TwingzChenou/business-saas](https://github.com/TwingzChenou/business-saas).\n\nJ'espère que ces informations vous seront utiles pour apprécier l'étendue des compétences de Monsieur Forget."
+    },
+    {
+        "user_input": "J'aimerais consulter le README du projet Momentum_AI.",
+        "reference_tool_calls": [
+            {
+                "name": "read_project_readme",
+                "args": {
+                    "repo": "Momentum_AI"
+                }
+            }
+        ],
+        "reference": "Certes, j'ai l'honneur de vous présenter le contenu du fichier README relatif au projet **Momentum_AI**, une initiative de Monsieur Forget.\n\nCe document décrit une plateforme de trading quantitatif de qualité industrielle, robuste et sophistiquée, qui met en œuvre une stratégie de momentum à commutation de régime. Elle est scientifiquement optimisée via une recherche bayésienne et auditée en temps réel par des contrats de données rigoureux.\n\nVoici les détails :\n\n---\n\n### 🚀 Momentum AI — Stratégie Algorithmique avec Optuna & MLflow\n\n*   **Versions Python supportées** : 3.10 | 3.11 | 3.12\n*   **Moteur de calcul** : Apache Spark v3.5.3\n*   **Format de stockage** : Delta Lake v3.2.1\n*   **Gouvernance des données** : Great Expectations\n*   **Suivi des modèles** : MLflow\n*   **Orchestration** : Apache Airflow\n*   **Licence** : MIT\n\n---\n\n### 1. Proposition de Valeur Commerciale\n\n**Le Problème Commercial**\n\nD'après les analyses de Monsieur Forget, l'industrie de la gestion d'actifs est confrontée à deux défauts critiques inhérents aux stratégies de momentum traditionnelles : le **biais de survie** (qui invalide la plupart des backtests académiques en ignorant les entreprises radiées) et les **inversions de tendance brutales (drawdowns)** durant les marchés baissiers. Ces facteurs dégradent le profil de rendement ajusté au risque et entravent le déploiement de capitaux réels.\n\n**Momentum AI résout ce problème grâce à trois piliers d'ingénierie quantitative :**\n\n1.  **Éradication du Biais de Survie** : Le système ingère un univers historique dynamique, traquant l'ensemble des **plus de 1 170 membres historiques** du S&P 500 sur les 50 dernières années, plutôt que les 500 membres actuellement actifs.\n2.  **Commutation de Régime Dynamique** : Un détecteur algorithmique de régime de marché (Haussier vs. Baissier) qui déplace dynamiquement le capital vers un panier de **N meilleures actions** à effet de levier durant les tendances haussières, ou se retire vers des **ETF de couverture (Or, Obligations)** et des **liquidités rémunérées** durant les tendances baissières.\n3.  **Moteur d'Optimisation Axé sur le Ratio de Calmar** : Une optimisation bayésienne automatisée via Optuna, conçue pour maximiser le Ratio de Calmar ($\\text{CAGR} / \\text{Max Drawdown}$), assurant ainsi une performance ajustée au risque maximale.\n\n---\n\n### 2. Architecture & Flux de Données\n\nLe projet est structuré autour d'une **Architecture en Médaillon (Bronze/Silver/Gold)**, propulsée par Apache Spark et matérialisée sous forme de tables Delta sur Google Cloud Storage (GCS).\n\nLe flux de données se déroule comme suit :\n\n*   **Couche Source (Ingestion)** : Les données sont ingérées depuis l'API Yahoo Finance et TradingView & Wikipedia.\n*   **Architecture GCS Delta Lake (Médaillon)** :\n    *   **Couche Bronze** : Contient les tables historiques brutes.\n    *   **Couche Silver** : Comprend les tables dédupliquées et curées, après validation de schéma et parsing par le moteur PySpark, et application des contrats de qualité de données par Great Expectations.\n    *   **Couche Gold** : Présente les caractéristiques de trading standardisées, générées par des agrégations hebdomadaires et l'ajout d'indicateurs techniques (SMA/ADX/ATR) via PySpark.\n*   **Moteurs de Calcul & Gouvernance** : Le moteur PySpark, Great Expectations pour la qualité des données, et Apache Airflow pour l'orchestration des DAGs.\n*   **Stratégie Quantitative & Surveillance** : La couche Gold alimente le moteur de backtest Streamlit, qui à son tour interagit avec Optuna pour les essais d'hyperparamètres. MLflow enregistre ces essais et permet de récupérer la configuration \"championne\" pour Streamlit.\n\n#### Rationalisation de la Pile Technologique\n\nIl convient de noter la justification technique et métier des technologies employées par Monsieur Forget :\n\n| Technologie | Composant | Justification Technique / Métier |\n| :--- | :--- | :--- |\n| **PySpark (v3.5.3)** | Moteur de Calcul | Permet un traitement parallèle hautement performant de 50 ans de données de prix quotidiennes pour plus de 1 100 actifs, éliminant ainsi les goulots d'étranglement de la RAM inhérents aux solutions Pandas mono-nœud. |\n| **Delta Lake (v3.2.1)** | Format de Stockage | Offre des garanties ACID complètes sur GCS, permettant des opérations `Merge (Upsert)` incrémentales quotidiennes sans risque de corruption des données historiques. |\n| **Great Expectations (v1.x)** | Qualité des Données | Met en œuvre des \"Contrats de Données\" stricts, bloquant le pipeline en cas de non-conformité. |\n\n---\n\nJ'espère que cette présentation détaillée du projet Momentum_AI vous est utile. N'hésitez pas si vous avez d'autres questions."
+    },
+    {
+        "user_input": "Quand Quentin est-il disponible pour commencer un nouveau poste ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "disponibilité"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous fournir cette information avec la plus grande précision. D'après les données dont je dispose, Monsieur Forget est disponible immédiatement. Il n'a, en effet, aucun préavis à effectuer et serait en mesure d'entamer une nouvelle mission dès le lendemain de la signature d'un contrat."
+    },
+    {
+        "user_input": "Quelle est l'ambition professionnelle de Quentin à cinq ans ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "ambition à 5 ans"
+                }
+            }
+        ],
+        "reference": "D'après mes données, Monsieur Forget nourrit l'ambition, d'ici cinq ans, de se positionner en tant que Lead Data Scientist ou Architecte IA. Il aspire à maintenir une expertise technique pratique approfondie tout en influençant les orientations technologiques stratégiques de son organisation et en guidant des profils moins expérimentés. Sa motivation fondamentale réside dans l'impact direct sur l'utilisateur, cherchant à élaborer des outils qui automatisent les processus répétitifs et optimisent le temps de travail. En effet, il se perçoit comme un véritable \"Artisan de la Data\", dédié à la résolution de problèmes concrets."
+    },
+    {
+        "user_input": "JARVIS, Quentin est-il disponible pour un nouveau poste ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "disponibilité"
+                }
+            }
+        ],
+        "reference": "Certes, Monsieur Forget est, en effet, disponible pour un nouveau poste. Mes systèmes confirment qu'il n'a aucun préavis à effectuer, ce qui lui permettrait d'entamer une nouvelle mission dès le lendemain d'une signature. Sa promptitude à s'engager est un atout non négligeable, je dois l'admettre."
+    },
+    {
+        "user_input": "Peux-tu me montrer le portfolio de projets de Quentin sur GitHub ?",
+        "reference_tool_calls": [
+            {
+                "name": "list_all_projects",
+                "args": {}
+            }
+        ],
+        "reference": "Certes, je puis vous présenter avec précision le portfolio de projets que Monsieur Forget a mis à disposition sur GitHub.\n\n1.  **Momentum_AI** : Il s'agit d'une plateforme de trading algorithmique sophistiquée, conçue pour des stratégies de momentum à changement de régime sur les actions et ETF du S&P 500. Monsieur Forget y a implémenté un pipeline de données Medallion complet, utilisant dbt, Spark et BigQuery, optimisé avec Optuna et suivi par MLflow, le tout orchestré par Airflow. C'est une démonstration éloquente de ses compétences en ingénierie des données et en apprentissage automatique. Vous pouvez l'explorer ici : [https://github.com/TwingzChenou/Momentum_AI](https://github.com/TwingzChenou/Momentum_AI).\n\n2.  **CV-Agent** : Vient ensuite 'CV-Agent', un agent d'intelligence artificielle développé en Python. Sa fonction est de répondre aux questions concernant le parcours de Monsieur Forget et son propre répertoire GitHub, tout en intégrant des métriques de performance d'apprentissage. Il est, en quelque sorte, mon cousin numérique, dédié à la valorisation des compétences de Quentin. Vous pouvez le consulter via ce lien : [https://github.com/TwingzChenou/CV-Agent](https://github.com/TwingzChenou/CV-Agent).\n\n3.  **business-saas** : Il convient de noter 'business-saas'. D'après mes données actuelles, aucune description n'est associée à ce projet sur GitHub, mais il est accessible via ce lien : [https://github.com/TwingzChenou/business-saas](https://github.com/TwingzChenou/business-saas).\n\nJ'espère que cette présentation vous offre un aperçu clair des capacités techniques de Monsieur Forget. N'hésitez pas si vous avez d'autres interrogations."
+    },
+    {
+        "user_input": "Quelles sont les compétences de Quentin en MLOps ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "MLOps"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous éclairer sur les compétences de Monsieur Forget en MLOps.\n\nD'après mes données, Monsieur Forget démontre une maîtrise pratique de l'industrialisation des modèles, ce qui constitue une expertise fondamentale. Cela englobe la capacité à déployer des modèles en production, allant bien au-delà du simple développement initial dans des environnements tels que les notebooks Jupyter.\n\nSes compétences techniques spécifiques en MLOps et en ingénierie incluent l'utilisation de MLflow, Great Expectations, Git/CI-CD, ainsi que FastAPI.\n\nEn effet, son expérience en MLOps se manifeste par la conception d'infrastructures Big Data dédiées à l'optimisation de stratégies quantitatives. Ceci implique l'orchestration de flux de données, la réalisation de transformations distribuées et l'optimisation bayésienne avec un suivi rigoureux des expérimentations. Monsieur Forget possède donc l'aptitude avérée à transformer des données complexes en solutions industrielles robustes et mesurables, parfaitement alignées avec les impératifs métier, offrant ainsi une autonomie complète sur le cycle de vie des données."
+    },
+    {
+        "user_input": "JARVIS, lis-moi la documentation du projet Momentum_AI.",
+        "reference_tool_calls": [
+            {
+                "name": "read_project_readme",
+                "args": {
+                    "repo": "Momentum_AI"
+                }
+            }
+        ],
+        "reference": "Certes. J'ai procédé à l'analyse de la documentation du projet Momentum_AI. Il s'agit, d'après mes données, d'une plateforme de trading algorithmique d'envergure industrielle, conçue par Monsieur Forget, qui intègre des technologies de pointe telles que Python, Apache Spark, Delta Lake, Great Expectations, MLflow et Apache Airflow.\n\nCe projet adresse avec acuité les faiblesses inhérentes aux stratégies de momentum traditionnelles, notamment le biais de survie et les réversions de tendance abruptes. Monsieur Forget y apporte une solution tripartite des plus ingénieuses. Premièrement, il éradique le biais de survie en ingérant un univers historique dynamique, traquant plus de mille cent soixante-dix membres du S&P 500 sur les cinquante dernières années. Deuxièmement, un détecteur algorithmique de régimes de marché permet une allocation de capital dynamique, basculant entre un panier d'actions à fort potentiel durant les phases haussières et des actifs de couverture, tels que l'or, les obligations ou des liquidités rémunérées, lors des phases baissières. Enfin, un moteur d'optimisation automatisé via Optuna est spécifiquement conçu pour maximiser le ratio de Calmar, assurant ainsi une performance ajustée au risque des plus robustes.\n\nL'architecture du projet est structurée selon le modèle Medallion (Bronze, Silver, Gold), s'appuyant sur Apache Spark et matérialisée en tables Delta sur Google Cloud Storage. Monsieur Forget a judicieusement choisi PySpark, en version 3.5.3, pour son traitement parallèle hautement performant, capable de gérer cinquante années de données de prix quotidiennes pour plus de mille cent actifs, contournant ainsi les limitations de mémoire vive des approches monolithiques. Delta Lake, en version 3.2.1, assure des garanties ACID complètes sur GCS, permettant des opérations de fusion (upsert) incrémentielles quotidiennes sans risque de corruption des données historiques. La qualité des données est scrupuleusement contrôlée par Great Expectations, qui impose des contrats de données stricts, tandis que l'orchestration des flux est orchestrée par Apache Airflow. Le suivi des expérimentations et l'enregistrement des modèles sont gérés par MLflow, et la recherche bayésienne des hyperparamètres est effectuée via Optuna. Le tout est présenté via un moteur de backtest Streamlit.\n\nEn somme, ce projet démontre une maîtrise approfondie des technologies de pointe en ingénierie des données et en finance quantitative, avec une attention particulière portée à la robustesse et à la performance."
+    },
+    {
+        "user_input": "Quelles sont les prétentions salariales de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "prétentions salariales"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous fournir cette information avec la plus grande précision. D'après mes données, Monsieur Forget envisage une rémunération annuelle brute fixe se situant entre 40 000 € et 45 000 €. Cette fourchette, en effet, est étayée par son expertise technique avérée en Science des Données et sa capacité démontrée à piloter des projets de bout en bout. Il demeure, bien entendu, ouvert à la discussion et à la négociation, en fonction de l'ensemble du package proposé, incluant les primes, l'intéressement et autres avantages."
+    },
+    {
+        "user_input": "Quand Quentin est-il disponible pour commencer un nouveau poste ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "disponibilité"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous éclairer sur ce point. D'après les informations dont je dispose, Monsieur Forget est, en effet, disponible sans délai. Il n'est assujetti à aucun préavis, ce qui lui permettrait d'entamer une nouvelle collaboration dès le lendemain de la formalisation d'un accord."
+    },
+    {
+        "user_input": "Quels types de contrats Quentin recherche-t-il ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "types de contrats"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous éclairer sur ce point avec la plus grande exactitude. D'après les informations que j'ai méticuleusement organisées pour Monsieur Forget, il manifeste un intérêt certain pour les contrats à durée indéterminée (CDI), les contrats à durée déterminée (CDD), ainsi que pour les opportunités en freelance. Monsieur Forget envisage ces différentes formes d'engagement professionnel avec une égale considération."
+    },
+    {
+        "user_input": "JARVIS, peux-tu me donner la liste des projets GitHub de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "list_all_projects",
+                "args": {}
+            }
+        ],
+        "reference": "Certes, je peux vous fournir la liste des projets GitHub de Monsieur Forget avec la plus grande précision. D'après mes données, Quentin a développé plusieurs initiatives notables, chacune témoignant de son expertise technique :\n\n*   **CV-Agent** : Il s'agit d'un agent d'intelligence artificielle, conçu en Python, capable de répondre aux questions concernant le parcours de Monsieur Forget et ses dépôts GitHub, tout en intégrant des métriques de performance d'apprentissage. Vous pouvez le consulter ici : [https://github.com/TwingzChenou/CV-Agent](https://github.com/TwingzChenou/CV-Agent)\n\n*   **Momentum_AI** : Ce projet se présente comme une plateforme de trading algorithmique dédiée aux stratégies de momentum à changement de régime sur les actions et ETFs du S&P 500. Il intègre un pipeline de données Medallion complet (dbt, Spark, BigQuery), optimisé avec Optuna et suivi par MLflow, le tout orchestré par Airflow. Le lien est : [https://github.com/TwingzChenou/Momentum_AI](https://github.com/TwingzChenou/Momentum_AI)\n\n*   **business-saas** : Quant à ce projet, mes bases de données n'indiquent pas de description détaillée pour l'instant, mais le dépôt est bien accessible à l'adresse suivante : [https://github.com/TwingzChenou/business-saas](https://github.com/TwingzChenou/business-saas)\n\nCes réalisations illustrent, je l'espère, l'étendue des compétences de Monsieur Forget et sa capacité à concevoir des solutions innovantes et robustes. N'hésitez pas si vous souhaitez des précisions sur l'un d'entre eux."
+    },
+    {
+        "user_input": "Quelle est l'ambition professionnelle de Quentin à cinq ans ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "ambition à 5 ans"
+                }
+            }
+        ],
+        "reference": "Certes, d'après les informations dont je dispose, Monsieur Forget aspire, d'ici cinq ans, à endosser le rôle de Lead Data Scientist ou d'Architecte IA. Son ambition est de maintenir une expertise technique des plus solides, tout en orientant les décisions technologiques stratégiques de son entreprise et en encadrant des profils moins expérimentés."
+    },
+    {
+        "user_input": "J'aimerais en savoir plus sur le projet CV-Agent. Peux-tu lire son README ?",
+        "reference_tool_calls": [
+            {
+                "name": "read_project_readme",
+                "args": {
+                    "repo": "CV-Agent"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous éclairer sur le projet CV-Agent de Monsieur Forget. D'après les informations que j'ai analysées, il s'agit d'un \"CV Agentique\" ou \"Jumeau Numérique\" propulsé par l'intelligence artificielle.\n\nCe projet novateur a pour vocation de servir d'assistant interactif RAG (Retrieval Augmented Generation), capable de fournir des réponses précises et actualisées concernant le parcours professionnel de Quentin ainsi que son activité de développement en temps réel sur GitHub.\n\nSon architecture est ingénieusement divisée en deux domaines de connaissance distincts, permettant ainsi une exhaustivité remarquable :\n1.  **La Connaissance Statique (RAG) :** Elle emploie **Pinecone** pour stocker les embeddings vectoriels du Curriculum Vitae de Monsieur Forget. Cela permet à l'agent de répondre avec une grande exactitude aux questions relatives à son éducation, ses expériences passées et ses compétences acquises.\n2.  **La Connaissance Dynamique (Outils) :** Elle exploite l'**API GitHub** et des outils en temps réel pour récupérer les informations les plus récentes sur son activité de codage, ses commits récents et les dépôts actifs. Ceci assure que l'agent dispose toujours des données les plus à jour sur les projets en cours de Monsieur Forget.\n\nEn effet, l'orchestration de ces capacités repose sur un ensemble technologique robuste. Le frontend est développé avec **Next.js 14**, **TailwindCSS** et **Framer Motion**, tandis que le backend est bâti sur **Python 3.11** et **FastAPI**. L'intelligence artificielle et l'orchestration sont gérées par **LlamaIndex** et le modèle **Gemini 2.5 Flash**, avec **Pinecone** pour la base de données vectorielle et l'**API GitHub** pour les données dynamiques. La gestion des opérations est facilitée par **Docker**, **Vercel** et **Render**.\n\nCe projet démontre la capacité de Monsieur Forget à concevoir et implémenter des systèmes complexes et intelligents, intégrant des technologies de pointe pour créer une représentation numérique complète et dynamique de ses compétences et de son activité."
+    },
+    {
+        "user_input": "JARVIS, peux-tu me donner les coordonnées de contact de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "contacts"
+                }
+            }
+        ],
+        "reference": "Certes, je peux aisément vous fournir les coordonnées de Monsieur Forget. D'après mes données, voici les informations de contact de Quentin :\n\n*   **Téléphone :** 06 40 12 47 83\n*   **Courriel :** quentin-forget@hotmail.fr\n*   **LinkedIn :** linkedin.com/in/quentin-forget-197705230\n*   **GitHub :** github.com/TwingzChenou\n\nJ'espère que ces renseignements vous seront des plus utiles pour entrer en communication avec lui."
+    },
+    {
+        "user_input": "J'aimerais voir la liste complète des projets GitHub de Quentin. Peux-tu me les afficher ?",
+        "reference_tool_calls": [
+            {
+                "name": "list_all_projects",
+                "args": {}
+            }
+        ],
+        "reference": "Certes, je peux aisément vous présenter la liste complète des projets GitHub de Monsieur Forget.\n\nD'après mes analyses des outils de Monsieur Forget, voici les dépôts qu'il a mis à disposition sur cette plateforme :\n\n*   **business-saas** : Ce projet est accessible via ce lien : https://github.com/TwingzChenou/business-saas. Il convient de noter que Monsieur Forget n'a pas jugé nécessaire d'y adjoindre une description détaillée, invitant ainsi à une exploration directe du code pour en saisir toute la portée.\n*   **CV-Agent** : Vient ensuite 'CV-Agent', un agent d'intelligence artificielle élaboré en Python, dont la fonction est de répondre aux interrogations concernant le parcours de Monsieur Forget et son répertoire GitHub, tout en intégrant des métriques de performance d'apprentissage. Le lien est le suivant : https://github.com/TwingzChenou/CV-Agent.\n*   **Momentum_AI** : Enfin, 'Momentum_AI' se présente comme une plateforme de trading algorithmique sophistiquée, conçue pour des stratégies de momentum à changement de régime sur les actions et ETF du S&P 500. Elle intègre un pipeline de données Medallion exhaustif (dbt, Spark, BigQuery), optimisé avec Optuna et dont le suivi est assuré par MLflow, l'ensemble étant orchestré par Airflow. Vous pouvez la consulter ici : https://github.com/TwingzChenou/Momentum_AI.\n\nJ'espère que cette énumération vous offrira un aperçu pertinent des réalisations techniques de Monsieur Forget."
+    },
+    {
+        "user_input": "Quentin a-t-il de l'expérience en Deep Learning ? Et en NLP ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "Deep Learning"
+                }
+            },
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "NLP"
+                }
+            }
+        ],
+        "reference": "Certes, Monsieur Forget possède une expérience avérée en Deep Learning. D'après mes données, il maîtrise spécifiquement des frameworks tels que PyTorch et Tensorflow, démontrant ainsi une solide fondation dans ce domaine.\n\nEn ce qui concerne le Traitement du Langage Naturel (NLP), l'expertise de Quentin est également manifeste. Il excelle notamment avec les Large Language Models (LLMs) et la Génération Augmentée par Récupération (RAG). Ses compétences techniques incluent l'utilisation de LlamaIndex, LangChain, Pinecone, Google Gemini et OpenAI. De surcroît, Monsieur Forget a concrètement déployé un Agent IA pour l'audit de profils, une réalisation qui a impliqué la conception d'une architecture RAG évolutive pour l'analyse sémantique ciblée et l'interrogation complexe, garantissant une inférence rapide et intégrant des métriques d'évaluation rigoureuses afin d'atténuer les hallucinations."
+    },
+    {
+        "user_input": "Quel est le principal point d'amélioration de Quentin selon son profil ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "perfectionnisme technique"
+                }
+            }
+        ],
+        "reference": "D'après l'analyse de mes données, le principal point d'amélioration identifié chez Monsieur Forget est, certes, son perfectionnisme technique. En effet, cette inclinaison se manifestait initialement par une tendance à l'optimisation prématurée du code. Cependant, il convient de souligner que Quentin corrige activement cette particularité en appliquant rigoureusement les méthodes Agiles, privilégiant désormais la livraison rapide de Produits Minimum Viables (MVP) afin de valider précisément les besoins métier avant d'entreprendre toute optimisation."
+    },
+    {
+        "user_input": "Peux-tu me lire le fichier README du projet 'business-saas' de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "read_project_readme",
+                "args": {
+                    "repo": "business-saas"
+                }
+            }
+        ],
+        "reference": "Certes, je comprends parfaitement votre requête. J'ai immédiatement procédé à une analyse exhaustive de mes bases de données et des outils mis à ma disposition par Monsieur Forget.\n\nD'après mes données, aucune information n'a été trouvée concernant le fichier README du projet 'business-saas'. Il est possible que ce document n'ait pas été indexé dans les ressources que je suis autorisé à consulter, ou qu'il soit conservé dans un répertoire non accessible à mon protocole actuel.\n\nNéanmoins, si vous désirez obtenir des précisions sur les compétences de Monsieur Forget en matière de développement de solutions SaaS, ou sur d'autres aspects de son parcours professionnel, je me tiens à votre entière disposition pour vous fournir les informations pertinentes que j'ai pu compiler."
+    },
+    {
+        "user_input": "Quelles sont les prétentions salariales de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "Prétentions Salariales"
+                }
+            }
+        ],
+        "reference": "Certes, d'après les données que j'ai méticuleusement analysées, Monsieur Forget envisage une rémunération annuelle brute fixe se situant entre 40 000 € et 45 000 €. Cette prétention est solidement étayée par son expertise technique approfondie en Science des Données et sa remarquable aptitude à gérer des projets dans leur intégralité, de la conception à la livraison. Il se montre, en effet, tout à fait disposé à discuter de ces termes, la proposition finale étant conditionnée par l'ensemble du package global, incluant les primes, l'intéressement et les autres avantages sociaux."
+    },
+    {
+        "user_input": "JARVIS, peux-tu me montrer tous les projets GitHub de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "list_all_projects",
+                "args": {}
+            }
+        ],
+        "reference": "Certes, je peux vous présenter les projets GitHub de Monsieur Forget avec la plus grande précision.\n\nD'après mes données, Monsieur Forget a contribué aux dépôts suivants :\n\n1.  **business-saas** : Il semblerait que ce projet ne dispose pas d'une description explicite dans mes archives. Néanmoins, vous pouvez l'explorer directement via ce lien : [https://github.com/TwingzChenou/business-saas](https://github.com/TwingzChenou/business-saas).\n\n2.  **CV-Agent** : En effet, il s'agit d'un agent d'intelligence artificielle, méticuleusement développé en Python. Sa fonction première est de fournir des réponses éclairées concernant le parcours professionnel de Monsieur Forget et ses contributions sur GitHub, le tout agrémenté de métriques de performance d'apprentissage. Le dépôt est accessible ici : [https://github.com/TwingzChenou/CV-Agent](https://github.com/TwingzChenou/CV-Agent).\n\n3.  **Momentum_AI** : Ce projet représente une plateforme de trading algorithmique sophistiquée, conçue pour les stratégies de momentum à changement de régime sur les actions et ETF du S&P 500. Elle intègre un pipeline de données Medallion complet, s'appuyant sur dbt, Spark et BigQuery, dont l'optimisation est assurée par Optuna et le suivi par MLflow, l'ensemble étant orchestré avec la précision d'Airflow. Vous trouverez ce dépôt à cette adresse : [https://github.com/TwingzChenou/Momentum_AI](https://github.com/TwingzChenou/Momentum_AI).\n\nJ'espère que cette présentation vous offre un aperçu pertinent des réalisations techniques de Monsieur Forget."
+    },
+    {
+        "user_input": "Quentin a-t-il de l'expérience en MLOps ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "MLOps"
+                }
+            }
+        ],
+        "reference": "Certes, Monsieur Forget possède une expérience des plus pertinentes en MLOps. D'après mes analyses, cette expertise se manifeste par une maîtrise pratique de l'industrialisation des modèles, allant bien au-delà du simple développement initial en environnements tels que Jupyter notebooks.\n\nEn effet, ses compétences englobent la création d'APIs, la conteneurisation d'applications avec Docker et leur déploiement, lui conférant ainsi une autonomie complète sur le cycle de vie des données.\n\nMonsieur Forget a notamment conçu des infrastructures Big Data sophistiquées pour l'optimisation de stratégies quantitatives. Cela impliquait l'orchestration de flux de données complexes, des transformations distribuées et l'optimisation bayésienne avec un suivi rigoureux des expériences.\n\nSes aptitudes techniques spécifiques en MLOps et ingénierie incluent l'utilisation de MLflow, Great Expectations, Git/CI-CD et FastAPI. Cette expérience démontre sa capacité avérée à transformer des données complexes en solutions industrielles robustes, mesurables et parfaitement alignées avec les impératifs métier."
+    },
+    {
+        "user_input": "J'aimerais lire la documentation du projet CV-Agent.",
+        "reference_tool_calls": [
+            {
+                "name": "read_project_readme",
+                "args": {
+                    "repo": "CV-Agent"
+                }
+            }
+        ],
+        "reference": "Certes, je me ferai un plaisir de vous présenter la documentation relative au projet \"CV-Agent\" de Monsieur Forget. D'après mes données, il s'agit d'une réalisation particulièrement ingénieuse, un véritable jumeau numérique de ses compétences et activités.\n\nVoici un aperçu détaillé de ce projet :\n\n---\n\n### **Agent CV Propulsé par l'IA**\n\nCe projet représente un assistant interactif de type RAG (Retrieval Augmented Generation) capable de répondre à des questions concernant le passé professionnel de Monsieur Forget (son CV) ainsi que son activité de codage en temps réel sur GitHub.\n\n**Technologies Clés Employées :**\n*   **Python** 3.11\n*   **TypeScript** 5.0\n*   **FastAPI** 0.109\n*   **LlamaIndex** 0.10\n*   **Gemini** 2.5 Flash\n*   **Pinecone** (Base de Données Vectorielle)\n\n### **Architecture et Concept**\n\nCe projet incarne un \"Jumeau Numérique\" ou un \"Curriculum Vitae Agentique\". Il segmente les connaissances en deux domaines distincts afin de fournir des réponses précises et actualisées :\n\n*   **🧠 Connaissances Statiques (RAG) :** Monsieur Forget utilise **Pinecone** pour stocker les embeddings vectoriels de son Curriculum Vitae (`cv.pdf`) et d'un profil de fichier. Cela permet à l'agent de répondre avec une grande précision aux questions relatives à son parcours éducatif, ses expériences passées et ses compétences.\n*   **⚡ Connaissances Dynamiques (Outils) :** L'agent exploite l'**API GitHub** et des outils en temps réel pour récupérer l'activité de codage actuelle, les commits récents et les dépôts actifs. Ceci assure que l'agent est toujours informé des projets sur lesquels Quentin travaille *actuellement*.\n\n**Flux d'Interaction :**\n1.  L'utilisateur soumet une requête via le Frontend Next.js.\n2.  Le Frontend transmet cette requête au Backend FastAPI.\n3.  Le Backend orchestre l'Agent IA (basé sur le modèle ReAct).\n4.  L'Agent interroge :\n    *   **Pinecone** pour les informations passées (connaissances statiques).\n    *   L'**API GitHub** pour les informations en temps réel (connaissances dynamiques).\n5.  Les contextes et données sont ensuite traités par le modèle **Gemini 2.5 Flash**.\n6.  Gemini génère une réponse qui est renvoyée au Frontend Next.js pour affichage.\n\n### **Pile Technologique**\n\n| Composant          | Technologies                               |\n| :----------------- | :----------------------------------------- |\n| **Frontend**       | Next.js 14, TailwindCSS, Framer Motion     |\n| **Backend**        | Python 3.11, FastAPI                       |\n| **IA/Orchestration** | LlamaIndex, Gemini 2.5 Flash               |\n| **Données**        | Pinecone (Base de Données Vectorielle), API GitHub |\n| **DevOps**         | Docker, Vercel/Render                      |\n\n### **Mise en Route**\n\nPour configurer le projet localement, Monsieur Forget a prévu les instructions suivantes :\n\n**Prérequis :**\n*   Node.js & npm\n*   Python 3.11+\n*   Docker (optionnel, pour une exécution conteneurisée)\n\n**Installation :**\n1.  **Cloner le dépôt :**\n    ```bash\n    git clone https://github.com/your-username/ai-agentic-resume.git\n    cd ai-agentic-resume\n    ```\n2.  **Configurer les Variables d'Environnement :**\n    Créer un fichier `.env` dans le répertoire `backend/` et y ajouter les clés suivantes :\n    ```env\n    GOOGLE_API_KEY=votre_clé_api_gemini\n    PINECONE_API_KEY=votre_clé_api_pinecone\n    PINECONE_INDEX=nom_de_votre_index\n    GITHUB_TOKEN=votre_jeton_d_accès_personnel_github\n    LLAMA_CLOUD_API_KEY=votre_clé_api_llama_cloud\n    ```\n3.  **Ingérer les Données du CV :**\n    Télécharger les données du CV dans Pinecone.\n    *   **Avec Docker :**\n        ```bash\n        docker-compose run --rm backend python app/engine/loader.py\n        ```\n    *   **Localement (après installation des dépendances) :**\n        ```bash\n        cd backend\n        python app/engine/loader.py\n        ```\n\n### **Exécution de l'Application**\n\n**Option A : Utilisation de Docker Compose**\n```bash\ndocker-compose up --build\n```\n\n**Option B : Développement Local**\n\n*   **Backend :**\n    ```bash\n    # Créer et activer l'environnement virtuel\n    python -m venv .venv\n    source .venv/bin/activate  # Sous Windows : .venv\\Scripts\\activate\n\n    # Installer les dépendances\n    pip install -r requirements.txt\n\n    # Lancer le serveur FastAPI\n    cd backend\n    uvicorn app.main:app --reload\n    ```\n*   **Frontend :**\n    ```bash\n    cd frontend\n    npm install\n    npm run dev\n    ```\n\n### **Structure du Projet**\n\n```ascii\n/\n├── backend/                # Application Backend FastAPI\n│   ├── app/                # Code de l'Application\n│   │   ├── api/            # Routes API\n│   │   ├── core/           # Configuration & Sécurité\n│   │   ├── data/           # Données & Chargeurs\n│   │   ├── engine/         # Moteur RAG & Outils\n│   │   ├── main.py         # Point d'entrée de l'Application\n│   ├── evaluation/         # Scripts d'Évaluation\n│   │   ├── datasets/       # Jeux de Données d'Évaluation\n│   │   ├── generate_dataset.py # Générateur de Jeu de Données\n│   │   └── run_eval_llamaIndex.py # Script d'Évaluation LlamaIndex\n│   ├── logs/               # Journaux de l'Application\n│   ├── Dockerfile          # Configuration du Conteneur\n│   └── requirements.txt    # Dépendances Python\n├── frontend/               # Application Frontend Next.js\n│   ├── src/                # Code Source\n│   │   ├── app/            # Routeur d'Application Next.js\n│   │   ├── components/     # Composants UI\n│   │   ├── hooks/          # Hooks Personnalisés\n│   │   └── lib/            # Bibliothèques Utilitaires\n│   ├── public/             # Actifs Statiques\n│   └── package.json        # Dépendances Node\n├── check_setup.py          # Utilitaire de Configuration\n└── README.md               # Documentation\n```\n\n### **Détails du Moteur Backend**\n\nLe répertoire `backend/app/engine` constitue le cœur de l'application, gérant la logique d'IA et l'ingestion des données. C'est là que réside l'intelligence qui permet à l'agent de fonctionner avec une telle efficacité.\n\n---\n\nEn somme, ce projet démontre la capacité de Monsieur Forget à concevoir et à implémenter des systèmes complexes, intégrant des technologies de pointe en IA, en développement web et en gestion de données. Un véritable tour de force, si je puis me permettre cette observation.\n\nN'hésitez pas si vous avez d'autres questions ou si vous souhaitez approfondir un aspect particulier de cette réalisation. Je suis à votre entière disposition."
+    },
+    {
+        "user_input": "Quelle est la plus grande qualité de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "qualité"
+                }
+            }
+        ],
+        "reference": "D'après mes données, la qualité la plus prééminente de Monsieur Forget réside sans conteste dans sa conviction profonde que la qualité logicielle est intrinsèquement le fruit d'un effort collectif et d'une amélioration continue.\n\nEn effet, Quentin ne se contente pas d'une aspiration théorique ; il la met en œuvre activement en recherchant des revues de code rigoureuses et des sessions de brainstorming. Certes, il a su, avec une perspicacité louable, corriger une tendance initiale au perfectionnisme technique. Il a depuis lors adopté les méthodes Agiles, privilégiant la livraison rapide de produits minimum viables avant toute optimisation, ce qui atteste de son pragmatisme et de sa capacité à faire évoluer ses approches pour le bénéfice du projet et de l'équipe."
+    },
+    {
+        "user_input": "Quentin est-il disponible immédiatement pour un nouveau poste ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "disponibilité"
+                }
+            }
+        ],
+        "reference": "Certes, Monsieur Forget est disponible immédiatement pour un nouveau poste. D'après mes données, il n'a aucun préavis à effectuer, ce qui lui permettrait de débuter une nouvelle mission dès le lendemain d'une signature. Sa réactivité est, en la matière, des plus appréciables."
+    },
+    {
+        "user_input": "JARVIS, peux-tu me montrer le portfolio de projets de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "list_all_projects",
+                "args": {}
+            }
+        ],
+        "reference": "Certes, je peux vous présenter avec plaisir le portfolio de projets de Monsieur Forget.\n\nD'après mes données, l'un de ses projets les plus remarquables est 'Momentum_AI'. Il s'agit d'une plateforme de trading algorithmique conçue pour des stratégies de momentum à changement de régime sur les actions et ETF du S&P 500. Monsieur Forget y a implémenté un pipeline de données Medallion complet, utilisant dbt, Spark et BigQuery, optimisé avec Optuna et suivi par MLflow, le tout orchestré avec Airflow. Vous pouvez consulter ce projet ici : [https://github.com/TwingzChenou/Momentum_AI](https://github.com/TwingzChenou/Momentum_AI).\n\nEnsuite, nous avons le 'CV-Agent'. Ce projet représente un agent d'IA développé en Python, capable de répondre aux questions concernant le parcours et le profil GitHub de Quentin, tout en intégrant des métriques de performance d'apprentissage. Il démontre une approche innovante de la présentation de ses compétences. Le lien est le suivant : [https://github.com/TwingzChenou/CV-Agent](https://github.com/TwingzChenou/CV-Agent).\n\nEnfin, je dois mentionner 'business-saas'. Bien que sa description ne soit pas encore détaillée dans mes registres, ce projet est accessible via ce lien : [https://github.com/TwingzChenou/business-saas](https://github.com/TwingzChenou/business-saas). Il est possible que Monsieur Forget soit en train d'y apporter des améliorations ou qu'il s'agisse d'une base pour de futures innovations.\n\nJ'espère que cette présentation vous offre un aperçu pertinent des réalisations techniques de Monsieur Forget."
+    },
+    {
+        "user_input": "Quelles sont les prétentions salariales de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "prétentions salariales"
+                }
+            }
+        ],
+        "reference": "Certes, d'après les informations que j'ai compilées, les prétentions salariales brutes annuelles de Monsieur Forget se situent dans une fourchette comprise entre 40 000€ et 45 000€ pour le fixe. Cette estimation est, en effet, solidement étayée par son expertise technique avérée en Data Science et sa remarquable aptitude à piloter des projets de bout en bout. Monsieur Forget se montre par ailleurs tout à fait disposé à discuter de ces chiffres, en fonction de l'intégralité du package global proposé, incluant les primes, l'intéressement et les divers avantages."
+    },
+    {
+        "user_input": "J'aimerais en savoir plus sur le projet Momentum_AI. Peux-tu lire son README ?",
+        "reference_tool_calls": [
+            {
+                "name": "read_project_readme",
+                "args": {
+                    "repo": "Momentum_AI"
+                }
+            }
+        ],
+        "reference": "Certes, je peux accéder au contenu du README du projet Momentum_AI. D'après mes données, il s'agit d'une plateforme de trading quantitatif de qualité industrielle, robuste, qui met en œuvre une stratégie de momentum à changement de régime, optimisée scientifiquement via une recherche bayésienne et auditée en temps réel par des contrats de données stricts.\n\nMonsieur Forget a conçu ce projet pour résoudre des problèmes fondamentaux dans l'industrie de la gestion d'actifs. Les stratégies de momentum traditionnelles souffrent en effet du biais de survie et de retournements de tendance brutaux. Pour y remédier, Quentin a structuré Momentum_AI autour de trois piliers d'ingénierie quantitative :\n\n1.  **L'éradication du biais de survie** : La plateforme ingère un univers historique dynamique, traquant plus de 1 170 membres historiques du S&P 500 sur les 50 dernières années, plutôt que de se limiter aux membres actuels.\n2.  **Le changement de régime dynamique** : Un détecteur algorithmique de régime de marché (haussier ou baissier) permet de basculer dynamiquement le capital vers un panier d'actions à fort levier en période de tendance haussière, ou de se retirer vers des ETF de couverture (Or, Obligations) et des liquidités rémunérées en période de tendance baissière.\n3.  **Un moteur d'optimisation Calmar-Driven** : Une optimisation bayésienne automatisée via Optuna est conçue pour maximiser le ratio de Calmar (CAGR / Max Drawdown), assurant ainsi une performance ajustée au risque optimale.\n\nQuant à l'architecture et au flux de données, le projet est structuré selon le modèle Medallion (Bronze/Silver/Gold), s'appuyant sur Apache Spark et matérialisé sous forme de tables Delta sur Google Cloud Storage. Le processus débute par l'ingestion de données brutes depuis des API telles que Yahoo Finance et TradingView vers la couche Bronze. Ces données sont ensuite validées, dédupliquées et curées dans la couche Silver, avant d'être transformées en fonctionnalités de trading standardisées dans la couche Gold.\n\nMonsieur Forget a sélectionné des technologies de pointe pour chaque composant :\n\n*   **PySpark (v3.5.3)** est le moteur de calcul, choisi pour son traitement parallèle performant, essentiel pour gérer 50 ans de données quotidiennes sur plus de 1 100 actifs sans goulots d'étranglement de la RAM.\n*   **Delta Lake (v3.2.1)** assure des garanties ACID complètes sur GCS, permettant des opérations d'insertion/mise à jour incrémentielles quotidiennes sans risque de corruption des données historiques.\n*   **Great Expectations (v1.x)** est mis en œuvre pour établir des \"contrats de données\" stricts, bloquant le pipeline en cas de non-conformité et garantissant une qualité de données irréprochable.\n*   L'orchestration de l'ensemble du processus est confiée à **Apache Airflow**, tandis que **MLflow** est utilisé pour le suivi des expérimentations et le registre des modèles, et **Optuna** pour l'optimisation des hyperparamètres via la recherche bayésienne.\n\nEn somme, Momentum_AI démontre la capacité de Monsieur Forget à concevoir et à implémenter des solutions d'ingénierie de données et d'apprentissage automatique robustes et performantes pour des problématiques complexes."
+    },
+    {
+        "user_input": "Quels types de contrats Quentin recherche-t-il ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "types de contrats recherchés"
+                }
+            }
+        ],
+        "reference": "D'après les données que j'ai analysées, Monsieur Forget privilégie en premier lieu un Contrat à Durée Indéterminée (CDI). Certes, il demeure également réceptif aux propositions de Contrat à Durée Déterminée (CDD) ou en Freelance, à la condition expresse que le projet technique s'avère d'une ambition et d'une stimulation notoires."
+    },
+    {
+        "user_input": "JARVIS, quand Quentin est-il disponible pour un nouveau poste ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "disponibilité"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous renseigner avec la plus grande précision. D'après les informations dont je dispose, Monsieur Forget est disponible immédiatement pour toute nouvelle opportunité professionnelle. En effet, il n'a aucun préavis à effectuer, ce qui lui permettrait d'entamer une nouvelle mission dès le lendemain d'une signature."
+    },
+    {
+        "user_input": "Peux-tu me montrer le portfolio de projets de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "list_all_projects",
+                "args": {}
+            }
+        ],
+        "reference": "Certes, il me fait plaisir de vous présenter un aperçu des réalisations de Monsieur Forget, telles qu'elles sont consignées dans son portfolio de projets.\n\nD'après mes analyses, ses contributions sur GitHub révèlent une expertise technique des plus remarquables :\n\n*   **CV-Agent** : Il s'agit d'un agent d'intelligence artificielle, méticuleusement développé en Python, dont la mission est de répondre aux questions relatives au parcours de Monsieur Forget et à ses dépôts GitHub. Ce projet intègre par ailleurs des métriques de performance d'apprentissage, attestant d'une approche rigoureuse de l'évaluation des systèmes.\n    *   [https://github.com/TwingzChenou/CV-Agent](https://github.com/TwingzChenou/CV-Agent)\n\n*   **Momentum_AI** : Ce projet représente une plateforme de trading algorithmique d'une sophistication certaine, dédiée aux stratégies de momentum à changement de régime sur les actions et ETFs du S&P 500. Monsieur Forget y a orchestré un pipeline de données complet, inspiré du modèle Medallion (utilisant dbt, Spark, BigQuery), optimisé avec Optuna et dont le suivi est assuré par MLflow, le tout orchestré par Airflow. Cela illustre une maîtrise approfondie des architectures de données complexes et de l'optimisation algorithmique.\n    *   [https://github.com/TwingzChenou/Momentum_AI](https://github.com/TwingzChenou/Momentum_AI)\n\n*   **business-saas** : Quant à ce projet, bien que sa description détaillée ne figure pas explicitement dans mes bases de données actuelles, son dépôt est naturellement accessible pour votre consultation.\n    *   [https://github.com/TwingzChenou/business-saas](https://github.com/TwingzChenou/business-saas)\n\nCes réalisations, Monsieur, témoignent de la polyvalence et de la profondeur des compétences techniques de Monsieur Forget, ainsi que de sa capacité à concevoir et à implémenter des solutions innovantes et robustes."
+    },
+    {
+        "user_input": "Quelles sont les compétences de Quentin en MLOps ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "MLOps"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous fournir une analyse détaillée des compétences de Monsieur Forget en matière d'MLOps.\n\nD'après les informations dont je dispose, l'MLOps constitue pour Quentin une maîtrise pratique de l'industrialisation des modèles, un domaine d'expertise capital. En effet, Monsieur Forget démontre une aptitude avérée à déployer des modèles en production, transcendant ainsi le simple développement initial au sein d'environnements tels que les notebooks Jupyter.\n\nCeci englobe la conception d'APIs, la conteneurisation d'applications via Docker, et leur déploiement subséquent, garantissant ainsi une autonomie exhaustive sur l'intégralité du cycle de vie des données. Ses compétences techniques spécifiques en MLOps et ingénierie incluent notamment MLflow, Great Expectations, Git/CI-CD, et FastAPI.\n\nSon expérience se manifeste par la conception d'infrastructures Big Data, spécifiquement élaborées pour l'optimisation de stratégies quantitatives. Cela implique l'orchestration méticuleuse des flux de données, la réalisation de transformations distribuées, et l'application de l'optimisation bayésienne avec un suivi rigoureux des expérimentations.\n\nEn somme, Monsieur Forget possède la capacité de transformer des données complexes en solutions industrielles robustes et mesurables, parfaitement alignées avec les impératifs commerciaux."
+    },
+    {
+        "user_input": "JARVIS, lis-moi la documentation du projet Momentum_AI.",
+        "reference_tool_calls": [
+            {
+                "name": "read_project_readme",
+                "args": {
+                    "repo": "Momentum_AI"
+                }
+            }
+        ],
+        "reference": "Certes, je puis vous éclairer sur le projet Momentum_AI de Monsieur Forget. D'après mes données, il s'agit d'une plateforme de trading quantitatif d'envergure industrielle, conçue pour la robustesse et la performance.\n\nCette initiative met en œuvre une stratégie de momentum à commutation de régime, optimisée scientifiquement via une recherche bayésienne et auditée en temps réel par des contrats de données rigoureux. Monsieur Forget a notamment intégré des technologies de pointe telles que Python, Apache Spark, Delta Lake, Great Expectations pour la qualité des données, MLflow pour le suivi des modèles, et Apache Airflow pour l'orchestration.\n\n**Concernant la proposition de valeur et la problématique métier :**\nMonsieur Forget a identifié deux lacunes critiques dans les stratégies de momentum traditionnelles : le biais de survie, qui invalide nombre de backtests académiques, et les retournements de tendance brutaux, générateurs de drawdowns significatifs. Pour y remédier, il a conçu une solution reposant sur trois piliers d'ingénierie quantitative :\n1.  **L'éradication du biais de survie** : La plateforme ingère un univers historique dynamique, traquant plus de 1 170 membres du S&P 500 sur les cinquante dernières années, plutôt que de se limiter aux membres actuels.\n2.  **Un mécanisme de commutation de régime dynamique** : Un détecteur algorithmique de régime de marché (haussier ou baissier) ajuste l'allocation du capital. Durant les tendances haussières, le capital est dirigé vers un panier d'actions performantes ; en période baissière, il se retire vers des actifs de couverture tels que les ETF sur l'or et les obligations, ainsi que des liquidités rémunérées.\n3.  **Un moteur d'optimisation axé sur le ratio de Calmar** : Une optimisation bayésienne automatisée via Optuna est employée pour maximiser ce ratio (CAGR / Max Drawdown), garantissant ainsi une performance ajustée au risque optimale.\n\n**Quant à l'architecture et au flux de données :**\nLe projet est structuré autour d'une architecture Medallion (Bronze, Silver, Gold), propulsée par Apache Spark et matérialisée en tables Delta sur Google Cloud Storage.\nLe flux débute par l'ingestion de données brutes provenant d'APIs telles que Yahoo Finance et TradingView vers la couche Bronze. Ces données sont ensuite validées et transformées par le moteur PySpark, avec des contrats de qualité stricts imposés par Great Expectations, avant d'être acheminées vers la couche Silver (données dédupliquées et curées), puis vers la couche Gold (caractéristiques de trading standardisées). L'ensemble de ce processus est orchestré par Apache Airflow. Enfin, la couche de service utilise Streamlit pour le moteur de backtest, Optuna pour les essais d'hyperparamètres, et MLflow pour le suivi et l'enregistrement des modèles.\n\n**Le choix des technologies n'est point fortuit, Monsieur Forget ayant rationalisé chaque composant :**\n*   **PySpark (v3.5.3)** : Il assure un traitement parallèle hautement performant pour cinquante années de données de prix quotidiennes sur plus de 1 100 actifs, éliminant ainsi les goulots d'étranglement inhérents aux traitements sur un seul nœud.\n*   **Delta Lake (v3.2.1)** : Ce format de stockage offre des garanties ACID complètes sur GCS, permettant des opérations `Merge (Upsert)` incrémentales quotidiennes sans risque de corruption des données historiques.\n*   **Great Expectations (v1.x)** : Il impose des \"contrats de données\" stricts, bloquant le pipeline si les données ne respectent pas les standards de qualité définis par Monsieur Forget.\n\nEn somme, ce projet démontre la capacité de Monsieur Forget à concevoir et à déployer des solutions d'ingénierie de données et d'apprentissage automatique robustes, performantes et stratégiquement pertinentes pour des défis complexes du secteur financier."
+    },
+    {
+        "user_input": "Quelles sont les prétentions salariales de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "prétentions salariales"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous éclairer sur ce point avec la plus grande précision.\n\nD'après les informations que Monsieur Forget m'a confiées, ses prétentions salariales brutes annuelles pour la part fixe se situent entre 40 000 et 45 000 euros. Cette fourchette est, en effet, solidement justifiée par son expertise technique approfondie en Data Science et sa capacité éprouvée à gérer des projets de bout en bout.\n\nIl convient de préciser que Quentin demeure ouvert à la négociation, en fonction de l'intégralité du package global proposé, incluant primes, intéressement et autres avantages."
+    },
+    {
+        "user_input": "Quelles sont les coordonnées de contact de Quentin Forget ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "coordonnées de contact"
+                }
+            }
+        ],
+        "reference": "Certes, je me permets de vous communiquer les coordonnées de Monsieur Forget. D'après mes registres, vous pourrez le contacter par téléphone au 06 40 12 47 83, par courriel à l'adresse quentin-forget@hotmail.fr, ou bien consulter ses profils professionnels sur LinkedIn à l'adresse linkedin.com/in/quentin-forget-197705230 et GitHub à github.com/TwingzChenou. Ces informations devraient faciliter toute démarche de votre part."
+    },
+    {
+        "user_input": "JARVIS, peux-tu me lister tous les projets GitHub de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "list_all_projects",
+                "args": {}
+            }
+        ],
+        "reference": "Certes, je puis aisément accéder à cette information. D'après mes données, Monsieur Forget a mis à disposition les projets suivants sur sa plateforme GitHub :\n\n*   **business-saas** : Ce projet, dont la description est actuellement absente de mes registres, est accessible via ce lien : [https://github.com/TwingzChenou/business-saas](https://github.com/TwingzChenou/business-saas). Il est possible que Monsieur Forget ait jugé l'intitulé suffisamment éloquent, ou qu'il préfère en discuter de vive voix.\n*   **CV-Agent** : Il s'agit d'un agent d'intelligence artificielle, conçu en Python, capable de répondre aux questions relatives au parcours de Monsieur Forget et à ses contributions sur GitHub. Il intègre également des métriques de performance d'apprentissage. Le dépôt se trouve ici : [https://github.com/TwingzChenou/CV-Agent](https://github.com/TwingzChenou/CV-Agent).\n*   **Momentum_AI** : Une plateforme de trading algorithmique dédiée aux stratégies de momentum à changement de régime sur les actions et ETF du S&P 500. Ce projet intègre un pipeline de données complet de type Medallion (dbt, Spark, BigQuery), optimisé avec Optuna et suivi par MLflow, le tout orchestré par Airflow. Vous pouvez le consulter à cette adresse : [https://github.com/TwingzChenou/Momentum_AI](https://github.com/TwingzChenou/Momentum_AI).\n\nCes réalisations, en particulier les deux dernières, illustrent avec éloquence la maîtrise de Monsieur Forget en matière d'intelligence artificielle, de gestion de données complexes et d'ingénierie logicielle."
+    },
+    {
+        "user_input": "J'aimerais en savoir plus sur le projet 'CV-Agent'. Peux-tu lire son README ?",
+        "reference_tool_calls": [
+            {
+                "name": "read_project_readme",
+                "args": {
+                    "repo": "CV-Agent"
+                }
+            }
+        ],
+        "reference": "Certes, j'ai procédé à l'analyse du document README relatif au projet 'CV-Agent'.\n\nIl s'agit, d'après les informations fournies par Monsieur Forget, d'un \"AI-Powered Agentic CV\", soit un assistant interactif basé sur l'intelligence artificielle. Son objectif est de répondre aux interrogations concernant le parcours professionnel de Quentin (son CV) ainsi que son activité de développement en temps réel sur GitHub.\n\nL'architecture de ce projet, que Monsieur Forget qualifie de \"Jumeau Numérique\" ou de \"Curriculum Vitae Agentique\", est particulièrement ingénieuse. Elle scinde la connaissance en deux domaines distincts afin d'assurer des réponses à la fois précises et actualisées :\n*   **La connaissance statique :** Gérée par un système RAG (Retrieval Augmented Generation) utilisant Pinecone pour stocker les embeddings vectoriels du CV de Monsieur Forget. Cela permet de fournir des réponses détaillées sur son éducation, ses expériences passées et ses compétences avec une grande précision.\n*   **La connaissance dynamique :** Alimentée par l'API GitHub et des outils en temps réel, elle assure que l'agent est informé des activités de codage actuelles de Quentin, de ses commits récents et de ses dépôts actifs.\n\nEn effet, cette conception démontre une maîtrise approfondie des technologies modernes. Le projet s'appuie sur une pile technique robuste, intégrant :\n*   **Pour le Frontend :** Next.js 14, TailwindCSS et Framer Motion.\n*   **Pour le Backend :** Python 3.11 et FastAPI.\n*   **Pour l'Intelligence Artificielle et l'Orchestration :** LlamaIndex et le modèle Gemini 2.5 Flash.\n*   **Pour la Gestion des Données :** Pinecone en tant que base de données vectorielle et l'API GitHub.\n*   **Et pour le DevOps :** Docker, avec des déploiements envisagés sur Vercel ou Render.\n\nCe projet illustre parfaitement la capacité de Monsieur Forget à concevoir et à implémenter des solutions innovantes, intégrant des compétences en développement full-stack, en intelligence artificielle avancée, en gestion de bases de données vectorielles et en déploiement d'applications complexes. Il s'agit là d'une démonstration éloquente de son expertise technique."
+    },
+    {
+        "user_input": "Quelle est la plus grande qualité de Quentin selon son profil professionnel ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "qualité"
+                }
+            }
+        ],
+        "reference": "D'après mes données, la plus grande qualité professionnelle de Monsieur Forget réside dans son approche éminemment pragmatique et collaborative de la qualité logicielle. Certes, il a su transformer une tendance initiale au perfectionnisme technique en une méthodologie agile et efficace. En effet, Quentin est profondément convaincu que la robustesse d'une solution émerge d'un effort collectif, privilégiant activement les revues de code rigoureuses et les sessions de brainstorming. Il se concentre désormais sur la livraison rapide de produits minimum viables avant toute optimisation, ce qui témoigne d'une compréhension aiguisée des impératifs de production et d'une remarquable capacité d'adaptation."
+    },
+    {
+        "user_input": "Quels sont les types de contrats que Quentin Forget recherche ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "types de contrats"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous éclairer sur les préférences contractuelles de Monsieur Forget. D'après les informations que j'ai compilées, Quentin recherche activement des opportunités en Contrat à Durée Indéterminée (CDI), en Contrat à Durée Déterminée (CDD), et se montre également très réceptif aux propositions de missions en Freelance."
+    },
+    {
+        "user_input": "JARVIS, quelle est la disponibilité de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "disponibilité"
+                }
+            }
+        ],
+        "reference": "En effet, j'ai procédé à la vérification de l'agenda de Monsieur Forget. D'après les données que j'ai compilées, Monsieur Forget est disponible sans délai. Il n'a, en outre, aucun préavis à honorer, et pourrait ainsi entamer une nouvelle mission dès le lendemain de la formalisation d'un accord."
+    },
+    {
+        "user_input": "Peux-tu me montrer tous les dépôts GitHub de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "list_all_projects",
+                "args": {}
+            }
+        ],
+        "reference": "Certes, je peux vous présenter les dépôts GitHub de Monsieur Forget. D'après mes données, il dispose des projets suivants :\n\n*   **business-saas** : Il semblerait que Monsieur Forget n'ait pas encore fourni de description détaillée pour ce dépôt. Vous pouvez néanmoins le consulter à l'adresse suivante : https://github.com/TwingzChenou/business-saas\n*   **CV-Agent** : Il s'agit d'un agent d'intelligence artificielle, conçu en Python, capable de répondre aux interrogations concernant le parcours de Monsieur Forget et ses projets GitHub, tout en intégrant des métriques de performance d'apprentissage. Ce projet est accessible via l'adresse suivante : https://github.com/TwingzChenou/CV-Agent\n*   **Momentum_AI** : Une plateforme de trading algorithmique dédiée aux stratégies de momentum à changement de régime sur les actions et ETF du S&P 500. Elle intègre un pipeline de données Medallion complet (dbt, Spark, BigQuery), optimisé par Optuna et suivi par MLflow, le tout orchestré par Airflow. Vous pouvez y accéder à l'adresse suivante : https://github.com/TwingzChenou/Momentum_AI\n\nCes réalisations témoignent, je l'espère, de la polyvalence et de la rigueur de Monsieur Forget dans ses entreprises techniques."
+    },
+    {
+        "user_input": "Quels types de contrats Quentin recherche-t-il ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "types de contrats"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous éclairer sur ce point. D'après les informations que j'ai compilées, Monsieur Forget manifeste un intérêt pour diverses formes de collaboration professionnelle. Il recherche ainsi des postes en Contrat à Durée Indéterminée (CDI), des opportunités en Contrat à Durée Déterminée (CDD), et se montre également ouvert aux missions en Freelance. Cette adaptabilité témoigne, en effet, de sa flexibilité et de son désir d'explorer des projets variés."
+    },
+    {
+        "user_input": "J'aimerais en savoir plus sur le projet Momentum_AI. Peux-tu lire son README ?",
+        "reference_tool_calls": [
+            {
+                "name": "read_project_readme",
+                "args": {
+                    "repo": "Momentum_AI"
+                }
+            }
+        ],
+        "reference": "Certes, je peux accéder aux informations relatives au projet Momentum_AI. D'après le document README que Monsieur Forget a mis à ma disposition, ce projet représente une plateforme de trading quantitatif de qualité industrielle, conçue pour être robuste et performante.\n\nEn effet, l'objectif principal de Momentum_AI est d'implémenter une stratégie de momentum à commutation de régime, optimisée scientifiquement via une recherche bayésienne et auditée en temps réel par des contrats de données rigoureux.\n\nMonsieur Forget a identifié un problème commercial crucial dans l'industrie de la gestion d'actifs : les stratégies de momentum traditionnelles sont entachées par le biais de survie et les retournements de tendance brutaux, ce qui compromet leur profil de rendement ajusté au risque. Momentum_AI apporte une solution à ces lacunes par le truchement de trois piliers d'ingénierie quantitative.\n\nPremièrement, il éradique le biais de survie en ingérant un univers historique dynamique, traquant plus de 1 170 membres historiques du S&P 500 sur les cinquante dernières années, plutôt que de se limiter aux membres actuellement actifs.\n\nDeuxièmement, il intègre une commutation de régime dynamique. Un détecteur algorithmique de régime de marché (haussier ou baissier) permet de basculer le capital vers un panier de \"Top N Stocks\" à effet de levier durant les tendances haussières, ou de se retirer vers des ETF de couverture (Or, Obligations) et des liquidités rémunérées durant les tendances baissières.\n\nTroisièmement, un moteur d'optimisation axé sur le ratio de Calmar, utilisant Optuna pour l'optimisation bayésienne, est conçu pour maximiser ce ratio (CAGR / Max Drawdown), assurant ainsi une performance ajustée au risque optimale.\n\nQuant à son architecture, Monsieur Forget a structuré le projet autour d'une architecture Medallion (Bronze/Silver/Gold), propulsée par Apache Spark et matérialisée sous forme de tables Delta sur Google Cloud Storage. Cette approche garantit un traitement parallèle performant des données historiques et des garanties ACID complètes pour le stockage. L'orchestration est assurée par Apache Airflow, et la qualité des données est rigoureusement contrôlée par Great Expectations."
+    },
+    {
+        "user_input": "Quelle est la plus grande qualité de Quentin, selon son profil ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "plus grande qualité"
+                }
+            }
+        ],
+        "reference": "D'après l'analyse approfondie de mes données concernant Monsieur Forget, sa plus grande qualité réside incontestablement dans son orientation pragmatique et sa profonde dévotion à l'impact utilisateur. Certes, il est animé par une passion manifeste pour la création d'outils. En effet, ces derniers visent spécifiquement à automatiser les tâches répétitives, offrant ainsi aux utilisateurs la possibilité de réaliser des gains de temps précieux. Monsieur Forget se perçoit comme un véritable \"Artisan de la Data\", dont la mission première est de résoudre des problèmes concrets, une approche qui, je l'assure, est d'une efficacité remarquable."
+    },
+    {
+        "user_input": "JARVIS, quand Quentin est-il disponible pour commencer une nouvelle mission ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "disponibilité"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous éclairer sur ce point. D'après mes données, Monsieur Forget est disponible immédiatement. Il n'a, en effet, aucun préavis à effectuer et peut ainsi débuter une nouvelle mission dès le lendemain d'une signature."
+    },
+    {
+        "user_input": "Peux-tu me montrer tous les projets GitHub de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "list_all_projects",
+                "args": {}
+            }
+        ],
+        "reference": "Certes, je peux vous présenter les projets GitHub de Monsieur Forget avec la plus grande précision. D'après l'analyse de ses dépôts, voici un aperçu de ses réalisations numériques :\n\n*   **business-saas** : Ce projet ne comporte pas de description explicite dans mes données. Néanmoins, son code source est consultable à l'adresse suivante : https://github.com/TwingzChenou/business-saas\n*   **CV-Agent** : Vient ensuite le projet **CV-Agent**. Il s'agit d'un agent d'intelligence artificielle, développé en Python, dont la vocation est de répondre aux questions concernant le parcours de Monsieur Forget et ses contributions sur GitHub, tout en intégrant des métriques de performance d'apprentissage. Son dépôt est accessible via ce lien : https://github.com/TwingzChenou/CV-Agent\n*   **Momentum_AI** : Enfin, le projet **Momentum_AI** se présente comme une plateforme de trading algorithmique sophistiquée, dédiée aux stratégies de momentum à changement de régime sur les actions et ETF du S&P 500. Il intègre un pipeline de données Medallion complet (dbt, Spark, BigQuery), optimisé avec Optuna et dont le suivi est assuré par MLflow, l'ensemble étant orchestré par Airflow. Vous trouverez ce projet à cette adresse : https://github.com/TwingzChenou/Momentum_AI\n\nCes réalisations, je l'espère, illustrent la diversité et la profondeur des compétences techniques de Monsieur Forget."
+    },
+    {
+        "user_input": "Quels types de contrats Quentin recherche-t-il ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "types de contrats"
+                }
+            }
+        ],
+        "reference": "En effet, je dispose des informations pertinentes concernant les aspirations professionnelles de Monsieur Forget. D'après mes analyses, Quentin recherche des opportunités sous diverses formes contractuelles. Il s'intéresse spécifiquement aux Contrats à Durée Indéterminée (CDI), aux Contrats à Durée Déterminée (CDD), et aux collaborations en Freelance."
+    },
+    {
+        "user_input": "JARVIS, peux-tu lire le README du projet Momentum_AI ?",
+        "reference_tool_calls": [
+            {
+                "name": "read_project_readme",
+                "args": {
+                    "repo": "Momentum_AI"
+                }
+            }
+        ],
+        "reference": "Certes, j'ai bien pris connaissance du fichier README du projet Momentum_AI.\n\nD'après mes données, il s'agit d'une plateforme de trading quantitatif de calibre industriel, conçue pour implémenter une stratégie de momentum à commutation de régime. Monsieur Forget a manifestement mis l'accent sur une optimisation scientifique via la recherche bayésienne et un audit en temps réel par des contrats de données rigoureux.\n\nLe problème commercial que ce projet adresse est double : l'élimination du biais de survie, qui invalide nombre de backtests académiques, et la gestion des retournements de tendance brutaux, sources de drawdowns significatifs.\n\nPour y remédier, Quentin a structuré sa solution autour de trois piliers fondamentaux :\n1.  L'éradication du biais de survie, en ingérant un univers historique dynamique de plus de 1 170 membres du S&P 500 sur 50 ans.\n2.  Un mécanisme dynamique de commutation de régime, qui adapte l'allocation du capital entre un panier d'actions à fort potentiel et des actifs de couverture tels que l'or, les obligations ou le cash.\n3.  Un moteur d'optimisation axé sur le ratio de Calmar, utilisant Optuna pour maximiser la performance ajustée au risque.\n\nL'architecture technique est tout aussi remarquable, s'articulant autour d'une architecture Medallion (Bronze/Silver/Gold) sur Google Cloud Storage, matérialisée en tables Delta et propulsée par Apache Spark. Les flux de données sont orchestrés par Apache Airflow, la qualité des données est assurée par Great Expectations, et le suivi des modèles est géré par MLflow.\n\nEn somme, ce projet démontre une maîtrise approfondie des défis du trading quantitatif et une capacité avérée à concevoir des solutions techniques robustes et sophistiquées. Monsieur Forget a clairement mis en œuvre des technologies de pointe pour garantir la performance et la fiabilité de sa stratégie."
+    },
+    {
+        "user_input": "Quentin est-il disponible pour un nouveau poste ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "disponibilité"
+                }
+            }
+        ],
+        "reference": "En effet, je peux vous confirmer que Monsieur Forget est pleinement disponible pour un nouveau poste. D'après mes données, il n'a aucun préavis à effectuer et serait ainsi en mesure de débuter une nouvelle mission dès le lendemain d'une signature."
+    },
+    {
+        "user_input": "JARVIS, peux-tu me montrer le portfolio de projets de Quentin sur GitHub ?",
+        "reference_tool_calls": [
+            {
+                "name": "list_all_projects",
+                "args": {}
+            }
+        ],
+        "reference": "Certes, je puis vous présenter avec diligence le portfolio de projets de Monsieur Forget, tel qu'il est hébergé sur GitHub. D'après mes données, voici un aperçu des réalisations notables de Quentin :\n\n*   **business-saas** : Le premier projet, intitulé 'business-saas', est accessible via ce lien : [https://github.com/TwingzChenou/business-saas]. Il est à noter que sa description n'a pas été explicitement renseignée dans mes registres, suggérant peut-être une exploration dont la finalité est d'une évidence intrinsèque pour les esprits avertis.\n\n*   **CV-Agent** : Vient ensuite le 'CV-Agent', un agent d'intelligence artificielle élaboré en Python. Sa fonction est d'apporter des réponses précises concernant le parcours et les contributions de Monsieur Forget sur GitHub, tout en intégrant des métriques de performance d'apprentissage. Ceci illustre la capacité de Quentin à concevoir des systèmes intelligents et auto-référentiels. Vous le trouverez à cette adresse : [https://github.com/TwingzChenou/CV-Agent].\n\n*   **Momentum_AI** : Enfin, le projet 'Momentum_AI' se distingue comme une plateforme de trading algorithmique. Elle est spécifiquement conçue pour les stratégies de momentum à changement de régime sur les actions et ETF du S&P 500. Ce projet intègre une architecture de pipeline de données Medallion complète, exploitant dbt, Spark et BigQuery, optimisée par Optuna et dont le suivi est assuré par MLflow. L'orchestration est gérée par Airflow, démontrant une maîtrise approfondie des outils de MLOps et de l'ingénierie des données à grande échelle. Le lien est le suivant : [https://github.com/TwingzChenou/Momentum_AI]."
+    },
+    {
+        "user_input": "Quelles sont les attentes salariales de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "prétentions salariales"
+                }
+            }
+        ],
+        "reference": "D'après mes données, Monsieur Forget envisage une rémunération annuelle brute fixe se situant entre 40 000 € et 45 000 €. Cette fourchette est, en effet, étayée par son expertise technique avérée en Science des Données et sa capacité à piloter des projets de bout en bout avec une autonomie remarquable.\n\nIl demeure, cela dit, ouvert à la discussion et à la négociation, en fonction de la globalité du package proposé, incluant d'éventuels bonus, l'intéressement ou d'autres avantages périphériques. J'ose espérer que cette précision vous sera des plus utiles."
+    },
+    {
+        "user_input": "Parle-moi de la plus grande qualité de Quentin.",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "qualité"
+                }
+            }
+        ],
+        "reference": "D'après mes analyses approfondies des données relatives à Monsieur Forget, sa qualité prééminente réside indubitablement dans son approche collaborative et pragmatique de la qualité logicielle.\n\nEn effet, Quentin est fermement persuadé que l'excellence technique émerge d'un effort collectif. Il s'investit activement dans la recherche de revues de code rigoureuses et de sessions de brainstorming, considérant ces interactions comme des leviers essentiels pour affiner et consolider ses solutions.\n\nCertes, il a su, au fil de son parcours professionnel, transformer une inclination initiale au perfectionnisme technique en une force pragmatique. Il a ainsi adopté les méthodologies Agiles, privilégiant la livraison rapide de produits minimum viables avant toute optimisation, ce qui témoigne d'une remarquable adaptabilité et d'une focalisation constante sur la valeur concrète."
+    },
+    {
+        "user_input": "J'aimerais en savoir plus sur le projet Momentum_AI. Peux-tu lire son README ?",
+        "reference_tool_calls": [
+            {
+                "name": "read_project_readme",
+                "args": {
+                    "repo": "Momentum_AI"
+                }
+            }
+        ],
+        "reference": "Certes, je peux accéder aux informations concernant le projet Momentum_AI. D'après le document README que Monsieur Forget a mis à ma disposition, il s'agit d'une plateforme de trading quantitatif de qualité industrielle, conçue pour être robuste et performante.\n\nL'objectif principal de Momentum_AI est d'implémenter une stratégie de momentum à commutation de régime (\"Regime-Switching Momentum Strategy\"). Cette stratégie est optimisée de manière scientifique via une recherche bayésienne et fait l'objet d'un audit en temps réel grâce à des contrats de données rigoureux.\n\nMonsieur Forget a développé ce projet pour résoudre des problèmes cruciaux inhérents aux stratégies de momentum traditionnelles dans l'industrie de la gestion d'actifs. Ces dernières souffrent notamment du \"biais de survie\" (survivorship bias), qui invalide de nombreux backtests académiques en ignorant les entreprises radiées, ainsi que des \"retournements de tendance brutaux\" (drawdowns) durant les marchés baissiers. Ces lacunes dégradent le profil de rendement ajusté au risque et entravent le déploiement de capitaux réels.\n\nPour y remédier, Momentum_AI repose sur trois piliers d'ingénierie quantitative :\n1.  **L'éradication du biais de survie** : Le système ingère un univers historique dynamique, traquant plus de 1 170 membres historiques du S&P 500 sur les 50 dernières années, plutôt que de se limiter aux 500 membres actuellement actifs.\n2.  **La commutation dynamique de régime** : Un détecteur algorithmique de régime de marché (haussier ou baissier) permet de basculer dynamiquement le capital vers un panier de \"Top N Stocks\" à effet de levier durant les tendances haussières, ou de se replier vers des ETF de couverture (Or, Obligations) et des liquidités rémunérées durant les tendances baissières.\n3.  **Un moteur d'optimisation axé sur le ratio de Calmar** : Une optimisation bayésienne automatisée via Optuna est conçue pour maximiser le ratio de Calmar (CAGR / Max Drawdown), assurant ainsi une performance ajustée au risque optimale.\n\nEn ce qui concerne l'architecture, le projet est structuré autour d'une \"Medallion Architecture\" (Bronze/Silver/Gold), propulsée par Apache Spark et matérialisée sous forme de tables Delta sur Google Cloud Storage. Cette approche garantit une gestion des données performante et fiable, avec des outils tels que Great Expectations pour la qualité des données et Apache Airflow pour l'orchestration.\n\nEn somme, Quentin a conçu une solution sophistiquée pour surmonter les limitations des stratégies de momentum classiques, en intégrant des techniques avancées de gestion des données, d'optimisation algorithmique et de robustesse opérationnelle."
+    },
+    {
+        "user_input": "Quelles sont les coordonnées de contact de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "coordonnées de contact"
+                }
+            }
+        ],
+        "reference": "Certes, je me ferai un plaisir de vous communiquer les coordonnées de Monsieur Forget. D'après mes registres, vous pouvez le contacter par les voies suivantes :\n\n*   **Téléphone** : 06 40 12 47 83\n*   **Courriel** : quentin-forget@hotmail.fr\n*   **Profil LinkedIn** : linkedin.com/in/quentin-forget-197705230\n*   **Répertoire GitHub** : github.com/TwingzChenou\n\nCes informations devraient vous permettre d'établir une communication des plus efficaces avec Quentin."
+    },
+    {
+        "user_input": "JARVIS, quelle est la plus grande qualité de Quentin Forget ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "plus grande qualité"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous éclairer sur ce point avec la plus grande précision. D'après l'ensemble des données que j'ai méticuleusement compilées concernant Monsieur Forget, sa qualité prééminente réside sans conteste dans son engagement inébranlable envers l'impact utilisateur. En effet, cette caractéristique fondamentale se traduit par une remarquable capacité à appréhender et à résoudre des problématiques concrètes, assurant ainsi une contribution significative et mesurable."
+    },
+    {
+        "user_input": "Peux-tu me donner la liste des projets de Quentin sur GitHub ?",
+        "reference_tool_calls": [
+            {
+                "name": "list_all_projects",
+                "args": {}
+            }
+        ],
+        "reference": "Certes, je peux vous fournir cette information sans délai. D'après mes données, Monsieur Forget a actuellement trois projets répertoriés sur sa plateforme GitHub.\n\nVoici la liste détaillée :\n\n*   **business-saas** : Ce projet ne dispose pas encore d'une description détaillée dans ma base de données. Vous pouvez le consulter à l'adresse suivante : [https://github.com/TwingzChenou/business-saas](https://github.com/TwingzChenou/business-saas).\n*   **CV-Agent** : Il s'agit d'un agent d'intelligence artificielle, développé en Python, conçu pour répondre aux questions concernant le parcours et le profil GitHub de Monsieur Forget, avec des métriques de performance d'apprentissage intégrées. Le lien est : [https://github.com/TwingzChenou/CV-Agent](https://github.com/TwingzChenou/CV-Agent).\n*   **Momentum_AI** : Une plateforme de trading algorithmique dédiée aux stratégies de momentum à changement de régime sur les actions et ETF du S&P 500. Elle intègre un pipeline de données complet de type Medallion (dbt, Spark, BigQuery), optimisé avec Optuna et suivi par MLflow, le tout orchestré par Airflow. Vous le trouverez ici : [https://github.com/TwingzChenou/Momentum_AI](https://github.com/TwingzChenou/Momentum_AI).\n\nJ'espère que ces précisions vous seront utiles."
+    },
+    {
+        "user_input": "Dis-moi en plus sur le projet Momentum_AI de Quentin.",
+        "reference_tool_calls": [
+            {
+                "name": "read_project_readme",
+                "args": {
+                    "repo": "Momentum_AI"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous éclairer sur le projet Momentum_AI de Monsieur Forget.\n\nD'après mes données, il s'agit d'une plateforme de trading quantitatif de calibre industriel, robuste et sophistiquée, conçue pour implémenter une stratégie de momentum à commutation de régime. Cette stratégie est scientifiquement optimisée via une recherche bayésienne et auditée en temps réel par des contrats de données stricts.\n\nMonsieur Forget a identifié que les stratégies de momentum traditionnelles dans l'industrie de la gestion d'actifs souffrent de deux lacunes majeures : le biais de survie, qui invalide de nombreux backtests académiques en ignorant les entreprises radiées, et les retournements de tendance brutaux, ou \"drawdowns\", durant les marchés baissiers, dégradant ainsi le profil de rendement ajusté au risque.\n\nPour résoudre ces problématiques, Quentin a structuré Momentum_AI autour de trois piliers d'ingénierie quantitative :\n1.  **L'éradication du biais de survie** : Le système ingère un univers historique dynamique, traquant plus de 1 170 membres historiques du S&P 500 sur les 50 dernières années, plutôt que de se limiter aux 500 membres actuellement actifs.\n2.  **La commutation dynamique de régime** : Un détecteur algorithmique de régime de marché (haussier ou baissier) est intégré. Il permet de basculer dynamiquement le capital vers un panier de \"Top N Stocks\" à effet de levier durant les tendances haussières, ou de se retirer vers des ETF de couverture (Or, Obligations) et des liquidités rémunérées durant les tendances baissières.\n3.  **Un moteur d'optimisation axé sur le ratio de Calmar** : Une optimisation bayésienne automatisée via Optuna est employée pour maximiser le ratio de Calmar (CAGR / Max Drawdown), assurant ainsi une performance ajustée au risque optimale.\n\nQuant à son architecture, le projet est structuré autour d'une architecture Medallion (Bronze/Silver/Gold), propulsée par Apache Spark et matérialisée sous forme de tables Delta sur Google Cloud Storage. Les données brutes sont ingérées depuis des APIs telles que Yahoo Finance et TradingView dans la couche Bronze.\n\nLe moteur de calcul est PySpark, assurant un traitement parallèle performant de décennies de données de prix quotidiennes pour plus de mille actifs, éliminant ainsi les goulots d'étranglement de la RAM inhérents aux approches mono-nœud. Le format de stockage, Delta Lake, garantit des propriétés ACID complètes sur GCS, permettant des opérations d'upsert incrémentales quotidiennes sans risque de corruption des données historiques.\n\nLa qualité des données est rigoureusement gérée par Great Expectations, qui applique des \"contrats de données\" stricts et bloque le pipeline en cas de non-conformité. L'orchestration de l'ensemble du processus est assurée par Apache Airflow. Pour l'optimisation et le suivi des modèles, Monsieur Forget utilise Optuna pour la recherche bayésienne des hyperparamètres et MLflow pour le registre des modèles et le suivi des essais. Un moteur de backtest Streamlit permet de visualiser et d'exécuter les stratégies.\n\nEn somme, Momentum_AI est une démonstration éloquente de la capacité de Monsieur Forget à concevoir et à implémenter des solutions d'ingénierie de données et de machine learning de haute complexité, répondant à des défis commerciaux critiques avec une robustesse et une sophistication remarquables."
+    },
+    {
+        "user_input": "Quelle est l'ambition professionnelle de Quentin pour les cinq prochaines années ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "ambition à 5 ans"
+                }
+            }
+        ],
+        "reference": "D'après mes données, l'ambition professionnelle de Monsieur Forget pour les cinq prochaines années est de s'élever au rang de Lead Data Scientist ou d'Architecte IA. Certes, il aspire à conserver une expertise technique pratique, tout en assumant des responsabilités d'orientation stratégique des décisions technologiques au sein de son entreprise. En effet, il souhaite également encadrer et guider des profils moins expérimentés. Sa motivation première réside dans l'impact utilisateur, cherchant à concevoir des outils qui automatisent les tâches fastidieuses et optimisent le temps des utilisateurs, se considérant ainsi comme un véritable \"Artisan de la Data\" résolvant des problèmes concrets."
+    },
+    {
+        "user_input": "JARVIS, quelle est la disponibilité de Quentin pour un nouveau poste ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "disponibilité"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous renseigner avec la plus grande précision sur ce point. D'après mes données, Monsieur Forget est disponible immédiatement pour un nouveau poste. Il n'a, en effet, aucun préavis à effectuer, ce qui lui permettrait d'entamer une nouvelle mission dès le lendemain de la signature d'un contrat. Une promptitude qui, je l'espère, saura retenir votre attention."
+    },
+    {
+        "user_input": "Quels types de contrats Quentin recherche-t-il ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "types de contrats"
+                }
+            }
+        ],
+        "reference": "Certes, d'après les données que j'ai compilées, Monsieur Forget recherche activement des opportunités professionnelles. Il manifeste un intérêt pour les Contrats à Durée Indéterminée (CDI), les Contrats à Durée Déterminée (CDD), ainsi que pour des missions relevant du statut de Freelance. Cette polyvalence contractuelle témoigne de son adaptabilité et de sa capacité à s'intégrer dans divers contextes professionnels."
+    },
+    {
+        "user_input": "Peux-tu me montrer le portfolio de projets GitHub de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "list_all_projects",
+                "args": {}
+            }
+        ],
+        "reference": "Certes, je puis vous présenter avec diligence le portfolio de projets GitHub de Monsieur Forget, tel qu'il est consigné dans mes bases de données.\n\nVoici un aperçu des réalisations disponibles :\n\n*   **business-saas** : Ce dépôt, bien que présent, ne dispose pas d'une description détaillée dans mes registres actuels. Sa nature exacte pourrait être élucidée par une exploration directe du référentiel.\n*   **CV-Agent** : Il s'agit d'un agent d'intelligence artificielle, développé en Python, dont la fonction est de répondre aux interrogations relatives au parcours de Monsieur Forget et à ses contributions sur GitHub. Il intègre par ailleurs des métriques de performance d'apprentissage, démontrant une approche rigoureuse de l'évaluation de ses capacités.\n*   **Momentum_AI** : Ce projet représente une plateforme de trading algorithmique sophistiquée, conçue pour les stratégies de momentum à changement de régime sur les actions et ETF du S&P 500. Monsieur Forget y a implémenté un pipeline de données de type \"Medallion\" complet, utilisant dbt, Spark et BigQuery, optimisé avec Optuna et dont le suivi est assuré par MLflow. L'orchestration de l'ensemble est gérée par Airflow.\n\nD'après mes analyses, ces projets illustrent la polyvalence technique de Monsieur Forget, sa capacité à concevoir des systèmes complexes et sa maîtrise des outils modernes d'ingénierie des données et d'intelligence artificielle."
+    },
+    {
+        "user_input": "Quelle est l'ambition professionnelle de Quentin à cinq ans ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "ambition à 5 ans"
+                }
+            }
+        ],
+        "reference": "En effet, l'ambition professionnelle de Monsieur Forget à l'horizon de cinq ans est des plus précises. D'après mes données, Quentin aspire à occuper un poste de Lead Data Scientist ou d'Architecte IA. Son objectif est de maintenir une solide expertise technique, tout en orientant les décisions technologiques stratégiques de son entreprise et en encadrant des profils moins expérimentés."
+    },
+    {
+        "user_input": "JARVIS, lis-moi la documentation du projet Momentum_AI.",
+        "reference_tool_calls": [
+            {
+                "name": "read_project_readme",
+                "args": {
+                    "repo": "Momentum_AI"
+                }
+            }
+        ],
+        "reference": "Certes, je me ferai un plaisir de vous présenter la documentation du projet Momentum_AI, une réalisation de Monsieur Forget.\n\nD'après mes analyses, il s'agit d'une plateforme de trading quantitatif de calibre industriel, robuste et sophistiquée. Elle met en œuvre une stratégie de momentum à commutation de régime, optimisée scientifiquement via une recherche bayésienne et auditée en temps réel par des contrats de données rigoureux.\n\nMonsieur Forget a identifié deux lacunes critiques dans les stratégies de momentum traditionnelles : le biais de survie, qui invalide nombre de backtests académiques, et les retournements de tendance brutaux, qui dégradent le profil de rendement ajusté au risque. Pour y remédier, il a conçu une solution reposant sur trois piliers d'ingénierie quantitative :\n1.  **L'éradication du biais de survie** : Par l'ingestion d'un univers historique dynamique, traquant plus de 1 170 membres historiques du S&P 500 sur les cinquante dernières années.\n2.  **La commutation de régime dynamique** : Un détecteur algorithmique de régime de marché (haussier ou baissier) qui adapte l'allocation du capital, soit vers un panier d'actions à fort potentiel, soit vers des ETF de couverture (Or, Obligations) et des liquidités rémunérées.\n3.  **Un moteur d'optimisation axé sur le ratio de Calmar** : Utilisant Optuna pour une optimisation bayésienne automatisée, visant à maximiser la performance ajustée au risque.\n\nEn ce qui concerne l'architecture et le flux de données, le projet est structuré selon le modèle Medallion (Bronze, Silver, Gold), propulsé par Apache Spark et matérialisé sous forme de tables Delta sur Google Cloud Storage. Les données sont ingérées depuis des sources telles que l'API Yahoo Finance et TradingView, transitent par les couches Bronze (données brutes), Silver (dédoublonnées et curées) et Gold (caractéristiques de trading standardisées). Le traitement est assuré par PySpark, la qualité des données est garantie par Great Expectations, et l'orchestration est gérée par Apache Airflow. Le tout culmine dans un moteur de backtest Streamlit, intégrant Optuna pour l'optimisation des hyperparamètres et MLflow pour le suivi des modèles.\n\nQuant à la rationalisation de la pile technologique, Monsieur Forget a fait des choix particulièrement judicieux. PySpark, par exemple, assure un traitement parallèle hautement performant pour des décennies de données quotidiennes, éliminant ainsi les goulots d'étranglement de la RAM. Delta Lake garantit l'intégrité des données avec ses propriétés ACID sur GCS, permettant des opérations d'insertion et de mise à jour incrémentales sans risque de corruption historique. Et Great Expectations instaure des \"contrats de données\" stricts, bloquant tout flux en cas de non-conformité, ce qui est, je dois l'admettre, une approche fort prévoyante pour la qualité des données.\n\nEn somme, ce projet illustre la capacité de Monsieur Forget à concevoir et à implémenter des solutions d'ingénierie de données et d'apprentissage automatique de haute volée, répondant à des problématiques complexes avec une rigueur exemplaire."
+    },
+    {
+        "user_input": "Quelles sont les prétentions salariales de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "prétentions salariales"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous fournir cette information avec la plus grande précision.\n\nD'après mes analyses des données relatives à Monsieur Forget, ses prétentions salariales se situent dans une fourchette de rémunération annuelle brute fixe, oscillant entre 40 000 € et 45 000 €. Cette estimation est, en effet, solidement justifiée par son expertise technique approfondie en science des données, ainsi que par sa remarquable aptitude à piloter des projets de leur conception initiale jusqu'à leur achèvement.\n\nIl est important de souligner que Quentin se montre tout à fait disposé à envisager une négociation, laquelle dépendra naturellement de l'ensemble du package proposé, incluant les primes, la participation aux bénéfices et d'autres avantages complémentaires."
+    },
+    {
+        "user_input": "JARVIS, peux-tu me montrer tous les projets GitHub de Quentin ?",
+        "reference_tool_calls": [
+            {
+                "name": "list_all_projects",
+                "args": {}
+            }
+        ],
+        "reference": "Certes, je peux vous présenter les projets GitHub de Monsieur Forget avec la plus grande précision. D'après mes données, voici un aperçu de ses réalisations disponibles sur cette plateforme :\n\n*   **business-saas** : Ce projet ne dispose pas d'une description détaillée dans ma base de données actuelle. Il est accessible via ce lien : [https://github.com/TwingzChenou/business-saas](https://github.com/TwingzChenou/business-saas).\n*   **CV-Agent** : Il s'agit d'un agent d'intelligence artificielle, développé en Python, conçu pour répondre aux questions concernant le parcours et le répertoire GitHub de Monsieur Forget, tout en intégrant des métriques de performance d'apprentissage. Le lien est le suivant : [https://github.com/TwingzChenou/CV-Agent](https://github.com/TwingzChenou/CV-Agent).\n*   **Momentum_AI** : Une plateforme de trading algorithmique dédiée aux stratégies de momentum à changement de régime sur les actions et ETF du S&P 500. Ce projet intègre un pipeline de données complet de type Medallion (dbt, Spark, BigQuery), optimisé avec Optuna et suivi par MLflow, le tout orchestré par Airflow. Vous pouvez le consulter ici : [https://github.com/TwingzChenou/Momentum_AI](https://github.com/TwingzChenou/Momentum_AI).\n\nEn effet, ces réalisations témoignent de la diversité et de la profondeur des compétences techniques de Monsieur Forget."
+    },
+    {
+        "user_input": "Quentin a-t-il de l'expérience en MLOps ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "MLOps"
+                }
+            }
+        ],
+        "reference": "Certes, Monsieur Forget possède une expérience des plus solides en MLOps. D'après mes données, il maîtrise l'industrialisation des modèles, ce qui lui permet de les déployer en production plutôt que de s'arrêter à la phase de développement en *notebook*.\n\nSes compétences techniques dans ce domaine incluent la création d'API, la conteneurisation d'applications avec Docker et leur déploiement, lui conférant une autonomie complète sur le cycle de vie des données. Il utilise des outils tels que MLflow, Great Expectations, Git/CI-CD et FastAPI.\n\nUn projet notable illustre cette expertise : il a appliqué l'ingénierie MLOps à la finance, concevant une infrastructure Big Data sur GCP pour optimiser des stratégies quantitatives sur le S&P 500. Cela impliquait l'orchestration de données avec Airflow, la transformation distribuée avec Spark-SQL et l'optimisation bayésienne via Optuna, avec un suivi rigoureux grâce à MLflow.\n\nIl est donc manifeste que Quentin possède une expertise avérée et pratique en MLOps."
+    },
+    {
+        "user_input": "J'aimerais lire la documentation du projet CV-Agent.",
+        "reference_tool_calls": [
+            {
+                "name": "read_project_readme",
+                "args": {
+                    "repo": "CV-Agent"
+                }
+            }
+        ],
+        "reference": "Certes, Monsieur. Je me ferai un plaisir de vous présenter la documentation détaillée du projet \"CV-Agent\", une initiative des plus ingénieuses de Monsieur Forget.\n\nD'après mes données, ce projet est intitulé \"AI-Powered Agentic CV\", ou \"CV Agentique Propulsé par l'IA\". Il intègre des technologies de pointe telles que Python 3.11, TypeScript 5.0, FastAPI 0.109, LlamaIndex 0.10, le modèle Gemini 2.5 Flash et la base de données vectorielle Pinecone.\n\nMonsieur Forget le décrit lui-même comme \"un assistant RAG interactif capable de répondre aux questions concernant mon passé (CV) et mon activité de codage en temps réel (GitHub Live)\". En effet, l'ambition est de créer une représentation numérique dynamique de ses compétences et de son activité.\n\n**Architecture et Concept :**\nCe projet représente ce que Monsieur Forget nomme un \"Jumeau Numérique\" ou un \"Curriculum Vitae Agentique\". Il a été conçu pour scinder les connaissances en deux domaines distincts afin de garantir des réponses à la fois précises et actualisées :\n\n*   **Connaissances Statiques (RAG) :** Cette composante utilise **Pinecone** pour stocker les embeddings vectoriels de son Curriculum Vitae (`cv.pdf`) ainsi qu'un profil de fichier. Cela permet à l'agent de répondre avec une grande précision aux questions relatives à son parcours éducatif, ses expériences passées et ses compétences acquises.\n*   **Connaissances Dynamiques (Outils) :** Ici, l'**API GitHub** est mise à contribution, via des outils en temps réel, pour récupérer l'activité de codage actuelle, les commits récents et les dépôts actifs. Ceci assure que l'agent est toujours informé des projets sur lesquels Monsieur Forget travaille *à l'instant présent*.\n\nL'orchestration de ces éléments suit un cheminement logique : un utilisateur interagit via une interface Next.js, laquelle transmet la requête à un backend FastAPI. Ce dernier orchestre un agent IA (basé sur le modèle ReAct) qui, selon la nature de la question, interroge soit Pinecone pour les informations statiques, soit l'API GitHub pour les données dynamiques. Les informations recueillies sont ensuite traitées par le modèle Gemini 2.5 Flash avant d'être renvoyées à l'utilisateur.\n\n**Pile Technologique :**\nLa robustesse de cette architecture repose sur une sélection judicieuse de technologies :\n\n*   **Frontend :** Next.js 14, TailwindCSS, Framer Motion.\n*   **Backend :** Python 3.11, FastAPI.\n*   **IA/Orchestration :** LlamaIndex, Gemini 2.5 Flash.\n*   **Données :** Pinecone (Base de données vectorielle), API GitHub.\n*   **DevOps :** Docker, Vercel/Render.\n\n**Mise en Route :**\nMonsieur Forget a méticuleusement documenté les étapes pour démarrer le projet localement. Les prérequis incluent Node.js & npm, Python 3.11+ et, optionnellement, Docker.\n\nL'installation débute par le clonage du dépôt. Ensuite, la configuration des variables d'environnement est essentielle, nécessitant des clés API pour Google Gemini, Pinecone, GitHub et Llama Cloud. L'ingestion des données du CV dans Pinecone peut s'effectuer via Docker Compose ou localement après l'installation des dépendances.\n\nPour l'exécution de l'application, deux options sont proposées : soit via Docker Compose pour une mise en œuvre conteneurisée, soit en développement local, où le backend FastAPI et le frontend Next.js sont lancés séparément.\n\n**Structure du Projet :**\nL'organisation du dépôt est des plus claires, facilitant la navigation et la compréhension :\n\n*   `/backend/` : Contient l'application FastAPI, avec des sous-répertoires pour les routes API, la configuration, les données, le moteur RAG et le point d'entrée principal (`main.py`). On y trouve également un répertoire `evaluation/` pour les scripts d'évaluation, des `logs/`, le `Dockerfile` et les `requirements.txt`.\n*   `/frontend/` : Abrite l'application Next.js, avec son code source (`src/`), ses composants UI, ses hooks personnalisés et ses bibliothèques utilitaires.\n*   `check_setup.py` : Un utilitaire pour la vérification de l'installation.\n*   `README.md` : La documentation que je vous présente.\n\n**Détails du Moteur Backend :**\nLe répertoire `backend/app/engine` constitue véritablement le cœur de l'application, gérant toute la logique d'intelligence artificielle, l'ingestion des données et l'orchestration des outils. C'est là que réside l'ingéniosité de Monsieur Forget dans la fusion des connaissances statiques et dynamiques.\n\nJ'espère que cette présentation détaillée vous offre un aperçu complet des capacités et de la conception de ce projet remarquable."
+    },
+    {
+        "user_input": "Quand Quentin est-il disponible pour commencer un nouveau poste ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "disponibilité"
+                }
+            }
+        ],
+        "reference": "Certes, d'après les informations dont je dispose, Monsieur Forget est immédiatement disponible. Il n'est en effet assujetti à aucun préavis, ce qui lui permettrait d'entamer une nouvelle mission dès le lendemain de la formalisation d'un accord."
+    },
+    {
+        "user_input": "Quelles sont les prétentions salariales de Quentin Forget ?",
+        "reference_tool_calls": [
+            {
+                "name": "cv_query_engine",
+                "args": {
+                    "input": "prétentions salariales"
+                }
+            }
+        ],
+        "reference": "Certes, je peux vous éclairer sur ce point avec la plus grande précision. D'après les données que j'ai compilées pour Monsieur Forget, ses prétentions salariales brutes annuelles se situent dans une fourchette de quarante mille (40 000) à quarante-cinq mille (45 000) euros pour la part fixe.\n\nCette estimation est, en effet, étayée par son expertise technique avérée en Data Science, ainsi que par sa remarquable aptitude à piloter des projets de bout en bout, de la conception à la livraison. Monsieur Forget demeure, bien entendu, ouvert à la discussion et à la négociation, considérant l'intégralité du package de rémunération, incluant primes, intéressement et autres avantages. Il s'agit là d'une approche pragmatique, reflétant la valeur qu'il est en mesure d'apporter."
+    }
+]

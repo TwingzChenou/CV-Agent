@@ -1,9 +1,16 @@
 # INFORMATIONS ET PROFILS COMPLÉMENTAIRES DE QUENTIN FORGET
 
+## COORDONNÉES DE CONTACT (CONTACTS)
+Voici les coordonnées de contact de Quentin Forget :
+- Téléphone : 06 40 12 47 83
+- Email : quentin-forget@hotmail.fr
+- LinkedIn : linkedin.com/in/quentin-forget-197705230
+- GitHub : github.com/TwingzChenou
+
 ## LOGISTIQUE, SALAIRE ET CONTRAT
 
 ### Prétentions Salariales
-Quentin Forget vise une rémunération brute annuelle comprise entre **45 000€ et 55 000€** (fixe). Cette fourchette est justifiée par son expertise technique en Data Science et sa capacité à gérer des projets de A à Z. Il reste ouvert à la négociation selon le package global (primes, intéressement, avantages).
+Quentin Forget vise une rémunération brute annuelle comprise entre **40 000€ et 45 000€** (fixe). Cette fourchette est justifiée par son expertise technique en Data Science et sa capacité à gérer des projets de A à Z. Il reste ouvert à la négociation selon le package global (primes, intéressement, avantages).
 
 ### Disponibilité et Démarrage
 Le candidat est **disponible immédiatement**. Il n'a aucun préavis à effectuer auprès d'un autre employeur et peut démarrer une nouvelle mission dès le lendemain d'une signature.
@@ -11,8 +18,15 @@ Le candidat est **disponible immédiatement**. Il n'a aucun préavis à effectue
 ### Mobilité Géographique et Télétravail
 Quentin réside en **Île-de-France**. Il privilégie les postes situés à Paris ou en proche banlieue. Il est également très intéressé par les opportunités en **Full Remote** (100% télétravail) ou en format hybride. Il ne souhaite pas déménager hors de l'Île-de-France dans l'immédiat.
 
-### Type de Contrat Recherché
-Sa priorité est un **CDI (Contrat à Durée Indéterminée)** pour construire une relation de long terme. Cependant, il étudie les propositions de **CDD** si le projet technique est ambitieux et stimulant.
+### Types de Contrats Recherchés
+Sa priorité est un **CDI (Contrat à Durée Indéterminée)** pour construire une relation de long terme. Cependant, il étudie les propositions de **CDD** ou en **Freelance** si le projet technique est ambitieux et stimulant.
+
+### Métiers Recherchés
+Quentin déploie une stratégie ciblée autour de trois piliers majeurs de l'écosystème Data & IA, lui permettant de s'adapter aux différents besoins et architectures des entreprises :
+* **Ingénieur Data / Cloud Data Engineer :** Axé sur la robustesse de l'infrastructure, la conception de pipelines complexes (Batch/Streaming), l'automatisation (Airflow) et la modélisation cloud (GCP, Architecture Médaillon).
+* **Data Scientist / Machine Learning Engineer (MLE) :** Axé sur la modélisation statistique, le feature engineering, le traitement de séries temporelles et l'industrialisation des modèles (MLOps, MLflow, Docker).
+* **AI Engineer / Développeur GenAI :** Axé sur l'intégration des LLMs, la conception d'architectures RAG avancées (LlamaIndex, LangChain, bases vectorielles Pinecone/Qdrant) et l'orchestration d'agents autonomes.
+
 
 ---
 

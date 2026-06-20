@@ -1,5 +1,6 @@
 import sys
 import os
+import functools
 from pathlib import Path
 
 current_file = Path(__file__).resolve()
@@ -31,9 +32,18 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 setup_logging()
 logger = logging.getLogger(__name__)
 
+# Singleton GitHub
+_git_client = None
+
+def get_github_client():
+    global _git_client
+    if _git_client is None:
+        _git_client = Github(GITHUB_TOKEN)
+    return _git_client
+
 # Setup github
 def setup_github(username: str = "TwingzChenou"):
-    git = Github(GITHUB_TOKEN)
+    git = get_github_client()
     return git.get_user(username)
 
 # Setup Gemini
@@ -54,12 +64,13 @@ def setup_llm():
 
 
 # List github projects
+@functools.lru_cache(maxsize=16)
 def list_github_projects() -> str:
     """
     Récupère la liste de tous les projets publics (repositories) de l'utilisateur.
     Renvoie le nom, la description et le lien de chaque projet.
     """ 
-    git = Github(GITHUB_TOKEN)
+    git = get_github_client()
     user = git.get_user("TwingzChenou")
     
     # Récupération des dépôts (repos)
@@ -79,16 +90,17 @@ def list_github_projects() -> str:
 
 
 # Get github activity
+@functools.lru_cache(maxsize=64)
 def get_github_activity(repo: str) -> str:
     """
     Récupère INSTANTANÉMENT le README d'un dépôt spécifique via l'API directe.
     Plus de scan de dossiers, plus de lenteur.
     """
 
-    git = Github(GITHUB_TOKEN)
+    git = get_github_client()
     user = git.get_user("TwingzChenou")
     
-    # 2. Ciblage direct du repo
+    # 2. Cibrage direct du repo
     repo_obj = user.get_repo(repo)
     
     # 3. Demande spécifique du README
@@ -191,8 +203,8 @@ def main():
     logger.info("✅ CV info tool setup completed.")
 
     # Get Profile tool
-    get_profile_tool(index)
-    logger.info("✅ Profile tool setup completed.")
+    # get_profile_tool(index)
+    logger.info("✅ Profile tool setup completed (skipped).")
     
     # Get list github projects
     list_github_projects()
