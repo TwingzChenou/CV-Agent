@@ -17,6 +17,7 @@ from dspy.teleprompt import Teleprompter
 from llama_index.core.agent import ReActAgent
 from llama_index.llms.gemini import Gemini
 import asyncio
+from langfuse.decorators import observe, langfuse_context
 
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.memory import ChatMemoryBuffer
@@ -24,15 +25,309 @@ from llama_index.core.memory import ChatMemoryBuffer
 # Load environment variables
 load_dotenv()
 
+# Setup Logging
+setup_logging()
+logger = logging.getLogger(__name__)
+
+# --- Langfuse & OpenInference (DSPy) Instrumentation ---
+LANGFUSE_PUBLIC_KEY = os.getenv("LANGFUSE_PUBLIC_KEY")
+LANGFUSE_SECRET_KEY = os.getenv("LANGFUSE_SECRET_KEY")
+LANGFUSE_HOST = os.getenv("LANGFUSE_HOST") or os.getenv("LANGFUSE_BASE_URL") or "https://cloud.langfuse.com"
+
+from contextvars import ContextVar
+from llama_index.core.callbacks import CallbackManager, CBEventType, EventPayload
+from llama_index.core.callbacks.base import BaseCallbackHandler
+
+# Context variable for tracking token usage per request/context
+agent_token_usage_var = ContextVar("agent_token_usage", default=None)
+
+# Pricing parameters (per 1,000,000 tokens)
+GEMINI_INPUT_COST_PER_M = 0.30
+GEMINI_OUTPUT_COST_PER_M = 2.50
+GEMINI_EMBEDDING_COST_PER_M = 0.15
+
+def estimate_tokens(text: str) -> int:
+    if not text:
+        return 0
+    return max(1, len(text) // 4)
+
+def calculate_cost(prompt_tokens, completion_tokens, embedding_tokens):
+    return (prompt_tokens * GEMINI_INPUT_COST_PER_M + 
+            completion_tokens * GEMINI_OUTPUT_COST_PER_M + 
+            embedding_tokens * GEMINI_EMBEDDING_COST_PER_M) / 1_000_000
+
+class ContextTokenCountingHandler(BaseCallbackHandler):
+    def __init__(self):
+        super().__init__(event_starts_to_ignore=[], event_ends_to_ignore=[])
+
+    def start_trace(self, trace_id: str | None = None) -> None:
+        pass
+
+    def end_trace(self, trace_id: str | None = None, trace_map: dict | None = None) -> None:
+        pass
+
+    def on_event_start(self, event_type, payload=None, event_id="", parent_id="", **kwargs):
+        pass
+
+    def on_event_end(self, event_type, payload=None, event_id="", **kwargs):
+        if payload is None:
+            return
+            
+        token_usage = agent_token_usage_var.get()
+        if token_usage is None:
+            return
+            
+        if event_type == CBEventType.LLM:
+            response = payload.get(EventPayload.RESPONSE)
+            if response is not None:
+                # Check additional_kwargs or raw responses for tokens
+                prompt_tokens = response.additional_kwargs.get("prompt_tokens", 0)
+                completion_tokens = response.additional_kwargs.get("completion_tokens", 0)
+                
+                # Try raw model response if present
+                if prompt_tokens == 0 or completion_tokens == 0:
+                    raw = getattr(response, "raw", None)
+                    if raw and hasattr(raw, "usage_metadata"):
+                        usage = raw.usage_metadata
+                        if usage:
+                            prompt_tokens = getattr(usage, "prompt_token_count", prompt_tokens)
+                            completion_tokens = getattr(usage, "candidates_token_count", completion_tokens)
+                
+                # Fallback to estimate if still 0
+                if prompt_tokens == 0:
+                    messages = payload.get(EventPayload.MESSAGES)
+                    prompt_text = ""
+                    if messages:
+                        prompt_text = "\n".join([str(m.content) for m in messages])
+                    else:
+                        prompt_text = str(payload.get(EventPayload.PROMPT, ""))
+                    prompt_tokens = estimate_tokens(prompt_text)
+                    
+                if completion_tokens == 0:
+                    completion_text = str(response)
+                    completion_tokens = estimate_tokens(completion_text)
+                    
+                token_usage["prompt_tokens"] += prompt_tokens
+                token_usage["completion_tokens"] += completion_tokens
+                
+        elif event_type == CBEventType.EMBEDDING:
+            chunks = payload.get(EventPayload.CHUNKS)
+            if chunks:
+                embedding_tokens = sum(estimate_tokens(chunk) for chunk in chunks)
+                token_usage["embedding_tokens"] += embedding_tokens
+
+if LANGFUSE_PUBLIC_KEY and LANGFUSE_SECRET_KEY:
+    try:
+        from llama_index.core import set_global_handler, Settings
+        set_global_handler(
+            "langfuse",
+            public_key=LANGFUSE_PUBLIC_KEY,
+            secret_key=LANGFUSE_SECRET_KEY,
+            host=LANGFUSE_HOST
+        )
+        logger.info("Langfuse global callback handler registered for LlamaIndex.")
+        
+        # Monkey patch LlamaIndexCallbackHandler to support Gemini token parsing, model name normalization, and cost calculation
+        from langfuse.llama_index.llama_index import LlamaIndexCallbackHandler
+        
+        def patched_parse_usage_from_event_payload(self, event_payload: dict):
+            model = None
+            usage = None
+            if not event_payload:
+                return model, usage
+            
+            response = event_payload.get(EventPayload.RESPONSE)
+            
+            # 1. Extract model name
+            if response is not None:
+                if hasattr(response, "raw") and response.raw is not None:
+                    model = getattr(response.raw, "model", None)
+                if not model and hasattr(response, "model"):
+                    model = getattr(response, "model", None)
+            
+            if not model:
+                model = "gemini-2.5-flash"
+                
+            # 2. Extract or estimate tokens
+            prompt_tokens = 0
+            completion_tokens = 0
+            
+            if response is not None:
+                if hasattr(response, "additional_kwargs"):
+                    prompt_tokens = response.additional_kwargs.get("prompt_tokens", 0)
+                    completion_tokens = response.additional_kwargs.get("completion_tokens", 0)
+                    
+                if prompt_tokens == 0 or completion_tokens == 0:
+                    raw = getattr(response, "raw", None)
+                    if raw and hasattr(raw, "usage_metadata"):
+                        usage_metadata = raw.usage_metadata
+                        if usage_metadata:
+                            prompt_tokens = getattr(usage_metadata, "prompt_token_count", prompt_tokens)
+                            completion_tokens = getattr(usage_metadata, "candidates_token_count", completion_tokens)
+                            
+                # Fallback to estimation
+                if prompt_tokens == 0:
+                    messages = event_payload.get(EventPayload.MESSAGES)
+                    prompt_text = ""
+                    if messages:
+                        prompt_text = "\n".join([str(m.content) for m in messages])
+                    else:
+                        prompt_text = str(event_payload.get(EventPayload.PROMPT, ""))
+                    prompt_tokens = estimate_tokens(prompt_text)
+                    
+                if completion_tokens == 0:
+                    completion_text = str(response)
+                    completion_tokens = estimate_tokens(completion_text)
+                    
+            total_tokens = prompt_tokens + completion_tokens
+            
+            # 3. Calculate costs
+            input_cost = (prompt_tokens * GEMINI_INPUT_COST_PER_M) / 1_000_000
+            output_cost = (completion_tokens * GEMINI_OUTPUT_COST_PER_M) / 1_000_000
+            total_cost = input_cost + output_cost
+            
+            # 4. Clean up model name to match Langfuse's default registry
+            if model:
+                if model.startswith("models/"):
+                    model = model[7:]
+                elif model.startswith("gemini/"):
+                    model = model[7:]
+                    
+            usage = {
+                "input": prompt_tokens,
+                "output": completion_tokens,
+                "total": total_tokens,
+                "unit": "TOKENS",
+                "input_cost": input_cost,
+                "output_cost": output_cost,
+                "total_cost": total_cost
+            }
+            
+            return model, usage
+
+        def patched_handle_embedding_events(self, event_id: str, parent, trace_id: str):
+            events = self.event_map[event_id]
+            start_event, end_event = events[0], events[-1]
+
+            name = "Embedding"
+            model = None
+            timeout = None
+            if start_event.payload and EventPayload.SERIALIZED in start_event.payload:
+                serialized = start_event.payload.get(EventPayload.SERIALIZED, {})
+                name = serialized.get("class_name", "Embedding")
+                model = serialized.get("model_name", None)
+                timeout = serialized.get("timeout", None)
+
+            token_count = 0
+            if end_event.payload:
+                chunks = end_event.payload.get(EventPayload.CHUNKS, [])
+                try:
+                    token_count = sum(self._token_counter.get_string_tokens(chunk) for chunk in chunks)
+                except Exception:
+                    token_count = 0
+                if token_count == 0:
+                    token_count = sum(estimate_tokens(chunk) for chunk in chunks)
+
+            cleaned_model = model
+            if cleaned_model:
+                if cleaned_model.startswith("models/"):
+                    cleaned_model = cleaned_model[7:]
+                elif cleaned_model.startswith("gemini/"):
+                    cleaned_model = cleaned_model[7:]
+
+            embed_cost = (token_count * GEMINI_EMBEDDING_COST_PER_M) / 1_000_000
+
+            usage = {
+                "input": token_count,
+                "output": 0,
+                "total": token_count,
+                "unit": "TOKENS",
+                "input_cost": embed_cost,
+                "total_cost": embed_cost
+            }
+
+            input_payload = self._parse_input_from_event(end_event)
+            output_payload = self._parse_output_from_event(end_event)
+
+            generation = parent.generation(
+                id=event_id,
+                trace_id=trace_id,
+                name=name,
+                start_time=start_event.time,
+                end_time=end_event.time,
+                version=self.version,
+                model=cleaned_model,
+                input=input_payload,
+                output=output_payload,
+                usage=usage,
+                model_parameters={
+                    "request_timeout": timeout,
+                },
+            )
+
+            return generation
+
+        original_get_root_observation = LlamaIndexCallbackHandler._get_root_observation
+
+        def patched_get_root_observation(self):
+            from langfuse.llama_index.llama_index import context_root, context_trace_metadata
+            user_provided_root = context_root.get()
+            if user_provided_root is not None:
+                self.trace = user_provided_root
+                if getattr(self, "update_stateful_client", False):
+                    trace_metadata = context_trace_metadata.get()
+                    name = (
+                        trace_metadata["name"]
+                        or self.trace_name
+                        or f"LlamaIndex_{self._llama_index_trace_name}"
+                    )
+                    version = trace_metadata["version"] or self.version
+                    release = trace_metadata["release"] or self.release
+                    session_id = trace_metadata["session_id"] or self.session_id
+                    user_id = trace_metadata["user_id"] or self.user_id
+                    metadata = trace_metadata["metadata"] or self.metadata
+                    tags = trace_metadata["tags"] or self.tags
+                    public = trace_metadata["public"] or None
+
+                    user_provided_root.update(
+                        name=name,
+                        version=version,
+                        session_id=session_id,
+                        user_id=user_id,
+                        metadata=metadata,
+                        tags=tags,
+                        release=release,
+                        public=public,
+                    )
+                return user_provided_root
+            else:
+                return original_get_root_observation(self)
+
+        LlamaIndexCallbackHandler._parse_usage_from_event_payload = patched_parse_usage_from_event_payload
+        LlamaIndexCallbackHandler._handle_embedding_events = patched_handle_embedding_events
+        LlamaIndexCallbackHandler._get_root_observation = patched_get_root_observation
+
+        # Register the context token counting handler globally in LlamaIndex Settings
+        token_handler = ContextTokenCountingHandler()
+        if Settings.callback_manager is None:
+            Settings.callback_manager = CallbackManager([token_handler])
+        else:
+            Settings.callback_manager.add_handler(token_handler)
+    except Exception as e:
+        logger.error(f"Failed to register Langfuse handler: {e}")
+
+    try:
+        from openinference.instrumentation.dspy import DSPyInstrumentor
+        DSPyInstrumentor().instrument()
+        logger.info("DSPy auto-instrumentation via OpenInference enabled.")
+    except Exception as e:
+        logger.error(f"Failed to register DSPyInstrumentor: {e}")
+
 # --- Configuration ---
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 PINECONE_INDEX = os.getenv("PINECONE_INDEX")
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
-
-# Setup logging
-setup_logging()
-logger = logging.getLogger(__name__)
 
 llm = setup_llm()
 
@@ -320,9 +615,25 @@ agent = JarvisAgent(
     pinecone_index=pinecone_index
 )
 
-async def generate_response(query):
+@observe(name="generate_response")
+async def generate_response(query, session_id=None, user_id=None):
     logger.info(f"Query: {query}")
     
+    # Mettre à jour la trace Langfuse avec la session et l'utilisateur si disponibles
+    if session_id:
+        langfuse_context.update_current_trace(session_id=session_id)
+    if user_id:
+        langfuse_context.update_current_trace(user_id=user_id)
+        
+    # Nest LlamaIndex traces inside this trace
+    try:
+        from langfuse.llama_index.llama_index import context_root
+        lf_handler = langfuse_context.get_current_llama_index_handler()
+        if lf_handler:
+            context_root.set(lf_handler.trace or lf_handler.root_span)
+    except Exception as e:
+        logger.error(f"Failed to link LlamaIndex context to Langfuse trace: {e}")
+        
     agent_input = (
         f"{query}\n"
         f"### DIRECTIVE DE CONTRÔLE ###\n"
@@ -331,9 +642,37 @@ async def generate_response(query):
         f"Réponds en tant qu'Assistant J.A.R.V.I.S en parlant de Quentin à la 3ème personne ('Il', 'Quentin', 'Le candidat')."
     )
     
-    response = await agent.run(agent_input)
-    logger.info(f"Response: {response}")
-    return str(response)
+    # Initialize context-local token counting
+    token_usage = {"prompt_tokens": 0, "completion_tokens": 0, "embedding_tokens": 0}
+    token_usage_token = agent_token_usage_var.set(token_usage)
+    
+    try:
+        # Estimate DSPy classifier tokens (prompt ~ 350, completion ~ 10)
+        token_usage["prompt_tokens"] += 350
+        token_usage["completion_tokens"] += 10
+        
+        response = await agent.run(agent_input)
+        
+        # Calculate cost and metadata
+        final_usage = agent_token_usage_var.get()
+        prompt_tokens = final_usage["prompt_tokens"]
+        completion_tokens = final_usage["completion_tokens"]
+        embedding_tokens = final_usage["embedding_tokens"]
+        cost = calculate_cost(prompt_tokens, completion_tokens, embedding_tokens)
+        
+        langfuse_context.update_current_trace(
+            metadata={
+                "cost_usd": cost,
+                "prompt_tokens": prompt_tokens,
+                "completion_tokens": completion_tokens,
+                "embedding_tokens": embedding_tokens
+            }
+        )
+        
+        logger.info(f"Response: {response} | Cost: ${cost:.6f}")
+        return str(response)
+    finally:
+        agent_token_usage_var.reset(token_usage_token)
     
 
 

@@ -25,3 +25,16 @@ loguru
 llama-index
 llama-index-llms-ollama
 llama-index-embeddings-ollama
+
+# Langfuse Observability & Tracing
+langfuse
+llama-index-callbacks-langfuse
+openinference-instrumentation-dspy
+opentelemetry-api
+opentelemetry-sdk
+
+# Testing Dependencies
+pytest
+pytest-mock
+pytest-asyncio
+httpx
