@@ -96,20 +96,39 @@ def get_github_activity(repo: str) -> str:
     Récupère INSTANTANÉMENT le README d'un dépôt spécifique via l'API directe.
     Plus de scan de dossiers, plus de lenteur.
     """
+    import re
+    from github import GithubException
 
-    git = get_github_client()
-    user = git.get_user("TwingzChenou")
-    
-    # 2. Cibrage direct du repo
-    repo_obj = user.get_repo(repo)
-    
-    # 3. Demande spécifique du README
-    readme = repo_obj.get_readme()
-    
-    # 4. Décodage (Le contenu arrive encodé, il faut le traduire en texte)
-    content = readme.decoded_content.decode("utf-8")
-    
-    return f"README Content for {repo}:\n{content[:5000]}"
+    # Validation stricte du nom du repository (principe du moindre privilège)
+    if not repo or not re.match(r"^[a-zA-Z0-9_-]+$", repo):
+        logger.error(f"Tentative d'accès avec un nom de dépôt invalide : {repo}")
+        raise ValueError("Nom de dépôt GitHub invalide. Seuls les caractères alphanumériques, les tirets et les underscores sont autorisés.")
+
+    try:
+        git = get_github_client()
+        user = git.get_user("TwingzChenou")
+        
+        # 2. Ciblage direct du repo
+        repo_obj = user.get_repo(repo)
+        
+        # 3. Demande spécifique du README
+        readme = repo_obj.get_readme()
+        
+        # 4. Décodage (Le contenu arrive encodé, il faut le traduire en texte)
+        content = readme.decoded_content.decode("utf-8")
+        
+        return f"README Content for {repo}:\n{content[:5000]}"
+    except GithubException as ge:
+        logger.error(f"GitHub API Error for repo {repo} : {ge.status} - {ge.data}")
+        if ge.status == 404:
+            return f"README ou dépôt '{repo}' introuvable."
+        elif ge.status == 403:
+            return "Limite de taux de l'API GitHub atteinte ou accès refusé."
+        else:
+            return f"Erreur de communication avec l'API GitHub ({ge.status})."
+    except Exception as e:
+        logger.error(f"Unexpected error retrieving README for {repo}: {e}")
+        return "Une erreur inattendue est survenue lors de la récupération des données du dépôt."
 
 
 

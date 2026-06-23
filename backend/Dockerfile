@@ -27,12 +27,17 @@ ENV PYTHONPATH=/app
 # Copy installed packages from builder
 COPY --from=builder /install /usr/local
 
-# Copy application code
+# Create a non-root user
+RUN adduser --disabled-password --gecos '' appuser
+
+# Copy application code (owned by root, read-only for appuser)
 COPY . .
 
-# Create a non-root user
-RUN adduser --disabled-password --gecos '' appuser && \
-    chown -R appuser:appuser /app
+# Pre-create writeable directories for the application process (logs)
+RUN mkdir -p /app/logs && \
+    chown -R appuser:appuser /app/logs
+
+# Switch to the non-root user
 USER appuser
 
 # Expose port (Render sets PORT env var, but we expose 8000 as default/doc)

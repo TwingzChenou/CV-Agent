@@ -125,10 +125,12 @@ npm run dev
 │   │   ├── data/           # Data & Loaders
 │   │   ├── engine/         # RAG Engine & Tools
 │   │   ├── main.py         # App Entrypoint
-│   ├── evaluation/         # Evaluation Scripts
-│   │   ├── datasets/       # Evaluation Datasets
-│   │   ├── generate_dataset.py # Dataset Generator
-│   │   └── run_eval_llamaIndex.py # LlamaIndex Eval Script
+│   ├── evaluation/         # Evaluation Framework
+│   │   ├── datasets/       # Test Datasets & Reports (CSV / JSON)
+│   │   ├── evals/          # Evaluation Scripts
+│   │   │   └── generate_evals_global.py # Global Eval Runner (with Langfuse & Cost Auditing)
+│   │   └── experiments/    # Generation & Diagnostics
+│   │       └── generate_tests_datasets.py # Pydantic + Gemini Test Suite Generator
 │   ├── logs/               # Application Logs
 │   ├── Dockerfile          # Container Configuration
 │   └── requirements.txt    # Python Dependencies
@@ -150,16 +152,20 @@ The `backend/app/engine` directory is the brain of the application, managing the
 
 ### `generate.py`
 **The Orchestrator.** This file handles the main chat generation logic.
+*   **Dual Ingest & Fallback Pipeline:**
+    1.  **Fast Path (Gemini Context Caching):** Attempts to fetch or build the context cache directly on the Gemini server for ultra-low latencies (< 2.5s) and 75% cost savings.
+    2.  **Slow Path (Standard ReAct Agent):** In case caching fails, falls back to the LlamaIndex ReAct agent powered by Pinecone RAG and live tools.
 *   **Intent Classification:** Uses **DSPy** to classify user queries into categories like `chitchat` (handled directly), `cv` (requires RAG), or `list_all_projects` (requires GitHub API).
+*   **Cost Calculation:** Calculates prompt, cache-hit, and completion costs via dynamic pricing formulas, and integrates token auditing.
 *   **System Prompt:** Defines the persona of the agent ("Quentin Forget") and sets strict behavioral rules (STAR method, professional tone).
-*   **Agent Initialization:** Configures the **LlamaIndex ReActAgent** with the necessary tools and LLM (Gemini 2.5 Flash).
-*   **Response Generation:** Route the query to either a direct LLM call or the Agent based on the classified intent.
 
 ### `tools.py`
 **The Toolbelt.** This file defines the specific capabilities (tools) the agent can use.
 *   **GitHub Integration:**
     *   `list_github_projects`: Fetches the user's public repositories using the GitHub API.
     *   `get_github_activity`: Retrieves the README content of a specific repository for real-time project context.
+*   **Input Sanitization:** Uses a strict regex pattern (`^[a-zA-Z0-9_-]+$`) on the repo argument to prevent path traversal and command injection exploits.
+*   **Exception Handling:** Captures `GithubException` (handling 404, 403, and rates) gracefully to avoid leaking server stack traces to public clients.
 *   **CV RAG Tool:**
     *   `cv_query_engine`: Creates a query engine connected to the Pinecone vector database to answer questions about the CV.
 *   **Tool Assembly:** The `get_tools()` function packages these functions into LlamaIndex-compatible `FunctionTool` objects for the agent.
@@ -176,21 +182,78 @@ The `backend/app/engine` directory is the brain of the application, managing the
 *   **Splitting & Parsing:** Uses **LlamaParse** (via `LLAMA_CLOUD_API_KEY`) to accurately parse and convert documents (including PDFs) into markdown format for better embedding quality.
 *   **Execution:** Calls the indexing pipeline from `index.py` to store the processed chunks in the vector database.
 
+### `caching.py` [NEW]
+**The Cache Manager.** Manages the Gemini Context Caching lifecycle using the `google-genai` SDK.
+*   **Compilation:** Bundles static knowledge (system prompt, parsed CV PDF, profile metadata, GitHub project list, and repository READMEs) into a unified context block (~5,500 tokens).
+*   **Lifecycle Management:** Searches for an active cache (`cv_agent_context_cache`). If found, it extends its TTL by 1 hour (`3600s`). If expired or non-existent, it creates a new context cache, ensuring high cache hit rates (>99%).
+
 ## 🧪 Evaluation Framework Details
 
-The `backend/evaluation` directory contains scripts to ensure the quality and accuracy of the agent's responses using **LlamaIndex Evaluation** tools.
+The `backend/evaluation` directory contains scripts to ensure the quality and accuracy of the agent's responses using **Ragas** and **LlamaIndex Evaluation** tools.
 
-### `generate_dataset.py`
-**The Scenario Generator.** This script automates the creation of test cases.
-*   **Tool Analysis:** Iterates through available tools in `tools.py`.
-*   **Scenario Creation:** Uses Gemini to invent 5 distinct user questions per tool that *must* use that specific tool to be answered correctly.
-*   **Output:** Generates a JSON dataset (`datasets/agent_RAG_dataset.json`) of test queries.
+### `generate_tests_datasets.py`
+**The Scenario Generator.** This script automates the creation of high-quality test cases using Pydantic validation and Gemini JSON schemas.
+*   **Structured Pydantic Models:** Defines standard structures for target tool calls (`ToolCallModel`), tool arguments (`ToolArgsModel`), and test scenarios (`ScenarioModel`).
+*   **Ground Truth Ingestion:** Queries the actual RAG engine and live GitHub tools to inject real context for each scenario.
+*   **J.A.R.V.I.S Tone Synthesis:** Prompts Gemini to synthesize the perfect "reference" answer, ensuring the English-Butler persona and third-person rules are followed.
+*   **Output:** Generates a robust JSON dataset (`datasets/agent_test_suite_100.json`) containing 100 test scenarios.
 
-### `run_eval_llamaIndex.py`
-**The Judge.** This script runs the evaluation pipeline to measure performance.
-*   **LlamaIndex Evaluators:** Uses `FaithfulnessEvaluator` and `RelevancyEvaluator` (with Gemini as the judge LLM) to score responses.
-*   **Batch Inference:** Runs the agent against the dataset defined in `datasets/agent_RAG_dataset.json`.
-*   **Reporting:** Outputs a pandas DataFrame and CSV (`datasets/evaluation_results.csv`) with fidelity and relevancy scores for each question.
+### `generate_evals_global.py`
+**The Evaluation Runner & Judge.** This script executes evaluations to score the agent's performance.
+*   **Multi-Turn & Agent Metrics:** Uses Ragas evaluators to score `ToolCallAccuracy`, `AgentGoalAccuracyWithReference`, `_TopicAdherenceScore`, and `ToolCallF1`.
+*   **Single-Turn & RAG Metrics:** Evaluates retrieval quality using `ContextPrecision`, `ContextRecall`, `Faithfulness`, and `AnswerRelevancy`.
+*   **Token & Cost Auditing:** Tracks exact input, output, and embedding tokens consumed during agent calls and evaluation, calculating total USD cost.
+*   **Langfuse Integration:** Logs evaluation runs, scores, and costs directly to the Langfuse observability dashboard for analytics.
+*   **Reporting:** Saves evaluation results to a CSV report (`datasets/ragas_eval_report.csv`).
+
+## ⚡ Optimization & Security Hardening
+
+This project incorporates advanced performance optimization and security hardening following the **principle of least privilege**:
+
+### Gemini Context Caching
+To achieve extremely low response latencies (< 2.5s) and reduce API token consumption costs by **75%**, the application caches the static context (system instruction + CV + GitHub metadata) directly on the Gemini server.
+- **Cache Name:** `cv_agent_context_cache`
+- **TTL (Time to Live):** 1 hour (`3600s`), automatically extended upon each cache hit.
+- **Cache Hit Rate:** **> 99%** under continuous traffic, meaning only the user's new question is charged at full input rates.
+
+### Container Security & Hardening
+- **Non-Root Execution:** 
+  - Backend runs under `appuser` (UID 1000).
+  - Frontend runs under the default `node` user (UID 1000).
+  - Neither container runs processes as `root`.
+- **Immutable Codebase:** 
+  - All source code files (`.py`) inside the backend container are owned by `root:root` and set to read-only for the application process. This prevents runtime code injection or file overwriting in case of Remote Code Execution (RCE) exploits.
+  - The application process is only granted write access to the `/app/logs` directory.
+
+### API & Code Sanitization
+- **Strict Input Validation:** Input repository names in `get_github_activity` are validated against a strict regular expression (`^[a-zA-Z0-9_-]+$`) to prevent path traversal or parameter injection attacks.
+- **Robust Exception Handling:** GitHub API calls handle rate-limiting and missing repositories gracefully with dedicated logging.
+
+### Permissions & Secret Management
+- **GitHub Actions Workflow:** CI permissions are locked down to `permissions: contents: read` to protect repository integrity.
+- **Pinecone Vector Database:** FastAPI only queries embeddings. In production (e.g., Render), configure the environment using a **Read-Only API Key**. The Read-Write API Key should only be used locally for the data ingestion script (`loader.py`).
+- **GitHub Token:** Use a personal access token (PAT) restricted strictly to public repository read scopes.
+
+## 🧹 Repository Cleanup & Maintenance
+
+To keep the codebase clean and avoid security risks, obsolete and temporary test scripts were removed:
+- `backend/list_embeddings.py` (obsolete local testing script)
+- `backend/test_embedding_local.py` (obsolete local embedding verification)
+- `test_agent_manual.py` (legacy manual testing)
+- `test_github_read.py` (legacy manual github tests)
+- `backend/evaluation/run_eval_llamaIndex.py` (obsolete native LlamaIndex evaluator, replaced by Ragas runner)
+- `backend/evaluation/experiments/generate_dataset.py` (legacy local Ollama dataset generator)
+- `backend/evaluation/experiments/test_ollama_connection.py` (legacy local Ollama connectivity test)
+- `backend/evaluation/evals/test_metrics_ragas.py` (broken/obsolete local Ragas evaluation attempt)
+- `backend/evaluation/evals/test_agent_response.py` (legacy manual playground script for response formatting)
+- `backend/evaluation/datasets/agent_RAG_dataset.json` (obsolete first 61-question scenario dataset)
+
+## 🧪 Testing the Security & Caching Features
+
+You can run the unit test suite to verify cost calculations, caching fallback logic, and strict regex validations:
+```bash
+PYTHONPATH=backend .venv/bin/pytest backend/tests
+```
 
 ## Key Features
 

@@ -329,11 +329,25 @@ PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 PINECONE_INDEX = os.getenv("PINECONE_INDEX")
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 
+from google import genai
+from google.genai import types
+from app.engine.caching import get_or_create_cv_cache
+
 llm = setup_llm()
+genai_client = genai.Client(api_key=GOOGLE_API_KEY)
 
 # Setup DSPy
 lm = dspy.LM("gemini/gemini-2.5-flash", api_key=GOOGLE_API_KEY, temperature=0)
 dspy.settings.configure(lm=lm)
+
+# Pricing parameters (per 1,000,000 tokens)
+GEMINI_CACHED_INPUT_COST_PER_M = 0.075 # 75% cheaper for cached input tokens
+
+def calculate_cache_cost(prompt_tokens, cached_tokens, completion_tokens):
+    uncached_input = max(0, prompt_tokens - cached_tokens)
+    return (uncached_input * GEMINI_INPUT_COST_PER_M +
+            cached_tokens * GEMINI_CACHED_INPUT_COST_PER_M +
+            completion_tokens * GEMINI_OUTPUT_COST_PER_M) / 1_000_000
 
 # --- DSPy Intent Classifier ---
 class IntentSignature(dspy.Signature):
@@ -634,45 +648,89 @@ async def generate_response(query, session_id=None, user_id=None):
     except Exception as e:
         logger.error(f"Failed to link LlamaIndex context to Langfuse trace: {e}")
         
-    agent_input = (
-        f"{query}\n"
-        f"### DIRECTIVE DE CONTRÔLE ###\n"
-        f"Instruction critique : L'utilisateur s'adresse à toi ('Tu') par habitude, mais tu es une IA. "
-        f"En tant que J.A.R.V.I.S, tu dois répondre pour Quentin, jamais à la première personne. "
-        f"Réponds en tant qu'Assistant J.A.R.V.I.S en parlant de Quentin à la 3ème personne ('Il', 'Quentin', 'Le candidat')."
-    )
-    
-    # Initialize context-local token counting
-    token_usage = {"prompt_tokens": 0, "completion_tokens": 0, "embedding_tokens": 0}
-    token_usage_token = agent_token_usage_var.set(token_usage)
-    
+    # 1. Tente d'utiliser le cache de contexte Gemini (Inférence directe ultra-rapide)
     try:
-        # Estimate DSPy classifier tokens (prompt ~ 350, completion ~ 10)
-        token_usage["prompt_tokens"] += 350
-        token_usage["completion_tokens"] += 10
+        # get or create the cache
+        cache_name = get_or_create_cv_cache(genai_client)
+        logger.info(f"Using context cache: {cache_name}")
         
-        response = await agent.run(agent_input)
+        # Call model generate_content using asyncio.to_thread to avoid blocking
+        response_obj = await asyncio.to_thread(
+            genai_client.models.generate_content,
+            model="gemini-2.5-flash",
+            contents=query,
+            config=types.GenerateContentConfig(
+                cached_content=cache_name,
+                temperature=0.0
+            )
+        )
+        response_text = response_obj.text
         
-        # Calculate cost and metadata
-        final_usage = agent_token_usage_var.get()
-        prompt_tokens = final_usage["prompt_tokens"]
-        completion_tokens = final_usage["completion_tokens"]
-        embedding_tokens = final_usage["embedding_tokens"]
-        cost = calculate_cost(prompt_tokens, completion_tokens, embedding_tokens)
+        # Extract token usage and costs
+        usage = response_obj.usage_metadata
+        prompt_tokens = usage.prompt_token_count if usage else 0
+        cached_tokens = usage.cached_content_token_count if usage else 0
+        completion_tokens = usage.candidates_token_count if usage else 0
+        
+        cost = calculate_cache_cost(prompt_tokens, cached_tokens, completion_tokens)
         
         langfuse_context.update_current_trace(
             metadata={
                 "cost_usd": cost,
                 "prompt_tokens": prompt_tokens,
+                "cached_tokens": cached_tokens,
                 "completion_tokens": completion_tokens,
-                "embedding_tokens": embedding_tokens
+                "caching_status": "hit" if cached_tokens > 0 else "miss",
+                "pipeline_type": "context_caching"
             }
         )
         
-        logger.info(f"Response: {response} | Cost: ${cost:.6f}")
-        return str(response)
-    finally:
-        agent_token_usage_var.reset(token_usage_token)
+        logger.info(f"Response (cached): {response_text} | Cost: ${cost:.6f} (Cached tokens: {cached_tokens})")
+        return response_text
+        
+    except Exception as cache_err:
+        logger.error(f"Context caching failed or disabled: {cache_err}. Falling back to standard pipeline...")
+        
+        # 2. Fallback sur le pipeline standard (DSPy Classifier + Pinecone RAG + LlamaIndex)
+        agent_input = (
+            f"{query}\n"
+            f"### DIRECTIVE DE CONTRÔLE ###\n"
+            f"Instruction critique : L'utilisateur s'adresse à toi ('Tu') par habitude, mais tu es une IA. "
+            f"En tant que J.A.R.V.I.S, tu dois répondre pour Quentin, jamais à la première personne. "
+            f"Réponds en tant qu'Assistant J.A.R.V.I.S en parlant de Quentin à la 3ème personne ('Il', 'Quentin', 'Le candidat')."
+        )
+        
+        token_usage = {"prompt_tokens": 0, "completion_tokens": 0, "embedding_tokens": 0}
+        token_usage_token = agent_token_usage_var.set(token_usage)
+        
+        try:
+            token_usage["prompt_tokens"] += 350
+            token_usage["completion_tokens"] += 10
+            
+            response = await agent.run(agent_input)
+            
+            final_usage = agent_token_usage_var.get()
+            prompt_tokens = final_usage["prompt_tokens"]
+            completion_tokens = final_usage["completion_tokens"]
+            embedding_tokens = final_usage["embedding_tokens"]
+            cost = calculate_cost(prompt_tokens, completion_tokens, embedding_tokens)
+            
+            langfuse_context.update_current_trace(
+                metadata={
+                    "cost_usd": cost,
+                    "prompt_tokens": prompt_tokens,
+                    "completion_tokens": completion_tokens,
+                    "embedding_tokens": embedding_tokens,
+                    "caching_status": "disabled/error",
+                    "pipeline_type": "standard_fallback",
+                    "error": str(cache_err)
+                }
+            )
+            
+            logger.info(f"Response (fallback): {response} | Cost: ${cost:.6f}")
+            return str(response)
+        finally:
+            agent_token_usage_var.reset(token_usage_token)
     
 
 
