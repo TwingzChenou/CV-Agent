@@ -33,6 +33,45 @@ graph TD
     Gemini -->|Response| NextJS
 ```
 
+### ⚡ Decision Flow & Tool Routing
+
+The backend orchestrator (`generate.py`) uses a dual-route routing architecture to optimize both execution speed and cost, deciding dynamically when to execute local tools vs using the cached context:
+
+```mermaid
+flowchart TD
+    Start([User Query]) --> CacheCheck{1. Context Cache active?}
+    
+    %% Fast Path
+    CacheCheck -- Yes --> CachedLLM[Gemini 2.5 Flash with Context Cache]
+    CachedLLM --> End([Stream Response])
+    
+    %% Fallback Path
+    CacheCheck -- No / Fallback --> DSPy[2. DSPy Intent Classifier]
+    
+    DSPy --> IntentRouting{3. Match Intent?}
+    
+    IntentRouting -- "chitchat" --> DirectLLM[Gemini direct generation]
+    IntentRouting -- "cv_query_engine(arg)" --> Pinecone[Query Pinecone Vector Index]
+    IntentRouting -- "list_all_projects" --> GitList[Fetch GitHub Repos list]
+    IntentRouting -- "read_project_readme(repo)" --> GitReadme[Fetch Repo README via GitHub API]
+    IntentRouting -- "mixed / complex / fallback" --> ReAct[4. LlamaIndex ReAct Agent]
+    
+    %% Tool execution & final response
+    Pinecone --> FinalLLM[Gemini Response Rephrasing]
+    GitList --> FinalLLM
+    GitReadme --> FinalLLM
+    
+    %% ReAct Agent loop
+    ReAct --> ReActLoop{ReAct Loop: Thought -> Action -> Observation}
+    ReActLoop -- Call Tool --> Pinecone
+    ReActLoop -- Call Tool --> GitList
+    ReActLoop -- Call Tool --> GitReadme
+    ReActLoop -- Done --> End
+    
+    DirectLLM --> End
+    FinalLLM --> End
+```
+
 ## Tech Stack
 
 | Component | Technologies |
