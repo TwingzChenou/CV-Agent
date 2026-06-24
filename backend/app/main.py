@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.routers.chat import chat_router
+from app.core.limiter import limiter
+from slowapi.errors import RateLimitExceeded
+from slowapi import _rate_limit_exceeded_handler
 import uvicorn
 import os
 
@@ -9,6 +12,10 @@ app = FastAPI(
     description="Backend pour l'agent IA de Quentin Forget",
     version="1.0.0"
 )
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
 
 # Configuration CORS (Pour autoriser ton Frontend à parler au Backend)
 origins = [

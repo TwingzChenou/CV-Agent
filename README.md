@@ -203,6 +203,9 @@ The `backend/app/engine` directory is the brain of the application, managing the
 **The API Router.** Exposes the main FastAPI endpoint (`/api/chat`).
 *   **Hybrid Streaming:** Inspects the request's `stream` boolean parameter to dynamically toggle between a standard JSON `ChatResponse` and a FastAPI `StreamingResponse`. This maintains full compatibility with legacy clients and test runs.
 
+### `limiter.py` [NEW]
+**The Rate Limiter.** Initializes the `Limiter` instance using the client's remote address, separating configuration from the application lifecycle to avoid circular dependencies.
+
 ### `tools.py`
 **The Toolbelt.** This file defines the specific capabilities (tools) the agent can use.
 *   **GitHub Integration:**
@@ -278,6 +281,15 @@ To achieve extremely low response latencies (< 2.5s) and reduce API token consum
 - **Pinecone Vector Database:** FastAPI only queries embeddings. In production (e.g., Render), configure the environment using a **Read-Only API Key**. The Read-Write API Key should only be used locally for the data ingestion script (`loader.py`).
 - **GitHub Token:** Use a personal access token (PAT) restricted strictly to public repository read scopes.
 
+### Client-Side Rate Limiting
+To protect the server from spam and abuse, the backend endpoints are protected by a client-side rate limit of **15 requests per minute** per client IP using `slowapi`. When the limit is exceeded, a standard `429 Too Many Requests` HTTP response is returned.
+
+### Automatic Transient API Retries
+To make the application resilient to transient third-party API issues, all direct Gemini API generation calls are wrapped with a retry policy using `tenacity`:
+- **Retry Condition:** Retries on `google.genai.errors.APIError` if the response code is `429` (Quota/Rate Limit), `500` (Internal Server Error), or `503` (Service Unavailable).
+- **Backoff Policy:** Exponential backoff with a multiplier of 1, minimum wait of 1s, and maximum wait of 10s.
+- **Attempts:** Up to `3` total attempts before raising the error to the caller.
+
 ## 🧹 Repository Cleanup & Maintenance
 
 To keep the codebase clean and avoid security risks, obsolete and temporary test scripts were removed:
@@ -333,6 +345,8 @@ To address latency issues during agent-user interaction, two main optimizations 
 
 *   **⚡ Real-Time Streaming (SSE/NDJSON):** Response chunks are streamed word-by-word to the frontend using JSON-lines formatting, reducing perceived first-token latency to ~150ms.
 *   **📡 Live Status Indicators:** The frontend displays the agent's real-time internal status (e.g., "Recherche dans le cache de contexte...", "Classification de la demande...") to provide visual feedback during processing.
+*   **🛡️ Client-Side Rate Limiting:** Protects the FastAPI endpoints from spam and abuse by limiting requests to `15 per minute` per client IP using `slowapi`.
+*   **🔄 Automatic API Retries:** Handles transient Gemini API quota/rate limit errors (429, 500, 503) gracefully with automatic exponential backoff retries using `tenacity`.
 *   **Hybrid Search:** Combines keyword interactions with semantic understanding to retrieve the most relevant information from the CV.
 *   **Real-time Tooling:** Implementation of the ReAct pattern allows the agent to autonomously decide when to query the GitHub API for live data versus when to rely on internal knowledge.
 *   **Eval-Driven Development:** Quality of responses is monitored using evaluation frameworks (like Ragas/Custom scripts) to ensure accuracy and relevance.

@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from app.engine.generate import generate_response, generate_response_stream
+from app.core.limiter import limiter
 import logging
 
 # Configuration du router
@@ -20,20 +21,21 @@ class ChatResponse(BaseModel):
 
 # 2. Créer l'endpoint (L'URL sera /api/chat)
 @chat_router.post("/chat")
-async def chat_endpoint(request: ChatRequest):
+@limiter.limit("15/minute")
+async def chat_endpoint(request: Request, chat_request: ChatRequest):
     """
     Endpoint pour discuter avec l'agent Quentin Forget.
     """
     try:
-        user_message = request.message
-        logger.info(f"📩 Reçu API : {user_message} (stream={request.stream})")
+        user_message = chat_request.message
+        logger.info(f"📩 Reçu API : {user_message} (stream={chat_request.stream})")
 
-        if request.stream:
+        if chat_request.stream:
             return StreamingResponse(
                 generate_response_stream(
                     user_message,
-                    session_id=request.session_id,
-                    user_id=request.user_id
+                    session_id=chat_request.session_id,
+                    user_id=chat_request.user_id
                 ),
                 media_type="text/event-stream"
             )
@@ -41,8 +43,8 @@ async def chat_endpoint(request: ChatRequest):
             # Appel à la logique métier standard
             ai_response = await generate_response(
                 user_message,
-                session_id=request.session_id,
-                user_id=request.user_id
+                session_id=chat_request.session_id,
+                user_id=chat_request.user_id
             )
             return ChatResponse(response=ai_response)
 

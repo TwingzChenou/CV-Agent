@@ -1,9 +1,11 @@
 fastapi
+slowapi
 uvicorn
 python-dotenv
 pandas
 pymupdf4llm
 google-genai
+tenacity
 # Les librairies IA (keep canonical package names only)
 llama-index
 llama-index-embeddings-gemini
