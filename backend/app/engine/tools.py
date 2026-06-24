@@ -1,5 +1,6 @@
 import sys
 import os
+import functools
 from pathlib import Path
 
 current_file = Path(__file__).resolve()
@@ -31,9 +32,18 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 setup_logging()
 logger = logging.getLogger(__name__)
 
+# Singleton GitHub
+_git_client = None
+
+def get_github_client():
+    global _git_client
+    if _git_client is None:
+        _git_client = Github(GITHUB_TOKEN)
+    return _git_client
+
 # Setup github
 def setup_github(username: str = "TwingzChenou"):
-    git = Github(GITHUB_TOKEN)
+    git = get_github_client()
     return git.get_user(username)
 
 # Setup Gemini
@@ -54,12 +64,13 @@ def setup_llm():
 
 
 # List github projects
+@functools.lru_cache(maxsize=16)
 def list_github_projects() -> str:
     """
     Récupère la liste de tous les projets publics (repositories) de l'utilisateur.
     Renvoie le nom, la description et le lien de chaque projet.
     """ 
-    git = Github(GITHUB_TOKEN)
+    git = get_github_client()
     user = git.get_user("TwingzChenou")
     
     # Récupération des dépôts (repos)
@@ -79,25 +90,45 @@ def list_github_projects() -> str:
 
 
 # Get github activity
+@functools.lru_cache(maxsize=64)
 def get_github_activity(repo: str) -> str:
     """
     Récupère INSTANTANÉMENT le README d'un dépôt spécifique via l'API directe.
     Plus de scan de dossiers, plus de lenteur.
     """
+    import re
+    from github import GithubException
 
-    git = Github(GITHUB_TOKEN)
-    user = git.get_user("TwingzChenou")
-    
-    # 2. Ciblage direct du repo
-    repo_obj = user.get_repo(repo)
-    
-    # 3. Demande spécifique du README
-    readme = repo_obj.get_readme()
-    
-    # 4. Décodage (Le contenu arrive encodé, il faut le traduire en texte)
-    content = readme.decoded_content.decode("utf-8")
-    
-    return f"README Content for {repo}:\n{content[:5000]}"
+    # Validation stricte du nom du repository (principe du moindre privilège)
+    if not repo or not re.match(r"^[a-zA-Z0-9_-]+$", repo):
+        logger.error(f"Tentative d'accès avec un nom de dépôt invalide : {repo}")
+        raise ValueError("Nom de dépôt GitHub invalide. Seuls les caractères alphanumériques, les tirets et les underscores sont autorisés.")
+
+    try:
+        git = get_github_client()
+        user = git.get_user("TwingzChenou")
+        
+        # 2. Ciblage direct du repo
+        repo_obj = user.get_repo(repo)
+        
+        # 3. Demande spécifique du README
+        readme = repo_obj.get_readme()
+        
+        # 4. Décodage (Le contenu arrive encodé, il faut le traduire en texte)
+        content = readme.decoded_content.decode("utf-8")
+        
+        return f"README Content for {repo}:\n{content[:5000]}"
+    except GithubException as ge:
+        logger.error(f"GitHub API Error for repo {repo} : {ge.status} - {ge.data}")
+        if ge.status == 404:
+            return f"README ou dépôt '{repo}' introuvable."
+        elif ge.status == 403:
+            return "Limite de taux de l'API GitHub atteinte ou accès refusé."
+        else:
+            return f"Erreur de communication avec l'API GitHub ({ge.status})."
+    except Exception as e:
+        logger.error(f"Unexpected error retrieving README for {repo}: {e}")
+        return "Une erreur inattendue est survenue lors de la récupération des données du dépôt."
 
 
 
@@ -191,8 +222,8 @@ def main():
     logger.info("✅ CV info tool setup completed.")
 
     # Get Profile tool
-    get_profile_tool(index)
-    logger.info("✅ Profile tool setup completed.")
+    # get_profile_tool(index)
+    logger.info("✅ Profile tool setup completed (skipped).")
     
     # Get list github projects
     list_github_projects()

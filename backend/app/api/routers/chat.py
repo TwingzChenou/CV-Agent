@@ -10,6 +10,8 @@ logger = logging.getLogger("uvicorn")
 # 1. Définir le format des données reçues (DTO)
 class ChatRequest(BaseModel):
     message: str # L'utilisateur doit envoyer un JSON {"message": "Sa question"}
+    session_id: str | None = None
+    user_id: str | None = None
 
 class ChatResponse(BaseModel):
     response: str
@@ -25,7 +27,11 @@ async def chat_endpoint(request: ChatRequest):
         logger.info(f"📩 Reçu API : {user_message}")
 
         # Appel à ta logique métier (DSPy + LlamaIndex)
-        ai_response = await generate_response(user_message)
+        ai_response = await generate_response(
+            user_message,
+            session_id=request.session_id,
+            user_id=request.user_id
+        )
         
         return ChatResponse(response=ai_response)
 

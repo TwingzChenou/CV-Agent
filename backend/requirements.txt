@@ -3,12 +3,15 @@ uvicorn
 python-dotenv
 pandas
 pymupdf4llm
-# Les librairies IA
-llama-index-core
-llama-index-llms-gemini
+google-genai
+# Les librairies IA (keep canonical package names only)
+llama-index
 llama-index-embeddings-gemini
-llama-index-readers-github
+llama-index-llms-gemini
 llama-index-vector-stores-pinecone
+# Note: specific LLM/embedding/connectors (eg. gemini, ollama, pinecone readers)
+# should be installed individually if needed. Remove any dotted module paths
+# like 'llama_index.core.node_parser' — they are not valid pip package names.
 # Ragas (Version bloquée pour éviter les bugs)
 ragas==0.1.21
 # LangChain pour Gemini (pour corriger le bug de génération)
@@ -19,3 +22,20 @@ pydantic-settings
 dspy-ai
 pygithub
 loguru
+# Add core llama-index and Ollama LLM integration
+llama-index
+llama-index-llms-ollama
+llama-index-embeddings-ollama
+
+# Langfuse Observability & Tracing
+langfuse
+llama-index-callbacks-langfuse
+openinference-instrumentation-dspy
+opentelemetry-api
+opentelemetry-sdk
+
+# Testing Dependencies
+pytest
+pytest-mock
+pytest-asyncio
+httpx
