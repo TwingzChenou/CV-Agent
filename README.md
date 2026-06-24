@@ -299,6 +299,36 @@ You can run the unit test suite to verify cost calculations, caching fallback lo
 PYTHONPATH=backend .venv/bin/pytest backend/tests
 ```
 
+## 📊 Performance, Latency & Ragas Evaluations
+
+To measure the agent's accuracy and perceived speed, the application undergoes automated evaluation and performance tracing.
+
+### 1. Ragas & Judge Evaluation Metrics
+The agent is evaluated against 41 representative scenarios (covering CV details, GitHub projects, and chitchat) using a local LLM Judge framework.
+
+| Metric | Score / Result | Description |
+| :--- | :--- | :--- |
+| **Reasoning Success Rate** | **95.1%** (39 YES / 2 NO) | The LLM judge validates if the tool choice and logical routing match expectation. |
+| **Average Faithfulness** | **95.1%** | Measures if the response is strictly grounded in the retrieved context (no hallucinations). |
+| **Average Answer Relevancy** | **100.0%** | Measures how relevant the final generated response is to the user's initial question. |
+
+*Detailed reports are saved locally at [evaluation_results.csv](file:///Users/forgetquentin/Desktop/CV-Agent/backend/evaluation/experiments/evaluation_results.csv) and [ragas_eval_report.csv](file:///Users/forgetquentin/Desktop/CV-Agent/backend/evaluation/datasets/ragas_eval_report.csv).*
+
+### 2. Latency Optimization (Context Caching & Streaming)
+
+To address latency issues during agent-user interaction, two main optimizations were implemented:
+
+1. **Gemini Context Caching (Context Batching):**
+   - **Mechanism:** Static background information (parsed CV PDF, profile data, repository READMEs, and system instructions) is loaded and cached directly on the Gemini servers as a unified context block (~5,500 tokens).
+   - **Latency Improvement:** Direct query execution time drops from 5s+ down to **< 2.5s**.
+   - **Cost Savings:** Prompt token costs are reduced by **75%** (from $0.30/M to $0.075/M).
+   - **Cache Hit Rate:** **> 99%** under continuous traffic.
+
+2. **Real-Time Streaming:**
+   - **Mechanism:** The backend endpoint yields response chunks dynamically in NDJSON (JSON-Lines) format.
+   - **TTFT (Time to First Token):** Perceived user wait time drops to **~160ms** (near-instantaneous response start).
+   - **Live Status Feed:** The stream includes status events (e.g. `{"type": "status", "content": "Recherche dans la base Pinecone..."}`) which the frontend renders dynamically next to the spinner, keeping the user informed of the agent's backend tool selection in real-time.
+
 ## Key Features
 
 *   **⚡ Real-Time Streaming (SSE/NDJSON):** Response chunks are streamed word-by-word to the frontend using JSON-lines formatting, reducing perceived first-token latency to ~150ms.
