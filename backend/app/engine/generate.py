@@ -331,10 +331,43 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 
 from google import genai
 from google.genai import types
+from google.genai.errors import APIError
 from app.engine.caching import get_or_create_cv_cache
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception
 
 llm = setup_llm()
 genai_client = genai.Client(api_key=GOOGLE_API_KEY)
+
+def is_transient_api_error(exception):
+    if isinstance(exception, APIError):
+        code = getattr(exception, "code", None) or getattr(exception, "status_code", None)
+        if code is not None:
+            try:
+                if int(code) in (429, 500, 503):
+                    logger.warning(f"Transient Gemini API error detected (code {code}). Retrying...")
+                    return True
+            except (ValueError, TypeError):
+                pass
+    return False
+
+@retry(
+    retry=retry_if_exception(is_transient_api_error),
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=1, max=10),
+    reraise=True
+)
+def retry_generate_content(*args, **kwargs):
+    return genai_client.models.generate_content(*args, **kwargs)
+
+@retry(
+    retry=retry_if_exception(is_transient_api_error),
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=1, max=10),
+    reraise=True
+)
+def retry_generate_content_stream(*args, **kwargs):
+    return genai_client.models.generate_content_stream(*args, **kwargs)
+
 
 # Setup DSPy
 lm = dspy.LM("gemini/gemini-2.5-flash", api_key=GOOGLE_API_KEY, temperature=0)
@@ -662,7 +695,7 @@ async def generate_response(query, session_id=None, user_id=None):
         
         # Call model generate_content using asyncio.to_thread to avoid blocking
         response_obj = await asyncio.to_thread(
-            genai_client.models.generate_content,
+            retry_generate_content,
             model="gemini-2.5-flash",
             contents=query,
             config=types.GenerateContentConfig(
@@ -765,7 +798,7 @@ async def generate_response_stream(query, session_id=None, user_id=None):
         yield format_stream_chunk("status", "Génération de la réponse...")
         
         def run_cached_stream():
-            return genai_client.models.generate_content_stream(
+            return retry_generate_content_stream(
                 model="gemini-2.5-flash",
                 contents=query,
                 config=types.GenerateContentConfig(
@@ -837,7 +870,7 @@ async def generate_response_stream(query, session_id=None, user_id=None):
             )
             yield format_stream_chunk("status", "Rédaction de la réponse de courtoisie...")
             def run_chitchat_stream():
-                return genai_client.models.generate_content_stream(
+                return retry_generate_content_stream(
                     model="gemini-2.5-flash",
                     contents=chitchat_prompt,
                     config=types.GenerateContentConfig(temperature=0.0)
@@ -863,7 +896,7 @@ async def generate_response_stream(query, session_id=None, user_id=None):
             )
             yield format_stream_chunk("status", "Mise en forme de la liste des projets...")
             def run_list_projects_stream():
-                return genai_client.models.generate_content_stream(
+                return retry_generate_content_stream(
                     model="gemini-2.5-flash",
                     contents=rephrase_prompt,
                     config=types.GenerateContentConfig(temperature=0.0)
@@ -889,7 +922,7 @@ async def generate_response_stream(query, session_id=None, user_id=None):
             )
             yield format_stream_chunk("status", f"Analyse et rédaction du résumé de '{arg}'...")
             def run_readme_stream():
-                return genai_client.models.generate_content_stream(
+                return retry_generate_content_stream(
                     model="gemini-2.5-flash",
                     contents=rephrase_prompt,
                     config=types.GenerateContentConfig(temperature=0.0)
@@ -916,7 +949,7 @@ async def generate_response_stream(query, session_id=None, user_id=None):
             )
             yield format_stream_chunk("status", "Mise en forme de la réponse professionnelle...")
             def run_cv_stream():
-                return genai_client.models.generate_content_stream(
+                return retry_generate_content_stream(
                     model="gemini-2.5-flash",
                     contents=rephrase_prompt,
                     config=types.GenerateContentConfig(temperature=0.0)

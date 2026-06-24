@@ -57,4 +57,43 @@ def test_get_github_activity_invalid_name():
         get_github_activity("")
     assert "Nom de dépôt" in str(excinfo.value)
 
+def test_retry_generate_content_transient_error():
+    """Teste que retry_generate_content effectue bien des tentatives en cas d'erreur API transitoire."""
+    from unittest.mock import MagicMock, patch
+    from google.genai.errors import APIError
+    from app.engine.generate import retry_generate_content
+    
+    mock_error = APIError(429, {"message": "Rate limit exceeded"})
+    
+    mock_response = MagicMock()
+    mock_response.text = "Success"
+    
+    mock_generate = MagicMock(side_effect=[mock_error, mock_error, mock_response])
+    
+    with patch("app.engine.generate.genai_client.models.generate_content", mock_generate), \
+         patch("time.sleep") as mock_sleep:
+        response = retry_generate_content(model="gemini-2.5-flash", contents="test")
+        assert response.text == "Success"
+        assert mock_generate.call_count == 3
+        assert mock_sleep.call_count == 2
+
+def test_retry_generate_content_non_transient_error():
+    """Teste que retry_generate_content échoue immédiatement en cas d'erreur non transitoire."""
+    from unittest.mock import MagicMock, patch
+    from google.genai.errors import APIError
+    from app.engine.generate import retry_generate_content
+    
+    mock_error = APIError(400, {"message": "Bad request"})
+    
+    mock_generate = MagicMock(side_effect=[mock_error])
+    
+    with patch("app.engine.generate.genai_client.models.generate_content", mock_generate), \
+         patch("time.sleep") as mock_sleep:
+        with pytest.raises(APIError) as excinfo:
+            retry_generate_content(model="gemini-2.5-flash", contents="test")
+        assert excinfo.value.code == 400
+        assert mock_generate.call_count == 1
+        assert mock_sleep.call_count == 0
+
+
 

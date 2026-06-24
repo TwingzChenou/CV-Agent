@@ -41,3 +41,20 @@ def test_chat_endpoint_validation_error(client):
     """Teste l'erreur de validation (422) si le corps de requête est vide ou incomplet."""
     response = client.post("/api/chat", json={})
     assert response.status_code == 422
+
+@patch("app.api.routers.chat.generate_response", new_callable=AsyncMock)
+def test_chat_endpoint_rate_limit(mock_generate, client):
+    """Teste la limitation de débit (rate limiting) de l'endpoint /api/chat."""
+    mock_generate.return_value = "Bonjour."
+    request_payload = {
+        "message": "Hello",
+    }
+    
+    # On fait 20 requêtes. Au moins une à la fin doit renvoyer 429.
+    status_codes = []
+    for _ in range(20):
+        response = client.post("/api/chat", json=request_payload)
+        status_codes.append(response.status_code)
+        
+    assert 429 in status_codes
+
