@@ -14,9 +14,6 @@ llama-index-vector-stores-pinecone
 # like 'llama_index.core.node_parser' — they are not valid pip package names.
 # Ragas (Version bloquée pour éviter les bugs)
 ragas==0.1.21
-# LangChain pour Gemini (pour corriger le bug de génération)
-langchain-google-genai
-langchain
 
 pydantic-settings
 dspy-ai

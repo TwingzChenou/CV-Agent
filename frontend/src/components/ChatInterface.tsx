@@ -82,14 +82,14 @@ export default function ChatInterface() {
                             ))}
 
                             {/* Live Feedback / Tool Call Indicator */}
-                            {status === 'loading' && (
+                            {((status === 'loading') || (status === 'streaming' && currentTool)) && (
                                 <motion.div
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     className="flex items-center gap-2 text-zinc-400 text-sm ml-2"
                                 >
                                     <Loader2 className="w-4 h-4 animate-spin" />
-                                    <span>Thinking...</span>
+                                    <span>{currentTool || "Thinking..."}</span>
                                 </motion.div>
                             )}
                             <div ref={scrollRef} />

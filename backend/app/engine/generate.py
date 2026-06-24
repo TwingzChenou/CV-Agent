@@ -629,6 +629,12 @@ agent = JarvisAgent(
     pinecone_index=pinecone_index
 )
 
+
+import json
+
+def format_stream_chunk(event_type: str, content: str) -> str:
+    return json.dumps({"type": event_type, "content": content}) + "\n"
+
 @observe(name="generate_response")
 async def generate_response(query, session_id=None, user_id=None):
     logger.info(f"Query: {query}")
@@ -731,6 +737,200 @@ async def generate_response(query, session_id=None, user_id=None):
             return str(response)
         finally:
             agent_token_usage_var.reset(token_usage_token)
+
+@observe(name="generate_response_stream")
+async def generate_response_stream(query, session_id=None, user_id=None):
+    logger.info(f"Query (stream): {query}")
+    
+    # Mettre à jour la trace Langfuse avec la session et l'utilisateur si disponibles
+    if session_id:
+        langfuse_context.update_current_trace(session_id=session_id)
+    if user_id:
+        langfuse_context.update_current_trace(user_id=user_id)
+        
+    try:
+        from langfuse.llama_index.llama_index import context_root
+        lf_handler = langfuse_context.get_current_llama_index_handler()
+        if lf_handler:
+            context_root.set(lf_handler.trace or lf_handler.root_span)
+    except Exception as e:
+        logger.error(f"Failed to link LlamaIndex context to Langfuse trace: {e}")
+        
+    # 1. Tente d'utiliser le cache de contexte Gemini (Inférence directe ultra-rapide)
+    try:
+        yield format_stream_chunk("status", "Recherche dans le cache de contexte...")
+        cache_name = get_or_create_cv_cache(genai_client)
+        logger.info(f"Using context cache (stream): {cache_name}")
+        
+        yield format_stream_chunk("status", "Génération de la réponse...")
+        
+        def run_cached_stream():
+            return genai_client.models.generate_content_stream(
+                model="gemini-2.5-flash",
+                contents=query,
+                config=types.GenerateContentConfig(
+                    cached_content=cache_name,
+                    temperature=0.0
+                )
+            )
+            
+        response_stream = await asyncio.to_thread(run_cached_stream)
+        
+        full_text = ""
+        for chunk in response_stream:
+            text = chunk.text
+            full_text += text
+            yield format_stream_chunk("text", text)
+            
+        logger.info(f"Stream generation completed (cached). Length: {len(full_text)}")
+        return
+        
+    except Exception as cache_err:
+        logger.error(f"Context caching failed or disabled (stream): {cache_err}. Falling back to standard pipeline...")
+        
+        # 2. Fallback sur le pipeline standard (DSPy Classifier + Pinecone RAG + LlamaIndex)
+        yield format_stream_chunk("status", "Classification de la demande...")
+        
+        agent_input = (
+            f"{query}\n"
+            f"### DIRECTIVE DE CONTRÔLE ###\n"
+            f"Instruction critique : L'utilisateur s'adresse à toi ('Tu') par habitude, mais tu es une IA. "
+            f"En tant que J.A.R.V.I.S, tu dois répondre pour Quentin, jamais à la première personne. "
+            f"Réponds en tant qu'Assistant J.A.R.V.I.S en parlant de Quentin à la 3ème personne ('Il', 'Quentin', 'Le candidat')."
+        )
+        
+        # 1. Classification
+        try:
+            intent_output = classifier(query)
+            intent_str = str(intent_output.intent).strip()
+        except Exception as e:
+            logger.error(f"Error classifying intent in stream: {e}")
+            intent_str = "mixed"
+            
+        logger.info(f"JarvisAgent Routing (stream) | Query: {query} | Intent: {intent_str}")
+        name, arg = parse_intent(intent_str)
+        
+        if name:
+            name = name.strip()
+        if arg:
+            arg = arg.strip()
+            
+        # Case-insensitive resolution of repository name
+        if name == "read_project_readme" and arg:
+            try:
+                git = get_github_client()
+                user = git.get_user("TwingzChenou")
+                repos = user.get_repos()
+                for r in repos:
+                    if r.name.lower() == arg.lower():
+                        arg = r.name
+                        break
+            except Exception as e:
+                logger.error(f"Error resolving repository name case-insensitively (stream): {e}")
+
+        # Direct streaming routing
+        if name == "chitchat":
+            chitchat_prompt = (
+                f"{SYSTEM_PROMPT}\n\n"
+                f"L'utilisateur dit : \"{query}\"\n"
+                f"En tant que J.A.R.V.I.S., réponds de façon courtoise, flegmatique et appropriée (en parlant de Monsieur Forget à la 3ème personne si besoin, et à la 1ère personne pour toi-même) :"
+            )
+            yield format_stream_chunk("status", "Rédaction de la réponse de courtoisie...")
+            def run_chitchat_stream():
+                return genai_client.models.generate_content_stream(
+                    model="gemini-2.5-flash",
+                    contents=chitchat_prompt,
+                    config=types.GenerateContentConfig(temperature=0.0)
+                )
+            response_stream = await asyncio.to_thread(run_chitchat_stream)
+            for chunk in response_stream:
+                yield format_stream_chunk("text", chunk.text)
+                
+        elif name == "list_all_projects":
+            yield format_stream_chunk("status", "Récupération de la liste des projets sur GitHub...")
+            from app.engine.tools import list_github_projects
+            try:
+                raw_projects = list_github_projects()
+            except Exception as e:
+                logger.error(f"Error listing projects in stream: {e}")
+                raw_projects = "Aucun projet public trouvé ou indisponible pour le moment."
+                
+            rephrase_prompt = (
+                f"{SYSTEM_PROMPT}\n\n"
+                f"Voici les données brutes sur les projets de Monsieur Forget :\n"
+                f"{raw_projects}\n\n"
+                f"Rédige une réponse parfaite au ton de J.A.R.V.I.S. pour présenter ces projets à la requête : \"{query}\" :"
+            )
+            yield format_stream_chunk("status", "Mise en forme de la liste des projets...")
+            def run_list_projects_stream():
+                return genai_client.models.generate_content_stream(
+                    model="gemini-2.5-flash",
+                    contents=rephrase_prompt,
+                    config=types.GenerateContentConfig(temperature=0.0)
+                )
+            response_stream = await asyncio.to_thread(run_list_projects_stream)
+            for chunk in response_stream:
+                yield format_stream_chunk("text", chunk.text)
+                
+        elif name == "read_project_readme" and arg:
+            yield format_stream_chunk("status", f"Lecture du README pour le projet '{arg}' sur GitHub...")
+            from app.engine.tools import get_github_activity
+            try:
+                raw_readme = get_github_activity(arg)
+            except Exception as e:
+                logger.error(f"Error reading README for {arg} in stream: {e}")
+                raw_readme = f"README ou dépôt '{arg}' introuvable."
+                
+            rephrase_prompt = (
+                f"{SYSTEM_PROMPT}\n\n"
+                f"Voici le contenu du README pour le projet {arg} :\n"
+                f"{raw_readme}\n\n"
+                f"Rédige une réponse parfaite au ton de J.A.R.V.I.S. pour résumer ou expliquer ce projet en réponse à la requête : \"{query}\" :"
+            )
+            yield format_stream_chunk("status", f"Analyse et rédaction du résumé de '{arg}'...")
+            def run_readme_stream():
+                return genai_client.models.generate_content_stream(
+                    model="gemini-2.5-flash",
+                    contents=rephrase_prompt,
+                    config=types.GenerateContentConfig(temperature=0.0)
+                )
+            response_stream = await asyncio.to_thread(run_readme_stream)
+            for chunk in response_stream:
+                yield format_stream_chunk("text", chunk.text)
+                
+        elif name == "cv_query_engine" and arg:
+            yield format_stream_chunk("status", "Recherche dans la base de connaissances Pinecone...")
+            query_engine = pinecone_index.as_query_engine()
+            try:
+                retrieved_response = await query_engine.aquery(arg)
+                response_content = str(retrieved_response)
+            except Exception as e:
+                logger.error(f"Error querying RAG in stream: {e}")
+                response_content = "Information non trouvée."
+                
+            rephrase_prompt = (
+                f"{SYSTEM_PROMPT}\n\n"
+                f"Voici l'information trouvée dans le CV de Monsieur Forget :\n"
+                f"{response_content}\n\n"
+                f"Rédige une réponse parfaite au ton de J.A.R.V.I.S. pour répondre à la question de l'utilisateur : \"{query}\" :"
+            )
+            yield format_stream_chunk("status", "Mise en forme de la réponse professionnelle...")
+            def run_cv_stream():
+                return genai_client.models.generate_content_stream(
+                    model="gemini-2.5-flash",
+                    contents=rephrase_prompt,
+                    config=types.GenerateContentConfig(temperature=0.0)
+                )
+            response_stream = await asyncio.to_thread(run_cv_stream)
+            for chunk in response_stream:
+                yield format_stream_chunk("text", chunk.text)
+                
+        else:
+            # Fallback to ReActAgent
+            yield format_stream_chunk("status", "Appel à l'agent de raisonnement complexe...")
+            logger.info(f"Fallback to ReActAgent in stream for query: {query}")
+            response = await react_agent.run(agent_input)
+            yield format_stream_chunk("text", str(response))
     
 
 

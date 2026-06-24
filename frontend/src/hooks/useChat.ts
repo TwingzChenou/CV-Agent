@@ -21,29 +21,76 @@ export function useChat() {
         const userMessage: Message = { role: 'user', content: query };
         setMessages((prev) => [...prev, userMessage]);
         setStatus('loading');
+        setCurrentTool(null);
 
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: query }),
+                body: JSON.stringify({ message: query, stream: true }),
             });
 
             if (!response.ok) {
                 throw new Error('Failed to fetch response');
             }
 
-            // Handle response - assuming JSON for now as per backend implementation
-            // Future TODO: Handle SSE for streaming and tool calls
-            const data = await response.json();
+            const reader = response.body?.getReader();
+            if (!reader) {
+                throw new Error('Response body is not readable');
+            }
 
-            const assistantMessage: Message = {
-                role: 'assistant',
-                content: data.response || data.text || "No response received."
-            };
+            const decoder = new TextDecoder("utf-8");
+            let accumulatedText = "";
+            let assistantMessageAdded = false;
+            let buffer = "";
 
-            setMessages((prev) => [...prev, assistantMessage]);
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                const chunk = decoder.decode(value, { stream: true });
+                buffer += chunk;
+
+                const lines = buffer.split("\n");
+                // Maintain the last incomplete line in the buffer
+                buffer = lines.pop() || "";
+
+                for (const line of lines) {
+                    if (!line.trim()) continue;
+
+                    try {
+                        const parsed = JSON.parse(line);
+                        if (parsed.type === "status") {
+                            setCurrentTool(parsed.content);
+                            setStatus('loading');
+                        } else if (parsed.type === "text") {
+                            setStatus('streaming');
+                            accumulatedText += parsed.content;
+                            
+                            setMessages((prev) => {
+                                const newMessages = [...prev];
+                                if (assistantMessageAdded && newMessages.length > 0) {
+                                    const lastMsg = newMessages[newMessages.length - 1];
+                                    if (lastMsg.role === 'assistant') {
+                                        lastMsg.content = accumulatedText;
+                                        return newMessages;
+                                    }
+                                }
+                                
+                                // Otherwise append new message
+                                newMessages.push({ role: 'assistant', content: accumulatedText });
+                                assistantMessageAdded = true;
+                                return newMessages;
+                            });
+                        }
+                    } catch (err) {
+                        console.error("Error parsing stream chunk:", err, "Line:", line);
+                    }
+                }
+            }
+
             setStatus('idle');
+            setCurrentTool(null);
 
         } catch (error) {
             console.error("Chat error:", error);
@@ -52,6 +99,7 @@ export function useChat() {
                 { role: 'assistant', content: "Sorry, something went wrong. Please check if the backend is running." }
             ]);
             setStatus('idle');
+            setCurrentTool(null);
         }
     };
 
